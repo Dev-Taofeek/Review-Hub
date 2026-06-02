@@ -1,0 +1,179 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── CSS custom properties ───────────────────────────────── */
+@layer base {
+  :root {
+    --bg:           #f9fafb;
+    --surface:      #ffffff;
+    --surface-2:    #f3f4f6;
+    --border:       #e5e7eb;
+    --text:         #111827;
+    --text-2:       #6b7280;
+    --text-3:       #9ca3af;
+    --brand:        #059669;
+    --brand-light:  #d1fae5;
+  }
+
+  .dark {
+    --bg:           #080d1a;
+    --surface:      #0d1526;
+    --surface-2:    #151e33;
+    --border:       rgba(148,163,184,0.1);
+    --text:         #f1f5f9;
+    --text-2:       #94a3b8;
+    --text-3:       #64748b;
+    --brand:        #10b981;
+    --brand-light:  rgba(16,185,129,0.15);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-sans;
+    background-color: var(--bg);
+    color: var(--text);
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  ::selection {
+    @apply bg-brand-100 text-brand-800;
+    .dark & {
+      background: rgba(16,185,129,0.25);
+      color: #d1fae5;
+    }
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-500 ring-offset-2;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply tracking-tight;
+  }
+
+  /* ── Premium scrollbar ─────────────────── */
+  ::-webkit-scrollbar              { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track        { background: transparent; }
+  ::-webkit-scrollbar-thumb        { background: #d1d5db; border-radius: 9999px; }
+  ::-webkit-scrollbar-thumb:hover  { background: #9ca3af; }
+  .dark ::-webkit-scrollbar-thumb  { background: #1e3a5f; }
+  .dark ::-webkit-scrollbar-thumb:hover { background: #2d5a8e; }
+}
+
+/* ── Design tokens as utilities ──────────────────────────── */
+@layer utilities {
+
+  /* Gradient text */
+  .text-gradient {
+    background: linear-gradient(135deg, #059669 0%, #34d399 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Glass cards — light */
+  .glass {
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.6);
+  }
+
+  /* Glass cards — dark (rich navy, NOT muddy grey) */
+  .glass-dark {
+    background: rgba(13, 21, 38, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(148,163,184,0.1);
+  }
+
+  /* Mesh gradient backgrounds */
+  .mesh-brand {
+    background-color: #ecfdf5;
+    background-image:
+      radial-gradient(at 40% 20%, rgba(16,185,129,0.12) 0, transparent 50%),
+      radial-gradient(at 80% 0%,  rgba(5,150,105,0.08)  0, transparent 50%),
+      radial-gradient(at 0%  50%, rgba(52,211,153,0.08) 0, transparent 50%);
+  }
+
+  .dark .mesh-brand {
+    background-color: #080d1a;
+    background-image:
+      radial-gradient(at 40% 20%, rgba(16,185,129,0.08) 0, transparent 50%),
+      radial-gradient(at 80% 0%,  rgba(5,150,105,0.05)  0, transparent 50%);
+  }
+
+  /* Line clamps */
+  .line-clamp-1 { overflow:hidden; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:1; }
+  .line-clamp-2 { overflow:hidden; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:2; }
+  .line-clamp-3 { overflow:hidden; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; }
+
+  /* Shimmer */
+  .bg-shimmer {
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%);
+    background-size: 200% 100%;
+  }
+  .dark .bg-shimmer {
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+    background-size: 200% 100%;
+  }
+
+  /* Card hover lift */
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-card-hover hover:-translate-y-0.5;
+  }
+
+  /* Noise texture */
+  .noise::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.3;
+    pointer-events: none;
+    border-radius: inherit;
+  }
+}
+
+/* ── Dark mode semantic overrides ──────────────────────────── */
+.dark {
+  /* Base page background — deep navy, not charcoal */
+  background-color: #080d1a;
+  color: #f1f5f9;
+
+  /* Cards — slightly elevated from the base */
+  .bg-white,
+  [class*="bg-white"] {
+    background-color: #0d1526 !important;
+  }
+
+  /* Secondary surface */
+  .bg-gray-50 { background-color: #0a1020 !important; }
+  .bg-gray-100 { background-color: #111c30 !important; }
+
+  /* Borders — subtle blue-tinted */
+  .border-gray-100,
+  .border-gray-200 {
+    border-color: rgba(148,163,184,0.1) !important;
+  }
+
+  /* Input backgrounds */
+  input, textarea, select {
+    background-color: #111c30;
+    color: #f1f5f9;
+    border-color: rgba(148,163,184,0.15);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #475569;
+  }
+}
