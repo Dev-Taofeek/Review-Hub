@@ -85,7 +85,7 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200/60 bg-white/95 backdrop-blur-xl dark:bg-[#060c1a]/95 dark:border-white/[0.06] shadow-sm shadow-slate-900/5 dark:shadow-black/20">
-      <div className="mx-auto flex h-[60px] max-w-[1600px] items-center justify-between px-4 sm:px-8 lg:px-18">
+      <div className="mx-auto flex h-[60px] max-w-[1600px] items-center justify-between px-3 xs:px-4 sm:px-6 lg:px-18">
 
         {/* Logo */}
         <Link href={isAuthenticated ? '/dashboard' : '/'} onClick={closeAll}

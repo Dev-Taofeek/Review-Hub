@@ -15,7 +15,7 @@ export default function ModerationLayout({ children }: { children: React.ReactNo
       {/* Moderation mode indicator */}
       <div className="border-b border-violet-900/40 dark:border-violet-800/30"
         style={{ background: 'linear-gradient(90deg, #0d0a1a 0%, #120e22 50%, #0d0a1a 100%)' }}>
-        <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 h-8 flex items-center justify-between">
+        <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 h-8 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-violet-400 animate-pulse shadow-sm shadow-violet-400/50" />
@@ -33,7 +33,7 @@ export default function ModerationLayout({ children }: { children: React.ReactNo
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 py-6 sm:py-8">
+      <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-6 sm:py-8">
         <div className="flex gap-6 lg:gap-10">
 
           {/* Desktop sidebar */}

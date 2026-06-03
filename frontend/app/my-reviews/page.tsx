@@ -26,7 +26,7 @@ export default function MyReviewsPage() {
   };
 
   return (
-    <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 py-8">
+    <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-slate-900 dark:text-white">My Reviews</h1>
         <p className="text-sm text-slate-500 mt-1">{total} review{total !== 1 ? 's' : ''} submitted</p>

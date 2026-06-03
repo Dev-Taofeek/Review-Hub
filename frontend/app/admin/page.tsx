@@ -50,7 +50,7 @@ export default function AdminOverviewPage() {
     return (
       <div className="space-y-6">
         <Skeleton className="h-40 rounded-2xl" />
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-36 rounded-2xl" />)}
         </div>
         <div className="grid gap-5 lg:grid-cols-2">
@@ -131,7 +131,7 @@ export default function AdminOverviewPage() {
         </div>
 
         {/* Quick stats strip */}
-        <div className="relative mt-6 pt-5 border-t border-white/[0.07] grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="relative mt-6 pt-5 border-t border-white/[0.07] grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-4 gap-4">
           {[
             { label: 'Total Users',    value: analytics.users.total.toLocaleString(),    icon: '👥', change: `+${analytics.users.newThisMonth}` },
             { label: 'Products',       value: analytics.products.total.toLocaleString(), icon: '📦', change: null },
@@ -153,7 +153,7 @@ export default function AdminOverviewPage() {
       </div>
 
       {/* ── KPI stat cards ────────────────────────────────── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <StatsCard
           title="Total Users"
           value={analytics.users.total}
@@ -314,7 +314,7 @@ export default function AdminOverviewPage() {
           </span>
         </div>
 
-        <div className="p-5 sm:p-6 grid grid-cols-2 sm:grid-cols-4 gap-4 lg:gap-6">
+        <div className="p-5 sm:p-6 grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-4 gap-4">
           {[
             {
               label: 'Review Rate',

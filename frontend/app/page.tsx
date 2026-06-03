@@ -130,7 +130,7 @@ export default async function LandingPage() {
           <div className="absolute bottom-0 -left-32 h-[400px] w-[400px] rounded-full bg-emerald-50 opacity-40 blur-3xl dark:bg-emerald-950/10" />
         </div>
 
-        <div className="relative mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 py-12 sm:py-16 lg:py-24">
+        <div className="relative mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-8 xs:py-10 sm:py-16 lg:py-24">
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
 
             {/* Left: Copy */}
@@ -140,7 +140,7 @@ export default async function LandingPage() {
                 Trusted by real shoppers
               </div>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-[3.25rem] font-bold leading-[1.1] tracking-tight text-gray-900 dark:text-white mb-6">
+              <h1 className="text-3xl xs:text-4xl sm:text-5xl lg:text-[3.25rem] font-bold leading-[1.1] tracking-tight text-gray-900 dark:text-white mb-4 sm:mb-6">
                 Make smarter
                 <span className="block text-brand-600 dark:text-brand-400"> purchase decisions</span>
                 with honest reviews
@@ -268,7 +268,7 @@ export default async function LandingPage() {
 
       {/* Features */}
       <section className="bg-gray-50 dark:bg-surface-dark-muted py-20 border-t border-gray-100 dark:border-white/5">
-        <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18">
+        <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18">
           <div className="mb-12 text-center">
             <p className="text-sm font-semibold uppercase tracking-widest text-brand-600 dark:text-brand-400 mb-3">
               Why ReviewHub
@@ -299,7 +299,7 @@ export default async function LandingPage() {
 
       {/* CTA */}
       <section className="bg-brand-600 dark:bg-brand-800 py-20">
-        <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 text-center">
+        <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 text-center">
           <h2 className="mb-3 text-2xl font-bold text-white">Ready to share your experience?</h2>
           <p className="mb-8 text-brand-100">
             Join reviewers and help others make smarter decisions.

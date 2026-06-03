@@ -120,7 +120,7 @@ export default function NewProductPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#060c1a]">
-      <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 py-8 sm:py-10">
+      <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-8 sm:py-10">
 
         {/* Back */}
         <nav className="mb-8">

@@ -68,7 +68,7 @@ export function ProductDetailClient({ slug }: Props) {
   const currentImage = images[selectedImage]?.url ?? '/placeholder-product.svg';
 
   return (
-    <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 py-8">
+    <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-8">
       {/* Breadcrumb */}
       <nav className="mb-6">
         <Link href="/products" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-brand-600 transition-colors">

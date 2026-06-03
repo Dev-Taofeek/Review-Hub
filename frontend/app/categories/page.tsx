@@ -59,7 +59,7 @@ export default function CategoriesPage() {
           style={{ background: 'radial-gradient(ellipse, rgba(99,102,241,0.12) 0%, transparent 70%)' }} />
         <div className="absolute inset-0 hero-grid-overlay" />
 
-        <div className="relative mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 py-14 sm:py-18">
+        <div className="relative mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-14 sm:py-18">
           <div className="max-w-2xl">
             <div className="flex items-center gap-2 mb-4">
               <div className="h-9 w-9 rounded-xl bg-brand-600/20 border border-brand-500/30 flex items-center justify-center">
@@ -93,10 +93,10 @@ export default function CategoriesPage() {
       </div>
 
       {/* ── Categories grid ───────────────────────────────── */}
-      <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 py-10 sm:py-14">
+      <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-10 sm:py-14">
 
         {loading ? (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
             {Array.from({ length: 12 }).map((_, i) => (
               <Skeleton key={i} className="h-44 rounded-2xl" />
             ))}
@@ -128,7 +128,7 @@ export default function CategoriesPage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
               {filtered.map((cat, i) => {
                 const grad = GRADIENTS[i % GRADIENTS.length];
                 return (

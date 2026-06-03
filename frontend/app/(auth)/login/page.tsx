@@ -97,7 +97,7 @@ function LoginForm() {
       </div>
 
       {/* Right panel — form */}
-      <div className="flex flex-1 flex-col justify-center px-6 py-12 sm:px-12 lg:px-16 xl:px-20">
+      <div className="flex flex-1 flex-col justify-center px-4 xs:px-6 py-8 xs:py-12 sm:px-12 lg:px-16 xl:px-20">
         {/* Mobile logo */}
         <div className="lg:hidden mb-8">
           <Link href="/" className="inline-flex items-center gap-2 font-bold text-gray-900 dark:text-white">

@@ -230,7 +230,7 @@ function ReviewHealthCard({ ov }: { ov: NonNullable<DashboardStats['overview']> 
           </div>
 
           {/* Status breakdown */}
-          <div className="grid grid-cols-2 gap-3 flex-1 w-full">
+          <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 flex-1 w-full">
             {items.map(({ key, value }) => {
               const d = STATUS_DETAILS[key];
               const pct = ov.totalReviews > 0 ? Math.round((value / ov.totalReviews) * 100) : 0;
@@ -302,7 +302,7 @@ export default function DashboardPage() {
         <div className="absolute bottom-0 left-0 right-0 h-16"
           style={{ background: 'linear-gradient(to top, #060c1a, transparent)' }} />
 
-        <div className="relative mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 py-10 sm:py-14">
+        <div className="relative mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-6 xs:py-8 sm:py-12">
           <div className="flex flex-col sm:flex-row sm:items-center gap-6 sm:justify-between">
 
             {/* Left: user info */}
@@ -320,7 +320,7 @@ export default function DashboardPage() {
                 <div className="flex items-center gap-2 mb-1">
                   <p className="text-xs font-semibold uppercase tracking-[0.12em] text-brand-400/80">{greeting}</p>
                 </div>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white leading-tight tracking-tight">
+                <h1 className="text-lg xs:text-xl sm:text-2xl lg:text-3xl font-bold text-white leading-tight tracking-tight">
                   {user.full_name || user.username || 'My Dashboard'}
                 </h1>
                 <div className="flex flex-wrap items-center gap-2.5 mt-2">
@@ -355,17 +355,17 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 -mt-4 pb-10 space-y-6">
+      <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 -mt-4 pb-10 space-y-6">
 
         {/* ── Stat Cards ─────────────────────────────────────── */}
         {loading ? (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
               <Skeleton key={i} className="h-36 rounded-2xl" />
             ))}
           </div>
         ) : ov ? (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {STAT_CARDS.map((card, idx) => {
               const raw = ov[card.key as keyof typeof ov] as number;
               const value = card.format ? card.format(raw) : raw.toLocaleString();

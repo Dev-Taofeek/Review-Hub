@@ -74,7 +74,7 @@ export default function CategoryPage() {
           style={{ background: 'radial-gradient(ellipse, rgba(5,150,105,0.15) 0%, transparent 70%)' }} />
         <div className="absolute inset-0 hero-grid-overlay" />
 
-        <div className="relative mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 py-10 sm:py-14">
+        <div className="relative mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-10 sm:py-14">
           {/* Breadcrumb */}
           <Link
             href="/categories"
@@ -125,7 +125,7 @@ export default function CategoryPage() {
       </div>
 
       {/* ── Products section ──────────────────────────────── */}
-      <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 py-8 sm:py-10">
+      <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-8 sm:py-10">
 
         {/* Toolbar */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-7">
