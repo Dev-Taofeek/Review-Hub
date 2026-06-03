@@ -87,6 +87,10 @@ export const productsApi = {
   },
   getOne: (idOrSlug: string) => request<ApiResponse<Product>>(`/api/products/${idOrSlug}`),
   getCategories: () => request<ApiResponse<Category[]>>('/api/products/categories'),
+  getByCategory: (slug: string, params?: Record<string, string | number>) => {
+    const qs = params ? '&' + new URLSearchParams(params as Record<string, string>).toString() : '';
+    return request<PaginatedResponse<Product>>(`/api/products?category=${slug}${qs}`);
+  },
   create: (data: Partial<Product>) =>
     request<ApiResponse<Product>>('/api/products', { method: 'POST', body: JSON.stringify(data) }),
   update: (id: string, data: Partial<Product>) =>

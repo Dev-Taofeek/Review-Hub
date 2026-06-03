@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   Star, Menu, X, ChevronDown, User, LogOut,
   Shield, BookOpen, LayoutDashboard, BarChart2, Plus,
-  Sparkles,
+  Sparkles, Layers,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Avatar } from '@/components/ui/Avatar';
@@ -54,7 +54,8 @@ export function Navbar() {
   };
 
   const navLinks = [
-    { href: '/products', label: 'Products' },
+    { href: '/products',   label: 'Products' },
+    { href: '/categories', label: 'Categories' },
   ];
 
   return (
@@ -238,6 +239,9 @@ export function Navbar() {
 
           {isAuthenticated ? (
             <>
+              <Link href="/categories" onClick={closeAll} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-white/5 transition-colors">
+                <Layers className="h-4 w-4 text-slate-400" /> Categories
+              </Link>
               <Link href="/products/new" onClick={closeAll} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-white/5 transition-colors">
                 <Plus className="h-4 w-4 text-slate-400" /> Add Product
               </Link>

@@ -114,10 +114,14 @@ export function detectSpam(data: ReviewData): SpamCheckResult {
 
   const isSpam = spamScore >= 70;
   let suggestedStatus: ReviewStatus;
-  if (spamScore >= 70) {
+  if (spamScore >= 90) {
+    // Severe spam — flag immediately for urgent admin attention
     suggestedStatus = 'flagged';
+  } else if (spamScore >= 70) {
+    // Suspicious but not certain — hold for admin review before publishing
+    suggestedStatus = 'pending';
   } else {
-    // Auto-publish anything that isn't clearly spam — no manual approval queue
+    // Clean review — auto-publish immediately
     suggestedStatus = 'published';
   }
 

@@ -73,11 +73,33 @@ export const deleteProduct = async (req: AuthRequest, res: Response): Promise<vo
 
 export const getCategories = async (_req: Request, res: Response): Promise<void> => {
   try {
-    const { data, error } = await import('../config/supabase').then(({ supabaseAdmin }) =>
-      supabaseAdmin.from('categories').select('*').order('name')
-    );
+    const { supabaseAdmin } = await import('../config/supabase');
+
+    const { data, error } = await supabaseAdmin
+      .from('categories')
+      .select('id, name, slug, icon, description')
+      .order('name');
+
     if (error) throw error;
-    sendSuccess(res, data);
+
+    // Fetch active product counts per category in a single query
+    const { data: counts } = await supabaseAdmin
+      .from('products')
+      .select('category_id')
+      .eq('is_active', true)
+      .not('category_id', 'is', null);
+
+    const countMap: Record<string, number> = {};
+    counts?.forEach((p) => {
+      if (p.category_id) countMap[p.category_id] = (countMap[p.category_id] ?? 0) + 1;
+    });
+
+    const result = data?.map((cat) => ({
+      ...cat,
+      product_count: countMap[cat.id] ?? 0,
+    }));
+
+    sendSuccess(res, result);
   } catch {
     sendError(res, 'Failed to fetch categories', 500);
   }

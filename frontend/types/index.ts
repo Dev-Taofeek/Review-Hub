@@ -25,6 +25,7 @@ export interface Category {
   slug: string;
   description?: string;
   icon?: string;
+  product_count?: number;
 }
 
 export interface ProductImage {
