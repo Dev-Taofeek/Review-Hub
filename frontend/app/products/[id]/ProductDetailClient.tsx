@@ -101,7 +101,7 @@ export function ProductDetailClient({ slug }: Props) {
                     i === selectedImage ? 'border-brand-500' : 'border-transparent hover:border-slate-300'
                   }`}
                 >
-                  <Image src={img.url} alt="" fill sizes="64px" className="object-cover" />
+                  <Image src={img.url} alt={`Product image ${i + 1}`} fill sizes="64px" className="object-cover" />
                 </button>
               ))}
             </div>

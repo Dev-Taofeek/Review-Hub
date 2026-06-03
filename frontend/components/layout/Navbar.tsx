@@ -136,12 +136,13 @@ export function Navbar() {
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setProfileOpen(!profileOpen)}
+                  aria-label="Open account menu"
+                  aria-expanded={profileOpen}
+                  aria-haspopup="menu"
                   className={cn(
                     'flex items-center gap-2.5 rounded-xl px-2.5 py-1.5 transition-all duration-200',
                     profileOpen ? 'bg-slate-100 dark:bg-white/10' : 'hover:bg-slate-100 dark:hover:bg-white/8'
                   )}
-                  aria-expanded={profileOpen}
-                  aria-haspopup="true"
                 >
                   <div className="relative">
                     <Avatar src={user.avatar_url} name={user.full_name || user.username} size="sm" />

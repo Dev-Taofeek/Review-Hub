@@ -11,13 +11,13 @@ export function ConditionalShell({ children }: { children: React.ReactNode }) {
   const isAuth   = AUTH_ROUTES.some((r) => pathname.startsWith(r));
 
   if (isAuth) {
-    return <main className="flex-1">{children}</main>;
+    return <main id="main-content" className="flex-1">{children}</main>;
   }
 
   return (
     <>
       <Navbar />
-      <main className="flex-1">{children}</main>
+      <main id="main-content" className="flex-1">{children}</main>
       <Footer />
     </>
   );

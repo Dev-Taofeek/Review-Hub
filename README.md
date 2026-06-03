@@ -1,104 +1,114 @@
-# ReviewHub — Production-Ready Product Review Platform
+# ReviewHub
 
-A full-stack, scalable product review and rating platform built with Next.js 14, Express.js, Supabase, and Cloudinary.
+A full-stack product review platform built for trust — community-moderated, spam-filtered, and designed to help shoppers make confident purchase decisions.
+
+**Live:** [review-hub-lilac.vercel.app](https://review-hub-lilac.vercel.app)  
+**Backend API:** [review-hub-production.up.railway.app/health](https://review-hub-production.up.railway.app/health)
 
 ---
 
 ## Tech Stack
 
-| Layer      | Technology                                      |
-|------------|-------------------------------------------------|
-| Frontend   | Next.js 14 App Router · TypeScript · Tailwind CSS |
-| Backend    | Express.js · TypeScript · express-validator      |
-| Database   | Supabase PostgreSQL · Row Level Security         |
-| Auth       | Supabase Auth (email/password)                  |
-| Media      | Cloudinary CDN                                  |
-| Testing    | Jest · ts-jest                                  |
-| Deployment | Vercel (frontend) · Render/Railway (backend)    |
-
----
-
-## Features
-
-- **Authentication** — Supabase Auth, protected routes, role-based access (user/moderator/admin)
-- **Products** — CRUD, categories, images, search/filter/sort, rating aggregation
-- **Reviews** — Create/edit/delete, pros/cons, image uploads, helpful votes, rating distribution
-- **Spam Detection** — Heuristic scoring: link detection, repeated words, caps, velocity, bombing
-- **Reports** — Flag reviews with reasons, auto-flag at 3+ reports, moderator review queue
-- **Moderation** — Approve/reject/flag queue, moderation logs, spam score visualization
-- **Admin Panel** — Analytics, user management, role assignment, product management
-- **SEO** — Server-side rendering, OpenGraph, metadata API
+| Layer | Technology |
+|---|---|
+| Frontend | Next.js 16 (App Router), TypeScript, Tailwind CSS |
+| Backend | Express.js, TypeScript |
+| Database | Supabase (PostgreSQL + Row Level Security) |
+| Auth | Supabase Auth (email/password, session cookies) |
+| Images | Cloudinary |
+| Frontend hosting | Vercel |
+| Backend hosting | Railway |
 
 ---
 
 ## Project Structure
 
 ```
-reviewhub/
-├── frontend/          # Next.js 14 App Router
-│   ├── app/           # Pages (App Router)
-│   ├── components/    # UI, layout, feature components
-│   ├── hooks/         # Custom React hooks
-│   ├── lib/           # API client, Supabase, utilities
-│   └── types/         # TypeScript types
-├── backend/           # Express.js API
-│   └── src/
-│       ├── controllers/
-│       ├── routes/
-│       ├── services/
-│       ├── middlewares/
-│       ├── utils/
-│       ├── validators/
-│       └── tests/     # Jest tests
-└── supabase/          # DB schema, RLS, seed data
+reviewplatform/
+├── frontend/                  # Next.js 16 app
+│   ├── app/                   # App Router pages + layouts
+│   │   ├── (auth)/            # Login / register (hides navbar/footer)
+│   │   ├── admin/             # Admin-only pages + error boundary
+│   │   ├── categories/        # Category browser + slug pages
+│   │   ├── dashboard/         # User dashboard + error boundary
+│   │   ├── moderation/        # Moderator queue
+│   │   ├── products/          # Product listing, detail, create + loading/error
+│   │   ├── error.tsx          # Global error boundary (try again + go home)
+│   │   ├── loading.tsx        # Global route loading skeleton
+│   │   ├── robots.ts          # robots.txt generation (Next.js route)
+│   │   └── sitemap.ts         # sitemap.xml generation (dynamic, revalidated)
+│   ├── components/
+│   │   ├── admin/             # StatsCard, UserTable, UserDetailModal
+│   │   ├── layout/            # Navbar, Footer, Sidebar, ConditionalShell
+│   │   ├── moderation/        # ModerationCard
+│   │   ├── products/          # ProductCard, ProductFilters, RatingDistribution
+│   │   ├── reviews/           # ReviewCard, ReviewForm, ReportModal
+│   │   └── ui/                # Button, Input, Modal, Avatar, Badge, StarRating…
+│   ├── hooks/                 # useAuth, useProducts, useReviews
+│   ├── lib/                   # api.ts, utils.ts, supabase.ts, theme.tsx
+│   ├── __tests__/             # Jest + React Testing Library tests
+│   │   ├── lib/utils.test.ts
+│   │   └── components/
+│   │       ├── Button.test.tsx
+│   │       └── StarRating.test.tsx
+│   └── types/                 # Shared TypeScript interfaces
+│
+└── backend/                   # Express.js API
+    └── src/
+        ├── controllers/       # Route handlers
+        ├── services/          # Business logic layer
+        ├── routes/            # Express route definitions
+        ├── middlewares/       # Auth, rate limiting, validation, errors
+        ├── validators/        # express-validator schemas
+        ├── utils/             # spamDetection, ratingCalculator, apiResponse, pagination
+        ├── config/            # Supabase + Cloudinary clients
+        ├── types/             # Shared types
+        └── tests/             # Jest tests (7 suites, ~60 test cases)
 ```
 
 ---
 
-## Quick Start
+## Features
 
-### 1. Clone & Install
+- **Product catalog** — Browse, search, filter and sort products by category, brand, price, rating
+- **Category pages** — Explore products by category with product counts and full filter support
+- **Community reviews** — Submit reviews with star ratings, pros/cons, image uploads
+- **Automatic spam detection** — 10-signal scoring system with three outcome tiers (publish / pending / flagged)
+- **Moderation queue** — Moderators approve/reject/flag content with reason logging
+- **Report system** — Users report suspicious reviews; moderators resolve or dismiss
+- **Admin panel** — Platform analytics, user management (role, ban, verify, vote permissions)
+- **User dashboard** — Review stats, health donut chart, activity feed, quick actions
+- **Role-based access** — `user` / `moderator` / `admin` with middleware-level and DB-level protection
+- **Dark mode** — System-aware with manual toggle
+- **Full responsiveness** — Works from smartwatch (360px) to 4K desktop with `xs` breakpoint
+- **SEO** — Dynamic `generateMetadata`, Open Graph, Twitter cards, JSON-LD structured data, sitemap, robots.txt
+- **Error handling** — Global + route-specific error boundaries with "Try again" recovery
+- **Loading states** — Route-level `loading.tsx` skeletons for instant perceived performance
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- pnpm (`npm install -g pnpm`)
+- Supabase project (free tier works)
+- Cloudinary account (free tier works)
+
+### 1. Clone and install
 
 ```bash
-git clone <your-repo>
-cd reviewhub
-npm run install:all
+git clone https://github.com/Dev-Taofeek/Review-Hub.git
+cd reviewplatform
+
+cd frontend && pnpm install
+cd ../backend && pnpm install
 ```
 
-### 2. Supabase Setup
+### 2. Environment variables
 
-1. Create a project at [supabase.com](https://supabase.com)
-2. Run `supabase/schema.sql` in the SQL editor
-3. Run `supabase/rls.sql` to set up Row Level Security
-4. Run `supabase/seed.sql` to insert sample data
-5. Copy your project URL, anon key, and service role key
-
-### 3. Cloudinary Setup
-
-1. Create an account at [cloudinary.com](https://cloudinary.com)
-2. Copy your cloud name, API key, and API secret
-
-### 4. Environment Variables
-
-**Backend** — copy `backend/.env.example` to `backend/.env`:
-
-```env
-NODE_ENV=development
-PORT=4000
-
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-
-CLOUDINARY_CLOUD_NAME=your-cloud-name
-CLOUDINARY_API_KEY=your-api-key
-CLOUDINARY_API_SECRET=your-api-secret
-
-FRONTEND_URL=http://localhost:3000
-```
-
-**Frontend** — copy `frontend/.env.example` to `frontend/.env.local`:
-
+**Frontend** (`frontend/.env.local`):
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
@@ -106,68 +116,122 @@ NEXT_PUBLIC_API_URL=http://localhost:4000
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
-### 5. Run Development Servers
+**Backend** (`backend/.env`):
+```env
+NODE_ENV=development
+PORT=4000
 
-```bash
-# Both servers concurrently (from root)
-npm run dev
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key   # NEVER expose this to the browser
 
-# Or individually
-npm run dev:frontend   # http://localhost:3000
-npm run dev:backend    # http://localhost:4000
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+
+FRONTEND_URL=http://localhost:3000
+RATE_LIMIT_WINDOW_MS=900000
+RATE_LIMIT_MAX_REQUESTS=100
 ```
 
-### 6. Run Tests
+### 3. Supabase setup
 
-```bash
-npm run test:backend
-# or with coverage
-cd backend && npm run test:coverage
-```
-
----
-
-## Creating an Admin User
-
-1. Register a new account via the UI
-2. In Supabase SQL editor, run:
+Run this in **Supabase → SQL Editor** to add any missing columns:
 
 ```sql
-UPDATE profiles SET role = 'admin' WHERE id = '<your-user-id>';
+ALTER TABLE public.profiles
+  ADD COLUMN IF NOT EXISTS is_verified BOOLEAN NOT NULL DEFAULT false,
+  ADD COLUMN IF NOT EXISTS can_vote    BOOLEAN NOT NULL DEFAULT true;
 ```
+
+Then **Supabase → Settings → API → Reload schema** to clear the PostgREST cache.
+
+### 4. Run
+
+```bash
+# Terminal 1
+cd backend && pnpm dev
+
+# Terminal 2
+cd frontend && pnpm dev
+```
+
+Visit [http://localhost:3000](http://localhost:3000)
 
 ---
 
-## API Reference
+## Scripts
 
-| Method | Endpoint                              | Auth       | Description              |
-|--------|---------------------------------------|------------|--------------------------|
-| GET    | /api/auth/me                          | Required   | Get current user profile |
-| GET    | /api/products                         | Optional   | List products (paginated)|
-| GET    | /api/products/:id                     | Optional   | Get product + reviews    |
-| POST   | /api/products                         | Admin      | Create product           |
-| PATCH  | /api/products/:id                     | Admin      | Update product           |
-| DELETE | /api/products/:id                     | Admin      | Delete product           |
-| GET    | /api/products/:id/reviews             | Optional   | Get product reviews      |
-| POST   | /api/products/:id/reviews             | Required   | Submit review            |
-| PATCH  | /api/reviews/:id                      | Owner      | Edit review              |
-| DELETE | /api/reviews/:id                      | Owner/Mod  | Delete review            |
-| POST   | /api/reviews/:id/helpful              | Required   | Vote helpful             |
-| POST   | /api/reports/reviews/:id/report       | Required   | Report review            |
-| GET    | /api/reports                          | Mod/Admin  | List reports             |
-| PATCH  | /api/reports/:id                      | Mod/Admin  | Update report status     |
-| GET    | /api/moderation/reviews               | Mod/Admin  | Moderation queue         |
-| PATCH  | /api/moderation/reviews/:id/approve   | Mod/Admin  | Approve review           |
-| PATCH  | /api/moderation/reviews/:id/reject    | Mod/Admin  | Reject review            |
-| PATCH  | /api/moderation/reviews/:id/flag      | Mod/Admin  | Flag review              |
-| GET    | /api/moderation/stats                 | Mod/Admin  | Moderation stats         |
-| GET    | /api/admin/analytics                  | Admin      | Platform analytics       |
-| GET    | /api/admin/users                      | Admin      | List users               |
-| PATCH  | /api/admin/users/:id/role             | Admin      | Update user role         |
-| PATCH  | /api/admin/users/:id/ban              | Admin      | Ban/unban user           |
-| POST   | /api/uploads/products/:productId      | Admin      | Upload product image     |
-| POST   | /api/uploads/reviews/:reviewId        | Required   | Upload review image      |
-| POST   | /api/uploads/avatar                   | Required   | Upload avatar            |
+### Frontend (`cd frontend`)
+
+| Command | Description |
+|---|---|
+| `pnpm dev` | Next.js dev server |
+| `pnpm build` | Production build |
+| `pnpm start` | Serve production build |
+| `pnpm lint` | ESLint |
+| `pnpm test` | Run Jest tests |
+| `pnpm test:watch` | Jest watch mode |
+| `pnpm test:coverage` | Jest with coverage |
+
+### Backend (`cd backend`)
+
+| Command | Description |
+|---|---|
+| `pnpm dev` | Express dev server (hot-reload) |
+| `pnpm build` | Compile TypeScript → `dist/` |
+| `pnpm start` | Start compiled server |
+| `pnpm test` | Run all Jest suites |
+| `pnpm test:coverage` | Jest with coverage |
+| `pnpm lint` | ESLint |
+
+---
+
+## Testing
+
+### Backend (7 suites, ~60 tests)
+
+```bash
+cd backend
+pnpm test
+pnpm test:coverage
+```
+
+Covers: spam detection, rating calculations, pagination, RBAC permissions, report logic, review validation, API response formatting.
+
+### Frontend (3 suites, ~50 tests)
+
+```bash
+cd frontend
+pnpm install   # installs @testing-library packages
+pnpm test
+pnpm test:coverage
+```
+
+Covers: utility functions (30+ cases), Button component (12 cases), StarRating component (8 cases).
+
+---
+
+## Spam Detection
+
+Reviews are automatically scored 0–100 across 10 signals:
+
+| Signal | Score |
+|---|---|
+| Body under 20 characters | +30 |
+| 2+ URLs in text | +40 |
+| 1 URL in text | +15 |
+| Repeated characters (`aaaaa`) | +20 |
+| Excessive caps | +15 |
+| Known profanity | +25 |
+| 2+ suspicious keywords (`buy now`, `dm me`…) | +35 |
+| 1 suspicious keyword | +15 |
+| >30% repeated words | +25 |
+| Review bombing (1-star + ≥5 recent) | +50 |
+| High velocity (≥3 reviews recently) | +20 |
+| Generic filler phrase | +30 |
+
+**Score → Status:**  `< 70` → published · `70–89` → pending · `≥ 90` → flagged
 
 ---
 
@@ -175,47 +239,81 @@ UPDATE profiles SET role = 'admin' WHERE id = '<your-user-id>';
 
 ### Frontend → Vercel
 
-```bash
-cd frontend
-npx vercel --prod
-# Set environment variables in Vercel dashboard
+Vercel auto-detects `frontend/` as the root directory.
+
+Set these **Environment Variables** in Vercel → Project → Settings:
+
+```
+NEXT_PUBLIC_SUPABASE_URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY
+NEXT_PUBLIC_API_URL      ← your Railway backend URL (with https://)
+NEXT_PUBLIC_SITE_URL     ← your Vercel URL
 ```
 
-### Backend → Render / Railway
+### Backend → Railway
 
-1. Connect your GitHub repository
-2. Set root directory to `backend/`
-3. Build command: `npm install && npm run build`
-4. Start command: `npm start`
-5. Add all environment variables from `.env.example`
+1. Connect GitHub repo on Railway
+2. Set **Root Directory** to `backend`
+3. Railway uses `backend/railway.toml` + `backend/nixpacks.toml` automatically
 
-### Database → Supabase (already hosted)
+Set these **Variables** in Railway → Service → Variables:
+
+```
+NODE_ENV=production
+SUPABASE_URL
+SUPABASE_ANON_KEY
+SUPABASE_SERVICE_ROLE_KEY
+CLOUDINARY_CLOUD_NAME
+CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET
+FRONTEND_URL     ← your Vercel URL (e.g. https://review-hub-lilac.vercel.app)
+```
+
+> Any `*.vercel.app` domain is automatically CORS-allowed (covers preview deployments).
 
 ---
 
-## Spam Detection Logic
+## User Roles
 
-Each review is scored 0–100 on submission:
+| Role | Capabilities |
+|---|---|
+| `user` | Browse, review, vote, report |
+| `moderator` | All user + approve/reject/flag reviews, resolve reports |
+| `admin` | All moderator + manage users, view platform analytics |
 
-| Signal                   | Score |
-|--------------------------|-------|
-| Body < 20 chars          | +30   |
-| 2+ URLs                  | +40   |
-| 1 URL                    | +15   |
-| Repeated characters      | +20   |
-| Excessive caps           | +15   |
-| Suspicious keywords (2+) | +35   |
-| Word repetition > 30%    | +25   |
-| High review velocity     | +20   |
-| Review bombing (1★ x5+)  | +40   |
-| Generic filler phrase    | +30   |
+---
 
-- Score 0–29  → `published` immediately
-- Score 30–69 → `pending` (awaits moderator)
-- Score 70+   → `flagged` (high priority queue)
+## API Overview
+
+Base URL: `https://review-hub-production.up.railway.app/api`
+
+| Method | Endpoint | Auth | Purpose |
+|---|---|---|---|
+| GET | `/products` | Optional | List/search/filter products |
+| GET | `/products/categories` | Public | Categories with product counts |
+| POST | `/products` | Required | Create product |
+| GET | `/products/:id` | Optional | Product + rating distribution |
+| GET | `/products/:id/reviews` | Optional | Reviews for product |
+| POST | `/products/:id/reviews` | Required | Submit review (auto spam-checked) |
+| GET | `/auth/me/stats` | Required | User review statistics |
+| PATCH | `/auth/profile` | Required | Update profile |
+| GET | `/admin/analytics` | Admin | Platform analytics |
+| GET | `/moderation/reviews` | Mod+ | Pending moderation queue |
+
+---
+
+## Security
+
+- All secrets stored as environment variables — never committed
+- `SUPABASE_SERVICE_ROLE_KEY` is backend-only (server-side Express only)
+- Supabase RLS provides row-level database access control
+- Rate limiting on all sensitive endpoints (auth, uploads, review submission)
+- CORS restricted to `FRONTEND_URL` + `*.vercel.app`
+- Helmet.js security headers on all responses
+- Input validated with express-validator before reaching business logic
 
 ---
 
 ## License
 
-MIT — free for personal and commercial use.
+MIT © ReviewHub
