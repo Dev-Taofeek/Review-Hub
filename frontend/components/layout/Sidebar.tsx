@@ -21,11 +21,13 @@ export function Sidebar({ items, title }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-52 shrink-0">
+    <aside className="w-56 shrink-0">
       {title && (
-        <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500">
-          {title}
-        </p>
+        <div className="mb-3 px-3">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+            {title}
+          </p>
+        </div>
       )}
       <nav className="flex flex-col gap-0.5">
         {items.map((item) => {
@@ -38,23 +40,36 @@ export function Sidebar({ items, title }: SidebarProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                'group flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-150',
+                'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
                 active
-                  ? 'bg-brand-50 text-brand-700 dark:bg-brand-950/50 dark:text-brand-300'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-white/8 dark:hover:text-gray-100'
+                  ? 'bg-gradient-to-r from-brand-50 via-brand-50/60 to-transparent text-brand-700 dark:from-brand-950/70 dark:via-brand-950/30 dark:to-transparent dark:text-brand-300 shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-white/[0.06] dark:hover:text-slate-100'
               )}
             >
+              {/* Left accent bar on active */}
+              {active && (
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[60%] rounded-r-full bg-gradient-to-b from-brand-400 to-brand-600 dark:from-brand-400 dark:to-brand-600" />
+              )}
+
+              {/* Icon container */}
               <span className={cn(
-                'flex h-7 w-7 items-center justify-center rounded-lg shrink-0 transition-all [&>svg]:h-4 [&>svg]:w-4',
+                'flex h-8 w-8 items-center justify-center rounded-lg shrink-0 transition-all duration-200 [&>svg]:h-4 [&>svg]:w-4',
                 active
-                  ? 'bg-brand-100 dark:bg-brand-900/60 text-brand-600 dark:text-brand-400'
-                  : 'bg-gray-100 dark:bg-white/8 text-gray-500 dark:text-gray-500 group-hover:bg-gray-200 dark:group-hover:bg-white/12'
+                  ? 'bg-brand-100 dark:bg-brand-900/60 text-brand-600 dark:text-brand-400 shadow-sm shadow-brand-200/50 dark:shadow-brand-900/50'
+                  : 'bg-slate-100 dark:bg-white/[0.06] text-slate-500 dark:text-slate-500 group-hover:bg-slate-200 dark:group-hover:bg-white/10 group-hover:text-slate-700 dark:group-hover:text-slate-300'
               )}>
                 {item.icon}
               </span>
-              <span className="flex-1">{item.label}</span>
+
+              <span className="flex-1 truncate">{item.label}</span>
+
               {item.badge !== undefined && item.badge > 0 && (
-                <span className="flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white">
+                <span className={cn(
+                  'flex h-5 min-w-[20px] items-center justify-center rounded-full px-1.5 text-[10px] font-bold',
+                  active
+                    ? 'bg-brand-500 text-white'
+                    : 'bg-red-500 text-white'
+                )}>
                   {item.badge > 99 ? '99+' : item.badge}
                 </span>
               )}

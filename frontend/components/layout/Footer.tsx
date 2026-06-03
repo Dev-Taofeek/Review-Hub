@@ -4,7 +4,7 @@ import { Star } from 'lucide-react';
 export function Footer() {
   return (
     <footer className="border-t border-gray-100 dark:border-white/8 bg-white dark:bg-surface-dark mt-auto">
-      <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-14 py-10 sm:py-12">
+      <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 py-10 sm:py-12">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
           {/* Brand */}
           <div className="col-span-2 sm:col-span-1">

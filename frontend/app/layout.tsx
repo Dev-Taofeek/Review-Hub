@@ -28,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body className="flex min-h-full flex-col bg-gray-50 text-gray-900 dark:bg-[#080d1a] dark:text-slate-100">
+      <body className="flex min-h-full flex-col bg-slate-50 text-slate-900 dark:bg-[#060c1a] dark:text-slate-100">
         <ThemeProvider>
         <ScrollToTop />
         <ConditionalShell>{children}</ConditionalShell>

@@ -20,7 +20,7 @@ export function ProductsClient() {
   const isFiltered = !!(filters.search || filters.category || filters.brand || filters.minPrice || filters.maxPrice || filters.minRating);
 
   return (
-    <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-14 py-8">
+    <div className="mx-auto max-w-[1600px] px-4 sm:px-8 lg:px-18 py-8">
       {/* Header */}
       <div className="flex items-start justify-between mb-6">
         <div>

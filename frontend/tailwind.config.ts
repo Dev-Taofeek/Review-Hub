@@ -107,6 +107,9 @@ const config: Config = {
           '50%':      { boxShadow: '0 0 24px rgba(16,185,129,0.6)' },
         },
       },
+      spacing: {
+        '18': '4.5rem',
+      },
       borderRadius: {
         '2xl': '1rem',
         '3xl': '1.5rem',

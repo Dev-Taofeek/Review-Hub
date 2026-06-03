@@ -116,9 +116,8 @@ export function detectSpam(data: ReviewData): SpamCheckResult {
   let suggestedStatus: ReviewStatus;
   if (spamScore >= 70) {
     suggestedStatus = 'flagged';
-  } else if (spamScore >= 30) {
-    suggestedStatus = 'pending';
   } else {
+    // Auto-publish anything that isn't clearly spam — no manual approval queue
     suggestedStatus = 'published';
   }
 
