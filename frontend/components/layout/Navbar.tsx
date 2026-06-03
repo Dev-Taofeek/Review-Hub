@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import {
   Star, Menu, X, ChevronDown, User, LogOut,
   Shield, BookOpen, LayoutDashboard, BarChart2, Plus,
-  Sparkles, Layers,
+  Sparkles, Layers, Package,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Avatar } from '@/components/ui/Avatar';
@@ -16,6 +16,21 @@ import { ThemeToggle } from '@/components/ui/ThemeToggle';
 import { cn } from '@/lib/utils';
 import toast from 'react-hot-toast';
 
+/* ── Shared mobile link style ── */
+const mobileLink = (active: boolean) => cn(
+  'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors',
+  active
+    ? 'bg-brand-50 text-brand-700 dark:bg-brand-950/40 dark:text-brand-300'
+    : 'text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-white/5'
+);
+
+const mobileIcon = (active: boolean) => cn(
+  'flex h-8 w-8 items-center justify-center rounded-lg shrink-0 [&>svg]:h-4 [&>svg]:w-4 transition-colors',
+  active
+    ? 'bg-brand-100 dark:bg-brand-900/50 text-brand-600 dark:text-brand-400'
+    : 'bg-slate-100 dark:bg-white/8 text-slate-500 dark:text-slate-400'
+);
+
 export function Navbar() {
   const { user, isAuthenticated, isAdmin, isModerator, signOut, loading } = useAuth();
   const [mobileOpen,  setMobileOpen]  = useState(false);
@@ -24,7 +39,6 @@ export function Navbar() {
   const router   = useRouter();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  /* Close profile dropdown on outside click */
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
@@ -35,16 +49,12 @@ export function Navbar() {
     return () => document.removeEventListener('mousedown', handler);
   }, [profileOpen]);
 
-  /* Close both menus on any route change */
   useEffect(() => {
     setMobileOpen(false);
     setProfileOpen(false);
   }, [pathname]);
 
-  const closeAll = () => {
-    setMobileOpen(false);
-    setProfileOpen(false);
-  };
+  const closeAll = () => { setMobileOpen(false); setProfileOpen(false); };
 
   const handleSignOut = async () => {
     closeAll();
@@ -53,9 +63,24 @@ export function Navbar() {
     router.push('/');
   };
 
+  /* Desktop nav links */
   const navLinks = [
     { href: '/products',   label: 'Products' },
     { href: '/categories', label: 'Categories' },
+  ];
+
+  /* All mobile nav links with icons — single source of truth, no duplicates */
+  const browseLinks = [
+    { href: '/products',   label: 'Products',   icon: <Package /> },
+    { href: '/categories', label: 'Categories', icon: <Layers /> },
+  ];
+  const accountLinks = [
+    { href: '/dashboard',    label: 'Dashboard',   icon: <BarChart2 /> },
+    { href: '/my-reviews',   label: 'My Reviews',  icon: <BookOpen /> },
+    { href: '/products/new', label: 'Add Product', icon: <Plus /> },
+    { href: '/profile',      label: 'Profile',     icon: <User /> },
+    ...(isModerator ? [{ href: '/moderation', label: 'Moderation', icon: <Shield /> }] : []),
+    ...(isAdmin     ? [{ href: '/admin',       label: 'Admin Panel', icon: <LayoutDashboard /> }] : []),
   ];
 
   return (
@@ -63,11 +88,8 @@ export function Navbar() {
       <div className="mx-auto flex h-[60px] max-w-[1600px] items-center justify-between px-4 sm:px-8 lg:px-18">
 
         {/* Logo */}
-        <Link
-          href={isAuthenticated ? '/dashboard' : '/'}
-          onClick={closeAll}
-          className="flex items-center gap-2.5 shrink-0 group"
-        >
+        <Link href={isAuthenticated ? '/dashboard' : '/'} onClick={closeAll}
+          className="flex items-center gap-2.5 shrink-0 group">
           <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-lg shadow-brand-600/30 group-hover:shadow-brand-600/50 transition-shadow duration-300">
             <Star className="h-4.5 w-4.5 fill-current" />
             <div className="absolute inset-0 rounded-xl bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -81,9 +103,7 @@ export function Navbar() {
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-0.5">
           {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
+            <Link key={link.href} href={link.href}
               className={cn(
                 'relative px-4 py-2 text-sm font-medium rounded-xl transition-all duration-200',
                 pathname.startsWith(link.href)
@@ -105,7 +125,6 @@ export function Navbar() {
             <div className="h-9 w-9 animate-pulse rounded-full bg-slate-200 dark:bg-white/10" />
           ) : isAuthenticated && user ? (
             <>
-              {/* Add product shortcut */}
               <Link href="/products/new" className="hidden sm:block" onClick={closeAll}>
                 <Button variant="outline" size="sm" icon={<Plus className="h-3.5 w-3.5" />}
                   className="border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:border-brand-300 dark:hover:border-brand-700 hover:bg-brand-50 dark:hover:bg-brand-950/30 transition-colors">
@@ -113,15 +132,13 @@ export function Navbar() {
                 </Button>
               </Link>
 
-              {/* Profile dropdown */}
+              {/* Profile dropdown — desktop */}
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setProfileOpen(!profileOpen)}
                   className={cn(
                     'flex items-center gap-2.5 rounded-xl px-2.5 py-1.5 transition-all duration-200',
-                    profileOpen
-                      ? 'bg-slate-100 dark:bg-white/10'
-                      : 'hover:bg-slate-100 dark:hover:bg-white/8'
+                    profileOpen ? 'bg-slate-100 dark:bg-white/10' : 'hover:bg-slate-100 dark:hover:bg-white/8'
                   )}
                   aria-expanded={profileOpen}
                   aria-haspopup="true"
@@ -141,7 +158,6 @@ export function Navbar() {
 
                 {profileOpen && (
                   <div className="absolute right-0 top-full mt-2.5 z-50 w-60 rounded-2xl border border-slate-100 dark:border-white/[0.07] bg-white dark:bg-[#0c1526] py-2 shadow-xl shadow-slate-900/15 dark:shadow-black/40 animate-scale-in overflow-hidden">
-                    {/* Header with gradient */}
                     <div className="relative px-4 py-3.5 mb-1 overflow-hidden">
                       <div className="absolute inset-0 bg-gradient-to-br from-brand-50 to-transparent dark:from-brand-950/30 dark:to-transparent" />
                       <div className="relative">
@@ -157,26 +173,17 @@ export function Navbar() {
                         <RoleBadge role={user.role} />
                       </div>
                     </div>
-
                     <div className="px-2 pb-1">
-                      <DropdownItem href="/dashboard"  icon={<BarChart2 />}     onClick={closeAll}>Dashboard</DropdownItem>
-                      <DropdownItem href="/profile"    icon={<User />}          onClick={closeAll}>Profile</DropdownItem>
-                      <DropdownItem href="/my-reviews" icon={<BookOpen />}      onClick={closeAll}>My Reviews</DropdownItem>
-                      {isModerator && (
-                        <DropdownItem href="/moderation" icon={<Shield />}     onClick={closeAll}>Moderation</DropdownItem>
-                      )}
-                      {isAdmin && (
-                        <DropdownItem href="/admin"   icon={<LayoutDashboard />} onClick={closeAll}>Admin Panel</DropdownItem>
-                      )}
+                      <DropdownItem href="/dashboard"  icon={<BarChart2 />}       onClick={closeAll}>Dashboard</DropdownItem>
+                      <DropdownItem href="/profile"    icon={<User />}            onClick={closeAll}>Profile</DropdownItem>
+                      <DropdownItem href="/my-reviews" icon={<BookOpen />}        onClick={closeAll}>My Reviews</DropdownItem>
+                      {isModerator && <DropdownItem href="/moderation" icon={<Shield />} onClick={closeAll}>Moderation</DropdownItem>}
+                      {isAdmin     && <DropdownItem href="/admin" icon={<LayoutDashboard />} onClick={closeAll}>Admin Panel</DropdownItem>}
                     </div>
-
                     <div className="mx-3 my-1.5 border-t border-slate-100 dark:border-white/[0.06]" />
-
                     <div className="px-2 pb-1">
-                      <button
-                        onClick={handleSignOut}
-                        className="flex w-full items-center gap-2.5 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors"
-                      >
+                      <button onClick={handleSignOut}
+                        className="flex w-full items-center gap-2.5 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors">
                         <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-red-50 dark:bg-red-950/40">
                           <LogOut className="h-3.5 w-3.5 text-red-500" />
                         </span>
@@ -202,7 +209,6 @@ export function Navbar() {
 
           <ThemeToggle className="hidden md:flex" />
 
-          {/* Mobile menu toggle */}
           <button
             className={cn(
               'md:hidden p-2 rounded-xl transition-all duration-200',
@@ -218,77 +224,97 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile nav drawer */}
+      {/* ── Mobile nav drawer ───────────────────────────── */}
       {mobileOpen && (
-        <div className="md:hidden border-t border-slate-100 dark:border-white/[0.06] bg-white dark:bg-[#0c1526] px-3 py-3 space-y-0.5 animate-slide-down">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={closeAll}
-              className={cn(
-                'flex items-center px-3 py-2.5 rounded-xl text-sm font-medium transition-colors',
-                pathname.startsWith(link.href)
-                  ? 'bg-brand-50 text-brand-700 dark:bg-brand-950/40 dark:text-brand-300'
-                  : 'text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-white/5'
-              )}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div className="md:hidden border-t border-slate-100 dark:border-white/[0.06] bg-white dark:bg-[#0c1526] animate-slide-down">
 
-          {isAuthenticated ? (
-            <>
-              <Link href="/categories" onClick={closeAll} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-white/5 transition-colors">
-                <Layers className="h-4 w-4 text-slate-400" /> Categories
-              </Link>
-              <Link href="/products/new" onClick={closeAll} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-white/5 transition-colors">
-                <Plus className="h-4 w-4 text-slate-400" /> Add Product
-              </Link>
-              <Link href="/dashboard" onClick={closeAll} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-white/5 transition-colors">
-                <BarChart2 className="h-4 w-4 text-slate-400" /> Dashboard
-              </Link>
-              <Link href="/my-reviews" onClick={closeAll} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-white/5 transition-colors">
-                <BookOpen className="h-4 w-4 text-slate-400" /> My Reviews
-              </Link>
-              {isModerator && (
-                <Link href="/moderation" onClick={closeAll} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-white/5 transition-colors">
-                  <Shield className="h-4 w-4 text-slate-400" /> Moderation
-                </Link>
-              )}
-              {isAdmin && (
-                <Link href="/admin" onClick={closeAll} className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-white/5 transition-colors">
-                  <LayoutDashboard className="h-4 w-4 text-slate-400" /> Admin Panel
-                </Link>
-              )}
-
-              <div className="pt-1">
-                <div className="h-px bg-slate-100 dark:bg-white/[0.05] mx-1 mb-1" />
-                <button
-                  onClick={handleSignOut}
-                  className="flex w-full items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors"
-                >
-                  <LogOut className="h-4 w-4" /> Sign out
-                </button>
+          {/* User info strip — authenticated only */}
+          {isAuthenticated && user && (
+            <div className="px-4 py-3 border-b border-slate-100 dark:border-white/[0.05] flex items-center gap-3">
+              <div className="relative">
+                <Avatar src={user.avatar_url} name={user.full_name || user.username} size="sm" />
+                <span className="absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full bg-emerald-500 border-2 border-white dark:border-[#0c1526]" />
               </div>
-            </>
-          ) : (
-            <div className="flex gap-2 pt-2">
-              <Link href="/login" onClick={closeAll} className="flex-1">
-                <Button variant="outline" size="sm" className="w-full">Sign in</Button>
-              </Link>
-              <Link href="/register" onClick={closeAll} className="flex-1">
-                <Button size="sm" className="w-full">Get started</Button>
-              </Link>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
+                  {user.full_name || user.username}
+                </p>
+                <p className="text-xs text-slate-400 truncate">{user.email}</p>
+              </div>
+              <RoleBadge role={user.role} />
             </div>
           )}
 
-          <div className="flex items-center justify-between px-3 py-2.5 mt-1 rounded-xl border border-slate-100 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.03]">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-3.5 w-3.5 text-slate-400" />
-              <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Appearance</span>
+          <div className="px-3 py-3 space-y-4">
+
+            {/* ── Browse section ── */}
+            <div>
+              <p className="px-3 mb-1 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500">
+                Discover
+              </p>
+              <div className="space-y-0.5">
+                {browseLinks.map((link) => {
+                  const active = pathname.startsWith(link.href);
+                  return (
+                    <Link key={link.href} href={link.href} onClick={closeAll} className={mobileLink(active)}>
+                      <span className={mobileIcon(active)}>{link.icon}</span>
+                      {link.label}
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
-            <ThemeToggle />
+
+            {/* ── Account section — authenticated ── */}
+            {isAuthenticated ? (
+              <div>
+                <p className="px-3 mb-1 text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500">
+                  My Account
+                </p>
+                <div className="space-y-0.5">
+                  {accountLinks.map((link) => {
+                    const active = pathname === link.href || pathname.startsWith(link.href + '/');
+                    return (
+                      <Link key={link.href} href={link.href} onClick={closeAll} className={mobileLink(active)}>
+                        <span className={mobileIcon(active)}>{link.icon}</span>
+                        {link.label}
+                      </Link>
+                    );
+                  })}
+                </div>
+
+                {/* Sign out */}
+                <div className="mt-2 pt-2 border-t border-slate-100 dark:border-white/[0.05]">
+                  <button onClick={handleSignOut}
+                    className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 dark:bg-red-950/40 shrink-0">
+                      <LogOut className="h-4 w-4 text-red-500" />
+                    </span>
+                    Sign out
+                  </button>
+                </div>
+              </div>
+            ) : (
+              /* ── Auth buttons — unauthenticated ── */
+              <div className="flex gap-2 pt-1">
+                <Link href="/login" onClick={closeAll} className="flex-1">
+                  <Button variant="outline" size="sm" className="w-full">Sign in</Button>
+                </Link>
+                <Link href="/register" onClick={closeAll} className="flex-1">
+                  <Button size="sm" className="w-full bg-gradient-to-r from-brand-600 to-brand-700">Get started</Button>
+                </Link>
+              </div>
+            )}
+
+            {/* ── Appearance ── */}
+            <div className="flex items-center justify-between px-3 py-2.5 rounded-xl border border-slate-100 dark:border-white/[0.06] bg-slate-50 dark:bg-white/[0.03]">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-3.5 w-3.5 text-slate-400" />
+                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">Appearance</span>
+              </div>
+              <ThemeToggle />
+            </div>
+
           </div>
         </div>
       )}
@@ -302,11 +328,8 @@ function DropdownItem({
   href: string; icon: React.ReactNode; children: React.ReactNode; onClick?: () => void;
 }) {
   return (
-    <Link
-      href={href}
-      onClick={onClick}
-      className="flex items-center gap-2.5 px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl transition-colors group"
-    >
+    <Link href={href} onClick={onClick}
+      className="flex items-center gap-2.5 px-3 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl transition-colors group">
       <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-100 dark:bg-white/8 text-slate-500 dark:text-slate-400 group-hover:bg-brand-50 dark:group-hover:bg-brand-950/40 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors [&>svg]:h-3.5 [&>svg]:w-3.5">
         {icon}
       </span>
