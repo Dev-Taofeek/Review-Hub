@@ -271,7 +271,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     authApi.getMyStats()
-      .then((res) => setStats(res.data))
+      .then((res) => setStats(res.data ?? null))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);

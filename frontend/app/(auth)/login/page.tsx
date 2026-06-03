@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Star, Eye, EyeOff, ArrowRight, Shield, ThumbsUp, BarChart2 } from 'lucide-react';
@@ -16,7 +16,7 @@ const PERKS = [
   { icon: <BarChart2 className="h-4 w-4" />, text: 'Track your review history' },
 ];
 
-export default function LoginPage() {
+function LoginForm() {
   const { signIn }   = useAuth();
   const router       = useRouter();
   const searchParams = useSearchParams();
@@ -156,5 +156,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   );
 }

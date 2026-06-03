@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 interface StarRatingProps {
   rating: number;
   max?: number;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   interactive?: boolean;
   onChange?: (rating: number) => void;
   className?: string;
@@ -15,6 +15,7 @@ interface StarRatingProps {
 }
 
 const sizes = {
+  xs: 'h-3 w-3',
   sm: 'h-3.5 w-3.5',
   md: 'h-5 w-5',
   lg: 'h-6 w-6',
