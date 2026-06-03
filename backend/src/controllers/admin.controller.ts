@@ -88,10 +88,15 @@ export const verifyUser = async (req: AuthRequest, res: Response): Promise<void>
       .eq('id', req.params.id)
       .select()
       .single();
-    if (error) throw error;
+    if (error) {
+      console.error('verifyUser supabase error:', error);
+      sendError(res, error.message || 'Failed to update verification', 500);
+      return;
+    }
     sendSuccess(res, data, `User ${is_verified ? 'verified' : 'unverified'}`);
-  } catch {
-    sendError(res, 'Failed to update verification', 500);
+  } catch (err) {
+    console.error('verifyUser error:', err);
+    sendError(res, (err as Error).message || 'Failed to update verification', 500);
   }
 };
 

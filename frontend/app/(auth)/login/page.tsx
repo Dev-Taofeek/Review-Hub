@@ -44,7 +44,8 @@ function LoginForm() {
     try {
       await signIn(email, password);
       toast.success('Welcome back!');
-      router.push(redirectTo);
+      // Full navigation so the middleware sees the fresh session cookie
+      window.location.href = redirectTo;
     } catch {
       toast.error('Invalid email or password');
       setErrors({ password: 'Invalid email or password' });
