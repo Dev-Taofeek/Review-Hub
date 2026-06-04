@@ -10,9 +10,17 @@ export async function createSupabaseServer() {
       cookies: {
         getAll() { return cookieStore.getAll(); },
         setAll(cookiesToSet: { name: string; value: string; options?: object }[]) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options as any)
-          );
+          try {
+            // Cookie writes are only allowed in Server Actions / Route Handlers.
+            // When called from a Server Component (e.g. during token refresh),
+            // this silently no-ops — the middleware (proxy.ts) handles the
+            // actual session refresh and sets the updated cookies.
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options as any)
+            );
+          } catch {
+            // Intentionally swallowed — see comment above.
+          }
         },
       },
     }
