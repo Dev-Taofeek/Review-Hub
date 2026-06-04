@@ -165,8 +165,12 @@ export function UserDetailModal({ user, currentUserId, onUpdate, onClose }: User
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-white/10">
           <h2 className="font-semibold text-gray-900 dark:text-white">User Details</h2>
-          <button onClick={onClose} className="h-8 w-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors">
-            <X className="h-5 w-5" />
+          <button
+            onClick={onClose}
+            aria-label="Close user details"
+            className="h-8 w-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+          >
+            <X className="h-5 w-5" aria-hidden="true" />
           </button>
         </div>
 

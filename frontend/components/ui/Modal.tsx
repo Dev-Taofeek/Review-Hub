@@ -22,9 +22,20 @@ const sizes = {
   lg: 'max-w-2xl',
 };
 
+const FOCUSABLE = [
+  'a[href]',
+  'button:not([disabled])',
+  'input:not([disabled])',
+  'select:not([disabled])',
+  'textarea:not([disabled])',
+  '[tabindex]:not([tabindex="-1"])',
+].join(', ');
+
 export function Modal({ open, onClose, title, description, children, size = 'md', className }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
+  const dialogRef  = useRef<HTMLDivElement>(null);
 
+  /* Escape key + body scroll lock */
   useEffect(() => {
     if (!open) return;
     const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
@@ -36,6 +47,33 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
     };
   }, [open, onClose]);
 
+  /* Focus trap — move focus into dialog on open, trap Tab/Shift+Tab inside */
+  useEffect(() => {
+    if (!open || !dialogRef.current) return;
+
+    const dialog    = dialogRef.current;
+    const focusable = Array.from(dialog.querySelectorAll<HTMLElement>(FOCUSABLE));
+    const first     = focusable[0];
+    const last      = focusable[focusable.length - 1];
+
+    /* Move initial focus into dialog */
+    first?.focus();
+
+    const trapFocus = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      if (focusable.length === 0) { e.preventDefault(); return; }
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last?.focus(); }
+      } else {
+        if (document.activeElement === last)  { e.preventDefault(); first?.focus(); }
+      }
+    };
+
+    document.addEventListener('keydown', trapFocus);
+    return () => document.removeEventListener('keydown', trapFocus);
+  }, [open]);
+
   if (!open) return null;
 
   return createPortal(
@@ -45,13 +83,15 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
       onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in" />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in" aria-hidden="true" />
 
-      {/* Dialog — flex column so header is fixed and body scrolls */}
+      {/* Dialog */}
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'modal-title' : undefined}
+        aria-describedby={description ? 'modal-description' : undefined}
         className={cn(
           'relative z-10 w-full rounded-2xl bg-white shadow-modal animate-scale-in',
           'dark:bg-surface-dark-muted dark:border dark:border-white/10',
@@ -60,7 +100,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
           className
         )}
       >
-        {/* Header — always visible */}
+        {/* Header */}
         {(title || description) && (
           <div className="flex items-start justify-between gap-4 px-6 pt-6 pb-4 border-b border-slate-100 dark:border-white/10 shrink-0">
             <div>
@@ -70,31 +110,30 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
                 </h2>
               )}
               {description && (
-                <p className="mt-1 text-sm text-slate-500">{description}</p>
+                <p id="modal-description" className="mt-1 text-sm text-slate-500">{description}</p>
               )}
             </div>
             <button
               onClick={onClose}
-              className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
+              aria-label="Close dialog"
+              className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
             >
-              <X className="h-5 w-5" />
+              <X className="h-5 w-5" aria-hidden="true" />
             </button>
           </div>
         )}
         {!title && (
           <button
             onClick={onClose}
-            className="absolute right-4 top-4 z-10 rounded-lg p-1 text-slate-400 hover:bg-slate-100 transition-colors"
+            aria-label="Close dialog"
+            className="absolute right-4 top-4 z-10 rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
           >
-            <X className="h-5 w-5" />
+            <X className="h-5 w-5" aria-hidden="true" />
           </button>
         )}
 
-        {/* Body — scrollable */}
-        <div className={cn(
-          'overflow-y-auto flex-1',
-          title ? 'px-6 py-5' : 'p-6'
-        )}>
+        {/* Scrollable body */}
+        <div className={cn('overflow-y-auto flex-1', title ? 'px-6 py-5' : 'p-6')}>
           {children}
         </div>
       </div>

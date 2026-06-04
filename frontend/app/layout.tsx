@@ -1,9 +1,16 @@
 import type { Metadata, Viewport } from 'next';
+import { Inter } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import { ConditionalShell } from '@/components/layout/ConditionalShell';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { ThemeProvider } from '@/lib/theme';
 import './globals.css';
+
+const inter = Inter({
+  subsets:  ['latin'],
+  variable: '--font-inter',
+  display:  'swap',
+});
 
 const BASE = process.env.NEXT_PUBLIC_SITE_URL || 'https://review-hub-lilac.vercel.app';
 
@@ -61,13 +68,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="h-full scroll-smooth" suppressHydrationWarning>
+    <html lang="en" className={`h-full scroll-smooth ${inter.variable}`} suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className="flex min-h-full flex-col bg-slate-50 text-slate-900 dark:bg-[#060c1a] dark:text-slate-100">
+      <body className={`${inter.className} flex min-h-full flex-col bg-slate-50 text-slate-900 dark:bg-[#060c1a] dark:text-slate-100`}>
         {/* Skip navigation for keyboard/screen-reader users */}
         <a
           href="#main-content"

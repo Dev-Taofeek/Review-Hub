@@ -206,9 +206,10 @@ export function ReviewCard({
           {!isOwner && currentUser && (
             <button
               onClick={() => onReport?.(review)}
+              aria-label="Report this review"
               className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-red-500 px-2 py-1.5 rounded-lg hover:bg-red-50 transition-colors"
             >
-              <Flag className="h-3.5 w-3.5" />
+              <Flag className="h-3.5 w-3.5" aria-hidden="true" />
               Report
             </button>
           )}

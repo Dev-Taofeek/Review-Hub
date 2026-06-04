@@ -1,13 +1,17 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { createClient } from '@/lib/supabase';
 import type { User } from '@/types';
 
 export function useAuth() {
-  const [user, setUser]       = useState<User | null>(null);
+  const [user,    setUser]    = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
+
+  /* Memoize the Supabase client so it's created once per hook instance,
+     not on every render. The client itself is a singleton internally,
+     but this prevents unnecessary re-creation of the wrapper object. */
+  const supabase = useMemo(() => createClient(), []);
 
   const fetchProfile = useCallback(async (userId: string, email: string) => {
     const { data } = await supabase
@@ -15,10 +19,7 @@ export function useAuth() {
       .select('*')
       .eq('id', userId)
       .single();
-
-    if (data) {
-      setUser({ ...data, email });
-    }
+    if (data) setUser({ ...data, email });
   }, [supabase]);
 
   useEffect(() => {
@@ -66,9 +67,9 @@ export function useAuth() {
   return {
     user,
     loading,
-    isAuthenticated: !!user,
-    isAdmin: user?.role === 'admin',
-    isModerator: user?.role === 'moderator' || user?.role === 'admin',
+    isAuthenticated:  !!user,
+    isAdmin:          user?.role === 'admin',
+    isModerator:      user?.role === 'moderator' || user?.role === 'admin',
     signIn,
     signUp,
     signOut,

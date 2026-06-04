@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import type { ProductImage } from '@/types';
 import { ProductDetailClient } from './ProductDetailClient';
 
 const API = process.env.NEXT_PUBLIC_API_URL || '';
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title       = `${product.name} Reviews`;
   const description = `Read ${product.total_reviews} verified reviews for the ${product.name} by ${product.brand}. Average rating: ${product.average_rating?.toFixed(1)}/5.`;
-  const image       = product.images?.find((i: any) => i.is_primary)?.url ?? product.images?.[0]?.url;
+  const image       = product.images?.find((i: ProductImage) => i.is_primary)?.url ?? product.images?.[0]?.url;
 
   return {
     title,
@@ -64,7 +65,7 @@ export default async function ProductDetailPage({ params }: Props) {
     name:        product.name,
     brand:       { '@type': 'Brand', name: product.brand },
     description: product.description,
-    image:       product.images?.find((i: any) => i.is_primary)?.url,
+    image:       product.images?.find((i: ProductImage) => i.is_primary)?.url,
     offers: {
       '@type':         'Offer',
       price:           product.price,
