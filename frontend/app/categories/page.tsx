@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, Package, Layers, Search } from 'lucide-react';
 import { productsApi } from '@/lib/api';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { cn } from '@/lib/utils';
+import { staggerContainer, staggerItem, fadeInUp } from '@/lib/animations';
 import type { Category } from '@/types';
 
 /* Gradient palettes cycling through categories */
@@ -35,6 +37,8 @@ export default function CategoriesPage() {
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
+
+  const reduced = useReducedMotion();
 
   const filtered = search
     ? categories.filter((c) =>
@@ -128,10 +132,16 @@ export default function CategoriesPage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+            <motion.div
+              variants={reduced ? {} : staggerContainer}
+              initial="hidden"
+              animate="visible"
+              className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4"
+            >
               {filtered.map((cat, i) => {
                 const grad = GRADIENTS[i % GRADIENTS.length];
                 return (
+                  <motion.div key={cat.id} variants={reduced ? {} : staggerItem} whileHover={reduced ? {} : { y: -6, transition: { duration: 0.2 } }}>
                   <Link
                     key={cat.id}
                     href={`/categories/${cat.slug}`}
@@ -184,9 +194,10 @@ export default function CategoriesPage() {
                       </div>
                     </div>
                   </Link>
+                  </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
           </>
         )}
       </div>

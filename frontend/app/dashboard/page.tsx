@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   Star, ThumbsUp, BookOpen, Clock, CheckCircle2,
   AlertTriangle, XCircle, TrendingUp, ArrowRight,
@@ -16,6 +17,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { RoleBadge } from '@/components/ui/Badge';
 import { StarRating } from '@/components/ui/StarRating';
 import { cn, formatRelativeTime, truncate } from '@/lib/utils';
+import { staggerContainer, staggerItem, fadeInUp, slideInLeft, slideInRight } from '@/lib/animations';
 
 interface DashboardStats {
   overview: {
@@ -264,6 +266,7 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const [stats, setStats]   = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const reduced = useReducedMotion();
 
   /* Time-of-day greeting */
   const hour = new Date().getHours();
@@ -302,11 +305,16 @@ export default function DashboardPage() {
         <div className="absolute bottom-0 left-0 right-0 h-16"
           style={{ background: 'linear-gradient(to top, #060c1a, transparent)' }} />
 
-        <div className="relative mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-6 xs:py-8 sm:py-12">
+        <motion.div
+          variants={reduced ? {} : staggerContainer}
+          initial="hidden"
+          animate="visible"
+          className="relative mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-6 xs:py-8 sm:py-12"
+        >
           <div className="flex flex-col sm:flex-row sm:items-center gap-6 sm:justify-between">
 
             {/* Left: user info */}
-            <div className="flex items-center gap-5">
+            <motion.div variants={reduced ? {} : slideInLeft} className="flex items-center gap-5">
               <div className="relative">
                 <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl overflow-hidden ring-2 ring-brand-500/40 ring-offset-2 ring-offset-transparent shadow-2xl shadow-brand-900/50">
                   <Avatar src={user.avatar_url} name={user.full_name || user.username} size="xl" className="h-full w-full" />
@@ -334,10 +342,10 @@ export default function DashboardPage() {
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Right: actions */}
-            <div className="flex items-center gap-2 flex-wrap">
+            <motion.div variants={reduced ? {} : slideInRight} className="flex items-center gap-2 flex-wrap">
               <Link href="/products/new">
                 <Button size="sm" icon={<Plus className="h-4 w-4" />}
                   className="bg-brand-600 hover:bg-brand-500 text-white border-brand-500/50 shadow-lg shadow-brand-900/30">
@@ -350,9 +358,9 @@ export default function DashboardPage() {
                   Edit Profile
                 </Button>
               </Link>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 -mt-4 pb-10 space-y-6">
@@ -365,13 +373,20 @@ export default function DashboardPage() {
             ))}
           </div>
         ) : ov ? (
-          <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <motion.div
+            variants={reduced ? {} : staggerContainer}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4"
+          >
             {STAT_CARDS.map((card, idx) => {
               const raw = ov[card.key as keyof typeof ov] as number;
               const value = card.format ? card.format(raw) : raw.toLocaleString();
               return (
-                <div
+                <motion.div
                   key={card.key}
+                  variants={reduced ? {} : staggerItem}
+                  whileHover={reduced ? {} : { y: -4, transition: { duration: 0.2 } }}
                   className="relative overflow-hidden rounded-2xl p-5 group"
                   style={{
                     background: `linear-gradient(135deg, ${card.from} 0%, ${card.to} 100%)`,
@@ -394,10 +409,10 @@ export default function DashboardPage() {
                     <p className="text-sm font-semibold text-white/90 mt-1.5">{card.label}</p>
                     <p className="text-xs text-white/60 mt-0.5 truncate">{card.sub(ov)}</p>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         ) : null}
 
         {/* ── Review Health ───────────────────────────────────── */}
@@ -510,7 +525,13 @@ export default function DashboardPage() {
         {/* ── Quick Actions ────────────────────────────────────── */}
         <div>
           <h2 className="text-sm font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-3 px-1">Quick Actions</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <motion.div
+            variants={reduced ? {} : staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4"
+          >
             {[
               {
                 href:      '/products',
@@ -572,7 +593,7 @@ export default function DashboardPage() {
                 <ChevronRight className="relative h-4 w-4 text-slate-300 dark:text-slate-600 self-center group-hover:text-slate-500 dark:group-hover:text-slate-400 group-hover:translate-x-0.5 transition-all" />
               </Link>
             ))}
-          </div>
+          </motion.div>
         </div>
 
       </div>

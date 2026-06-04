@@ -1,6 +1,7 @@
 'use client';
 
 import { forwardRef } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
@@ -30,30 +31,34 @@ const sizes: Record<Size, string> = {
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    { variant = 'primary', size = 'md', loading, icon, iconRight, className, children, disabled, ...rest },
-    ref
-  ) => (
-    <button
-      ref={ref}
-      disabled={disabled || loading}
-      className={cn(
-        'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-150',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2',
-        'disabled:pointer-events-none disabled:opacity-50',
-        variants[variant],
-        sizes[size],
-        className
-      )}
-      {...rest}
-    >
-      {loading ? (
-        <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-      ) : icon}
-      {children}
-      {!loading && iconRight}
-    </button>
-  )
+  ({ variant = 'primary', size = 'md', loading, icon, iconRight, className, children, disabled, ...rest }, ref) => {
+    const reduced = useReducedMotion();
+
+    return (
+      <motion.button
+        ref={ref}
+        disabled={disabled || loading}
+        whileHover={(!disabled && !loading && !reduced) ? { scale: 1.02 } : {}}
+        whileTap={(!disabled && !loading && !reduced)   ? { scale: 0.97 } : {}}
+        transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+        className={cn(
+          'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-150',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2',
+          'disabled:pointer-events-none disabled:opacity-50',
+          variants[variant],
+          sizes[size],
+          className
+        )}
+        {...(rest as any)}
+      >
+        {loading ? (
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" aria-label="Loading" />
+        ) : icon}
+        {children}
+        {!loading && iconRight}
+      </motion.button>
+    );
+  }
 );
 
 Button.displayName = 'Button';

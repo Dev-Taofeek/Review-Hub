@@ -1,37 +1,52 @@
+'use client';
+
+import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Button } from './Button';
+import { staggerContainer, staggerItem } from '@/lib/animations';
 
 interface EmptyStateProps {
   icon?: React.ReactNode;
   title: string;
   description?: string;
-  action?: {
-    label: string;
-    onClick: () => void;
-  };
+  action?: { label: string; onClick: () => void };
   className?: string;
 }
 
 export function EmptyState({ icon, title, description, action, className }: EmptyStateProps) {
+  const reduced = useReducedMotion();
+
   return (
-    <div
-      className={cn(
-        'flex flex-col items-center justify-center py-16 px-8 text-center',
-        className
-      )}
+    <motion.div
+      variants={reduced ? {} : staggerContainer}
+      initial="hidden"
+      animate="visible"
+      className={cn('flex flex-col items-center justify-center py-16 px-8 text-center', className)}
     >
       {icon && (
-        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 text-slate-400 dark:bg-white/10">
-          <span className="[&>svg]:h-8 [&>svg]:w-8">{icon}</span>
-        </div>
+        <motion.div
+          variants={reduced ? {} : staggerItem}
+          whileHover={reduced ? {} : { scale: 1.08, rotate: [0, -5, 5, 0], transition: { duration: 0.4 } }}
+          className="mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-slate-100 dark:bg-white/[0.06] text-slate-400 shadow-inner"
+        >
+          <span className="[&>svg]:h-10 [&>svg]:w-10">{icon}</span>
+        </motion.div>
       )}
-      <h3 className="mb-1.5 text-base font-semibold text-slate-900 dark:text-slate-100">{title}</h3>
+      <motion.h3 variants={reduced ? {} : staggerItem}
+        className="mb-2 text-lg font-bold text-slate-900 dark:text-slate-100">
+        {title}
+      </motion.h3>
       {description && (
-        <p className="mb-5 max-w-xs text-sm text-slate-500 dark:text-slate-400">{description}</p>
+        <motion.p variants={reduced ? {} : staggerItem}
+          className="mb-6 max-w-xs text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+          {description}
+        </motion.p>
       )}
       {action && (
-        <Button size="sm" onClick={action.onClick}>{action.label}</Button>
+        <motion.div variants={reduced ? {} : staggerItem} whileHover={reduced ? {} : { scale: 1.04 }} whileTap={reduced ? {} : { scale: 0.97 }}>
+          <Button size="sm" onClick={action.onClick}>{action.label}</Button>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 }
