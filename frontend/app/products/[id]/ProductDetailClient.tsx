@@ -81,13 +81,13 @@ export function ProductDetailClient({ slug }: Props) {
       <div className="grid gap-6 sm:gap-10 lg:grid-cols-2 mb-8 sm:mb-12">
         {/* Images */}
         <div>
-          <div className="relative aspect-square overflow-hidden rounded-2xl bg-slate-100 dark:bg-white/5 mb-3">
+          <div className="relative aspect-[4/3] sm:aspect-[3/2] overflow-hidden rounded-2xl bg-slate-100 dark:bg-white/5 mb-3">
             <Image
               src={buildProductImageUrl({ url: currentImage })}
               alt={product.name}
               fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
+              sizes="(max-width: 1024px) 100vw, 45vw"
+              className="object-contain p-4"
               priority
             />
           </div>
