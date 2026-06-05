@@ -71,7 +71,7 @@ function ScoreArc({ score, label, max = 100 }: { score: number; label: string; m
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <AnimatedCounter value={score} className="text-data text-2xl font-black text-white" />
+        <AnimatedCounter value={score} className="text-data text-2xl font-black text-slate-900 dark:text-white" />
         <span className="text-label-mono mt-0.5" style={{ color: 'var(--text-3)', fontSize: '9px' }}>{label}</span>
       </div>
     </div>
@@ -188,12 +188,7 @@ export default function DashboardPage() {
               const raw = ov[card.key as keyof typeof ov] as number;
               return (
                 <motion.div key={card.key} variants={reduced ? {} : staggerItem}
-                  className="rounded-2xl p-5 relative overflow-hidden"
-                  style={{
-                    background: 'var(--surface)',
-                    border: '1px solid var(--wire)',
-                    boxShadow: '0 0 0 1px rgba(255,255,255,0.03) inset, 0 8px 24px rgba(0,0,0,0.3)',
-                  }}>
+                  className="rounded-2xl p-5 relative overflow-hidden bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07] shadow-sm dark:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
                   {/* Accent glow background */}
                   <div className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none"
                     style={{ background: `radial-gradient(ellipse, ${card.accent}10 0%, transparent 70%)`, transform:'translate(30%,-30%)' }} />
@@ -207,8 +202,8 @@ export default function DashboardPage() {
                       <Zap className="h-3 w-3" style={{ color: `${card.accent}40` }} />
                     </div>
                     <AnimatedCounter value={raw} decimals={(card as any).dec ?? 0}
-                      className="text-data text-3xl font-black text-white block leading-none mb-1.5" />
-                    <p className="text-sm font-bold text-white/80">{card.label}</p>
+                      className="text-data text-3xl font-black text-slate-900 dark:text-white block leading-none mb-1.5" />
+                    <p className="text-sm font-bold text-slate-700 dark:text-white/80">{card.label}</p>
                     <p className="text-[11px] mt-0.5 truncate" style={{ color: 'var(--text-3)' }}>{card.sub}</p>
                   </div>
                 </motion.div>
@@ -223,11 +218,10 @@ export default function DashboardPage() {
 
             {/* Score arc panel */}
             <motion.div variants={reduced ? {} : staggerItem} initial="hidden" whileInView="visible" viewport={{ once:true }}
-              className="rounded-2xl p-6"
-              style={{ background:'var(--surface)', border:'1px solid var(--wire)', boxShadow:'0 8px 24px rgba(0,0,0,0.3)' }}>
+              className="rounded-2xl p-6 bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07] shadow-sm dark:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
               <div className="flex items-center gap-2 mb-5">
                 <Target className="h-4 w-4" style={{ color:'var(--signal)' }} />
-                <h2 className="font-bold text-white">Review Health</h2>
+                <h2 className="font-bold text-slate-900 dark:text-white">Review Health</h2>
                 {publishedPct >= 70 && (
                   <span className="ml-auto text-[11px] font-bold flex items-center gap-1 px-2 py-0.5 rounded-full"
                     style={{ background:'rgba(0,229,160,0.1)', border:'1px solid rgba(0,229,160,0.2)', color:'#00E5A0' }}>
@@ -253,7 +247,7 @@ export default function DashboardPage() {
                       style={{ background:`${item.hex}08`, border:`1px solid ${item.hex}18` }}>
                       <div className="flex items-center justify-between mb-1.5">
                         <span className="text-[10px] font-bold" style={{ color:item.hex }}>{item.label}</span>
-                        <span className="text-data text-sm font-black text-white">{item.val}</span>
+                        <span className="text-data text-sm font-black text-slate-900 dark:text-white">{item.val}</span>
                       </div>
                       <div className="h-1 rounded-full overflow-hidden" style={{ background:'rgba(255,255,255,0.06)' }}>
                         <motion.div className="h-full rounded-full"
@@ -271,15 +265,14 @@ export default function DashboardPage() {
 
             {/* Recent reviews — timeline style */}
             <motion.div variants={reduced ? {} : staggerItem} initial="hidden" whileInView="visible" viewport={{ once:true }}
-              className="rounded-2xl overflow-hidden"
-              style={{ background:'var(--surface)', border:'1px solid var(--wire)', boxShadow:'0 8px 24px rgba(0,0,0,0.3)' }}>
-              <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom:'1px solid var(--line)' }}>
+              className="rounded-2xl overflow-hidden bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07] shadow-sm dark:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
+              <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-white/[0.05]">
                 <div className="flex items-center gap-2.5">
                   <div className="h-7 w-7 rounded-lg flex items-center justify-center"
                     style={{ background:'rgba(167,139,250,0.12)', border:'1px solid rgba(167,139,250,0.2)' }}>
                     <MessageSquare className="h-3.5 w-3.5" style={{ color:'#A78BFA' }} />
                   </div>
-                  <h2 className="font-bold text-white">Recent Reviews</h2>
+                  <h2 className="font-bold text-slate-900 dark:text-white">Recent Reviews</h2>
                 </div>
                 <Link href="/my-reviews" className="flex items-center gap-1.5 text-xs font-bold transition-colors group"
                   style={{ color:'var(--signal)' }}>
@@ -302,7 +295,7 @@ export default function DashboardPage() {
                     style={{ background:'rgba(0,229,160,0.08)', border:'1px solid rgba(0,229,160,0.15)' }}>
                     <Star className="h-8 w-8" style={{ color:'var(--signal)' }} />
                   </div>
-                  <p className="font-bold text-white mb-1">No reviews yet</p>
+                  <p className="font-bold text-slate-800 dark:text-white mb-1">No reviews yet</p>
                   <p className="text-sm mb-5" style={{ color:'var(--text-2)' }}>Share your first experience</p>
                   <Link href="/products"><Button size="sm">Browse Products</Button></Link>
                 </div>
@@ -313,10 +306,7 @@ export default function DashboardPage() {
                     const meta = STATUS_META[review.status];
                     return (
                       <motion.div key={review.id} variants={reduced ? {} : staggerItem}
-                        className="px-5 py-3.5 flex items-center gap-4 transition-colors cursor-pointer"
-                        style={{ borderBottom:'1px solid var(--line)' }}
-                        onMouseEnter={e => (e.currentTarget.style.background = 'var(--raised)')}
-                        onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                        className="px-5 py-3.5 flex items-center gap-4 transition-colors cursor-pointer border-b border-slate-100 dark:border-white/[0.04] hover:bg-slate-50 dark:hover:bg-white/[0.03]"
                       >
                         <div className="h-12 w-12 rounded-xl overflow-hidden shrink-0"
                           style={{ background:'var(--raised)', border:'1px solid var(--wire)' }}>
@@ -329,7 +319,7 @@ export default function DashboardPage() {
                               {review.product.name}
                             </Link>
                           )}
-                          <p className="text-sm font-semibold text-white truncate mt-0.5">{truncate(review.title, 50)}</p>
+                          <p className="text-sm font-semibold text-slate-800 dark:text-white truncate mt-0.5">{truncate(review.title, 50)}</p>
                           <div className="flex items-center gap-3 mt-1">
                             <StarRating rating={review.rating} size="xs" />
                             <span className="text-[11px]" style={{ color:'var(--text-3)' }}>{formatRelativeTime(review.created_at)}</span>
@@ -365,21 +355,16 @@ export default function DashboardPage() {
                 whileHover={reduced ? {} : { y:-3 }}
                 transition={{ type:'spring', stiffness:320, damping:24 }}>
                 <Link href={action.href}
-                  className="group relative rounded-2xl p-5 flex items-start gap-4 transition-all duration-200 block"
-                  style={{
-                    background:'var(--surface)',
-                    border:'1px solid var(--wire)',
-                    boxShadow:'0 4px 16px rgba(0,0,0,0.25)',
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = `${action.accent}25`; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--wire)'; }}
+                  className="group relative rounded-2xl p-5 flex items-start gap-4 transition-all duration-200 block bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07] shadow-sm dark:shadow-[0_4px_16px_rgba(0,0,0,0.25)]"
+                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = `${action.accent}30`; }}
+                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = ''; }}
                 >
                   <div className="h-11 w-11 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110 duration-200"
                     style={{ background:`${action.accent}12`, border:`1px solid ${action.accent}22`, color:action.accent }}>
                     {action.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-white">{action.label}</p>
+                    <p className="text-sm font-bold text-slate-900 dark:text-white">{action.label}</p>
                     <p className="text-xs mt-0.5 leading-relaxed" style={{ color:'var(--text-2)' }}>{action.sub}</p>
                   </div>
                   <ChevronRight className="h-4 w-4 self-center group-hover:translate-x-0.5 transition-transform" style={{ color:'var(--text-3)' }} />
