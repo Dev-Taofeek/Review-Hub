@@ -61,8 +61,8 @@ export default function ModerationReportsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-          Reports <span className="text-slate-400 font-normal">({total})</span>
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+          Reports <span className="text-slate-400 dark:text-slate-500 font-normal">({total})</span>
         </h2>
         <Select
           options={STATUS_OPTIONS}
@@ -84,18 +84,19 @@ export default function ModerationReportsPage() {
         />
       ) : (
         <>
-          <div className="rounded-xl border border-slate-100 dark:border-white/8 overflow-hidden">
-            <table className="min-w-full divide-y divide-slate-100 dark:divide-white/8">
-              <thead className="bg-slate-50 dark:bg-white/5">
+          {/* overflow-x-auto allows horizontal scroll on narrow screens */}
+          <div className="rounded-xl bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07] overflow-x-auto shadow-sm">
+            <table className="min-w-full divide-y divide-slate-100 dark:divide-white/[0.06]">
+              <thead className="bg-slate-50 dark:bg-white/[0.03]">
                 <tr>
                   {['Review', 'Reason', 'Reporter', 'Date', 'Status', 'Actions'].map((h) => (
-                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{h}</th>
+                    <th key={h} className="px-4 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50 dark:divide-white/5 bg-white dark:bg-surface-dark-muted">
+              <tbody className="divide-y divide-slate-50 dark:divide-white/[0.04] bg-white dark:bg-[#0D1020]">
                 {reports.map((report) => (
-                  <tr key={report.id} className="hover:bg-slate-50/50 transition-colors">
+                  <tr key={report.id} className="hover:bg-slate-50 dark:hover:bg-white/[0.03] transition-colors">
                     <td className="px-4 py-3 max-w-xs">
                       <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">
                         {(report.review as { title?: string })?.title ?? 'Deleted review'}

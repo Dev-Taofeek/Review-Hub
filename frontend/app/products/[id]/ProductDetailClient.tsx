@@ -171,7 +171,7 @@ export function ProductDetailClient({ slug }: Props) {
 
       {/* Rating Distribution */}
       {product.rating_distribution && product.total_reviews > 0 && (
-        <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-card dark:bg-surface-dark-muted dark:border-white/8 mb-8">
+        <div className="rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white dark:bg-[#0D1020] p-6 shadow-sm mb-8">
           <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-5">Ratings Overview</h2>
           <RatingDistributionWidget
             average={product.average_rating}
@@ -193,7 +193,7 @@ export function ProductDetailClient({ slug }: Props) {
         {reviewsLoading ? (
           <div className="grid gap-4 sm:grid-cols-2">
             {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="rounded-2xl border border-slate-100 bg-white p-5 dark:bg-surface-dark-muted dark:border-white/8">
+              <div key={i} className="rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white dark:bg-[#0D1020] p-5">
                 <div className="flex gap-3 mb-3">
                   <Skeleton className="h-10 w-10 rounded-full" />
                   <div className="flex-1"><Skeleton className="h-4 w-32 mb-1.5" /><Skeleton className="h-3 w-20" /></div>

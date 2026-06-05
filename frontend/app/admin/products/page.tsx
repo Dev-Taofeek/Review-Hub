@@ -57,8 +57,8 @@ export default function AdminProductsPage() {
         />
       ) : (
         <>
-          <div className="overflow-x-auto rounded-xl border border-slate-100 dark:border-white/8">
-            <table className="min-w-full divide-y divide-slate-100 dark:divide-white/8">
+          <div className="overflow-x-auto rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white dark:bg-[#0D1020] shadow-sm">
+            <table className="min-w-full divide-y divide-slate-100 dark:divide-white/[0.06]">
               <thead className="bg-slate-50 dark:bg-white/5">
                 <tr>
                   {['Product', 'Category', 'Price', 'Rating', 'Reviews', 'Status', 'Actions'].map((h) => (
@@ -66,7 +66,7 @@ export default function AdminProductsPage() {
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50 dark:divide-white/5 bg-white dark:bg-surface-dark-muted">
+              <tbody className="divide-y divide-slate-50 dark:divide-white/[0.04] bg-white dark:bg-[#0D1020]">
                 {products.map((p) => (
                   <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="px-4 py-3">

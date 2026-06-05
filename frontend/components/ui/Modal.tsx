@@ -94,7 +94,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
         aria-describedby={description ? 'modal-description' : undefined}
         className={cn(
           'relative z-10 w-full rounded-2xl bg-white shadow-modal animate-scale-in',
-          'dark:bg-surface-dark-muted dark:border dark:border-white/10',
+          'dark:bg-[#0D1020] dark:border dark:border-white/10',
           'flex flex-col max-h-[90vh]',
           sizes[size],
           className

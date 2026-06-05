@@ -286,8 +286,7 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
       {/* ════════════════════════════════════════════════════
           TRUST PROOF — "The Numbers Don't Lie"
       ════════════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20"
-        style={{ background: 'var(--surface)', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)' }}>
+      <section className="py-16 sm:py-20 bg-white dark:bg-[#0D1020] border-y border-slate-200/60 dark:border-white/[0.05]">
         <div className="mx-auto max-w-[1600px] px-6 xs:px-8 sm:px-12 lg:px-20">
           <RevealSection className="flex flex-wrap items-center justify-center gap-12 sm:gap-20">
             {[
@@ -308,15 +307,15 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
       {/* ════════════════════════════════════════════════════
           INTELLIGENCE GRID — "The System"
       ════════════════════════════════════════════════════ */}
-      <section className="py-24 sm:py-32" style={{ background: 'var(--void)' }}>
+      <section className="py-24 sm:py-32 bg-slate-50 dark:bg-[#06080F]">
         <div className="mx-auto max-w-[1600px] px-6 xs:px-8 sm:px-12 lg:px-20">
 
           <RevealSection className="mb-16">
             <p className="text-label-mono mb-4" style={{ color: 'var(--signal)' }}>The Intelligence</p>
-            <h2 className="font-black tracking-[-0.04em] text-white leading-tight"
+            <h2 className="font-black tracking-[-0.04em] text-slate-900 dark:text-white leading-tight"
               style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}>
               Built to surface truth.<br />
-              <span style={{ color: 'var(--text-2)' }}>Not just reviews.</span>
+              <span className="text-slate-500 dark:text-slate-400">Not just reviews.</span>
             </h2>
           </RevealSection>
 
@@ -336,8 +335,8 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
                     style={{ background: 'rgba(0,229,160,0.15)', border: '1px solid rgba(0,229,160,0.25)' }}>
                     <Shield className="h-6 w-6" style={{ color: 'var(--signal)' }} />
                   </div>
-                  <h3 className="text-xl font-bold text-white mb-3">Intelligent Spam Detection</h3>
-                  <p className="text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Intelligent Spam Detection</h3>
+                  <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                     Our multi-layer heuristic engine scores every review across 12 signals — URL patterns, text velocity, rating anomalies, and duplicate detection — before a single word reaches you.
                   </p>
                   <div className="mt-6 grid grid-cols-3 gap-3">
@@ -354,14 +353,13 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
 
             {/* Tall card */}
             <RevealSection delay={0.2} className="row-span-2">
-              <div className="h-full rounded-2xl p-7 relative overflow-hidden"
-                style={{ background: 'var(--surface)', border: '1px solid var(--wire)' }}>
+              <div className="h-full rounded-2xl p-7 relative overflow-hidden bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07]">
                 <div className="h-12 w-12 rounded-xl mb-5 flex items-center justify-center"
                   style={{ background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.2)' }}>
                   <Users className="h-6 w-6" style={{ color: '#A78BFA' }} />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Community Verified</h3>
-                <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--text-2)' }}>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Community Verified</h3>
+                <p className="text-sm leading-relaxed mb-6 text-slate-600 dark:text-slate-400">
                   Real reviewers, real purchases. Every helpful vote, every report — the community keeps the signal clean.
                 </p>
                 {/* Trust levels visualization */}
@@ -373,10 +371,10 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
                   ].map(item => (
                     <div key={item.label}>
                       <div className="flex justify-between mb-1">
-                        <span className="text-xs font-medium" style={{ color: 'var(--text-2)' }}>{item.label}</span>
+                        <span className="text-xs font-medium text-slate-600 dark:text-slate-400">{item.label}</span>
                         <span className="text-data text-xs font-bold" style={{ color: item.color }}>{item.pct}%</span>
                       </div>
-                      <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
+                      <div className="h-1.5 rounded-full overflow-hidden bg-slate-200 dark:bg-white/[0.06]">
                         <motion.div className="h-full rounded-full"
                           initial={{ width: 0 }}
                           whileInView={{ width: `${item.pct}%` }}
@@ -393,13 +391,13 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
 
             {/* Standard card */}
             <RevealSection delay={0.3}>
-              <div className="rounded-2xl p-7" style={{ background: 'var(--surface)', border: '1px solid var(--wire)' }}>
+              <div className="rounded-2xl p-7 bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07]">
                 <div className="h-12 w-12 rounded-xl mb-5 flex items-center justify-center"
                   style={{ background: 'rgba(251,191,36,0.12)', border: '1px solid rgba(251,191,36,0.2)' }}>
                   <Zap className="h-6 w-6 text-amber-400" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Real-Time Moderation</h3>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Real-Time Moderation</h3>
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                   Reviews go live in under 2 hours. Not 2 days. Speed without compromise.
                 </p>
               </div>
@@ -407,13 +405,13 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
 
             {/* Minimal card */}
             <RevealSection delay={0.4}>
-              <div className="rounded-2xl p-7" style={{ background: 'var(--surface)', border: '1px solid var(--wire)' }}>
+              <div className="rounded-2xl p-7 bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07]">
                 <div className="h-12 w-12 rounded-xl mb-5 flex items-center justify-center"
                   style={{ background: 'rgba(0,229,160,0.08)', border: '1px solid rgba(0,229,160,0.18)' }}>
                   <Star className="h-6 w-6" style={{ color: 'var(--signal)' }} />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">Bayesian Ratings</h3>
-                <p className="text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Bayesian Ratings</h3>
+                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                   Scores weighted by reviewer credibility. A 5-star from a verified buyer counts more.
                 </p>
               </div>

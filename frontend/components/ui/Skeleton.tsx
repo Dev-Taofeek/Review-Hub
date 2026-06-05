@@ -20,7 +20,7 @@ export function Skeleton({ className }: SkeletonProps) {
 
 export function ProductCardSkeleton() {
   return (
-    <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-card dark:bg-surface-dark-muted dark:border-white/8">
+    <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm dark:bg-[#0D1020] dark:border-white/[0.07]">
       <Skeleton className="aspect-square w-full rounded-xl mb-4" />
       <Skeleton className="h-4 w-3/4 mb-2" />
       <Skeleton className="h-3 w-1/2 mb-3" />
@@ -32,7 +32,7 @@ export function ProductCardSkeleton() {
 
 export function ReviewCardSkeleton() {
   return (
-    <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-card dark:bg-surface-dark-muted dark:border-white/8">
+    <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm dark:bg-[#0D1020] dark:border-white/[0.07]">
       <div className="flex items-start gap-3 mb-4">
         <Skeleton className="h-10 w-10 rounded-full shrink-0" />
         <div className="flex-1">

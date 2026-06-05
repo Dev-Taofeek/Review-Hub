@@ -130,7 +130,7 @@ const SECTIONS = [
 
 export default function PrivacyPage() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-surface-dark">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#06080F]">
 
       {/* Hero */}
       <div className="bg-gradient-to-br from-gray-900 to-gray-800 relative overflow-hidden">
@@ -161,7 +161,7 @@ export default function PrivacyPage() {
 
           {/* Sticky table of contents */}
           <aside className="lg:col-span-1 hidden lg:block">
-            <div className="sticky top-20 rounded-2xl border border-gray-200 dark:border-white/8 bg-white dark:bg-surface-dark-muted shadow-card p-4">
+            <div className="sticky top-20 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white dark:bg-[#0D1020] shadow-sm p-4">
               <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Contents</p>
               <nav className="space-y-1">
                 {SECTIONS.map((s) => (

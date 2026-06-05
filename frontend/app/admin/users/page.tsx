@@ -21,6 +21,9 @@ const ROLE_OPTIONS = [
   { value: 'user',      label: 'User'       },
 ];
 
+/* Shared card class */
+const CARD = 'bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07] shadow-sm';
+
 export default function AdminUsersPage() {
   const { user: currentUser } = useAuth();
   const [users,      setUsers]      = useState<User[]>([]);
@@ -42,9 +45,7 @@ export default function AdminUsersPage() {
       setUsers(res.data);
       setTotal(res.pagination.total);
       setTotalPages(res.pagination.totalPages);
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   }, [page, search, roleFilter]);
 
   useEffect(() => { fetchUsers(); }, [fetchUsers]);
@@ -54,9 +55,9 @@ export default function AdminUsersPage() {
     setSelected(updated);
   };
 
-  const verifiedCount     = users.filter(u => u.is_verified).length;
-  const bannedCount       = users.filter(u => u.is_banned).length;
-  const restrictedCount   = users.filter(u => u.can_vote === false).length;
+  const verifiedCount   = users.filter(u => u.is_verified).length;
+  const bannedCount     = users.filter(u => u.is_banned).length;
+  const restrictedCount = users.filter(u => u.can_vote === false).length;
 
   return (
     <div className="space-y-5">
@@ -64,22 +65,22 @@ export default function AdminUsersPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
         <div>
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center gap-2">
-            <Users className="h-5 w-5 text-brand-500" />
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+            <Users className="h-5 w-5 text-brand-600 dark:text-[#00E5A0]" />
             Users
-            <span className="text-sm font-normal text-gray-400">({total.toLocaleString()})</span>
+            <span className="text-sm font-normal text-slate-400">({total.toLocaleString()})</span>
           </h2>
-          <p className="text-sm text-gray-500 mt-0.5">Click any row to view full details and manage permissions</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Click any row to view full details and manage permissions</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <select
             value={roleFilter}
             onChange={(e) => { setRoleFilter(e.target.value); setPage(1); }}
-            className="h-9 rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#111c30] text-sm text-gray-700 dark:text-gray-300 px-3 focus:outline-none focus:ring-2 focus:ring-brand-500"
+            className="h-9 rounded-xl border border-slate-200 dark:border-white/[0.09] bg-white dark:bg-[#0D1020] text-sm text-slate-700 dark:text-slate-300 px-3 focus:outline-none focus:ring-2 focus:ring-brand-500"
           >
             {ROLE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
-          <div className="w-52">
+          <div className="w-48 xs:w-52">
             <Input
               placeholder="Search users…"
               value={search}
@@ -90,19 +91,22 @@ export default function AdminUsersPage() {
         </div>
       </div>
 
-      {/* Summary strip */}
+      {/* Summary strip — responsive: stacks on tiny, row on xs+ */}
       {!loading && (
-        <div className="grid grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 xs:grid-cols-3 gap-3">
           {[
-            { icon: <BadgeCheck className="h-4 w-4" />, label: 'Verified Reviewers', value: verifiedCount,   color: 'text-[#1D9BF0] bg-blue-50 dark:bg-blue-950/30' },
-            { icon: <Ban className="h-4 w-4" />,        label: 'Banned',             value: bannedCount,     color: 'text-red-600 bg-red-50 dark:bg-red-950/30' },
-            { icon: <ShieldAlert className="h-4 w-4" />,label: 'Vote Restricted',    value: restrictedCount, color: 'text-orange-600 bg-orange-50 dark:bg-orange-950/30' },
+            { icon: <BadgeCheck className="h-4 w-4" />, label: 'Verified',       value: verifiedCount,   color: 'text-[#1D9BF0] bg-blue-50 dark:bg-blue-950/30',        border: 'border-blue-200/60 dark:border-blue-800/30' },
+            { icon: <Ban className="h-4 w-4" />,        label: 'Banned',         value: bannedCount,     color: 'text-red-600 bg-red-50 dark:bg-red-950/30',            border: 'border-red-200/60 dark:border-red-800/30' },
+            { icon: <ShieldAlert className="h-4 w-4" />,label: 'Vote Restricted', value: restrictedCount, color: 'text-orange-600 bg-orange-50 dark:bg-orange-950/30',  border: 'border-orange-200/60 dark:border-orange-800/30' },
           ].map((s) => (
-            <div key={s.label} className="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-white/8 bg-white dark:bg-surface-dark-muted p-3.5 shadow-card">
-              <div className={cn('h-9 w-9 rounded-xl flex items-center justify-center shrink-0', s.color)}>{s.icon}</div>
-              <div>
-                <p className="text-xl font-bold text-gray-900 dark:text-white">{s.value}</p>
-                <p className="text-xs text-gray-400">{s.label}</p>
+            <div key={s.label} className={cn('flex items-center gap-3 rounded-xl border p-3.5', CARD, s.border.replace('border-', 'border-').split(' ').join(' '))}>
+              {/* icon — always shows */}
+              <div className={cn('h-9 w-9 rounded-xl flex items-center justify-center shrink-0 [&>svg]:h-4 [&>svg]:w-4', s.color)}>
+                {s.icon}
+              </div>
+              <div className="min-w-0">
+                <p className="text-xl font-black text-slate-900 dark:text-white tabular-nums">{s.value}</p>
+                <p className="text-xs text-slate-400 dark:text-slate-500 leading-tight">{s.label}</p>
               </div>
             </div>
           ))}
@@ -115,27 +119,28 @@ export default function AdminUsersPage() {
           {Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-[60px] rounded-xl" />)}
         </div>
       ) : users.length === 0 ? (
-        <div className="py-16 text-center rounded-2xl border border-gray-200 dark:border-white/8 bg-white dark:bg-surface-dark-muted shadow-card">
-          <p className="text-gray-400">No users match your search</p>
+        <div className={cn('py-16 text-center rounded-2xl', CARD)}>
+          <p className="text-slate-400 dark:text-slate-500">No users match your search</p>
         </div>
       ) : (
-        <div className="rounded-2xl border border-gray-200 dark:border-white/8 overflow-hidden shadow-card">
-          <table className="min-w-full divide-y divide-gray-100 dark:divide-white/8">
-            <thead className="bg-gray-50 dark:bg-white/5">
+        /* overflow-x-auto allows horizontal scroll when table is too wide */
+        <div className={cn('rounded-2xl overflow-x-auto', CARD)}>
+          <table className="min-w-full divide-y divide-slate-100 dark:divide-white/[0.06]">
+            <thead className="bg-slate-50 dark:bg-white/[0.03]">
               <tr>
                 {['User', 'Role', 'Status', 'Reviews', 'Joined', ''].map((h, i) => (
-                  <th key={i} className="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  <th key={i} className="px-4 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider whitespace-nowrap">
                     {h}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50 dark:divide-white/5 bg-white dark:bg-surface-dark-muted">
+            <tbody className="divide-y divide-slate-50 dark:divide-white/[0.04] bg-white dark:bg-[#0D1020]">
               {users.map((user) => (
                 <tr
                   key={user.id}
                   onClick={() => setSelected(user)}
-                  className="hover:bg-brand-50/50 dark:hover:bg-brand-950/20 transition-colors cursor-pointer group"
+                  className="hover:bg-slate-50 dark:hover:bg-white/[0.03] transition-colors cursor-pointer group"
                 >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
@@ -145,19 +150,16 @@ export default function AdminUsersPage() {
                           <span className="absolute -bottom-0.5 -right-0.5"><VerifiedBadge size="xs" /></span>
                         )}
                       </div>
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
-                            {user.full_name || user.username || 'Unnamed'}
-                          </p>
-                          {user.is_verified && <VerifiedBadge size="xs" />}
-                        </div>
-                        <p className="text-xs text-gray-400 truncate max-w-[180px]">{user.email}</p>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 group-hover:text-brand-600 dark:group-hover:text-[#00E5A0] transition-colors whitespace-nowrap">
+                          {user.full_name || user.username || 'Unnamed'}
+                        </p>
+                        <p className="text-xs text-slate-400 dark:text-slate-500 truncate max-w-[160px]">{user.email}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3"><RoleBadge role={user.role} /></td>
-                  <td className="px-4 py-3">
+                  <td className="px-4 py-3 whitespace-nowrap"><RoleBadge role={user.role} /></td>
+                  <td className="px-4 py-3 whitespace-nowrap">
                     <div className="flex flex-col gap-1">
                       {user.is_banned
                         ? <Badge variant="danger">Banned</Badge>
@@ -168,10 +170,10 @@ export default function AdminUsersPage() {
                       )}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-300">{user.review_count ?? 0}</td>
-                  <td className="px-4 py-3 text-xs text-gray-400">{user.created_at ? formatDate(user.created_at) : '—'}</td>
-                  <td className="px-4 py-3 text-xs text-brand-600 dark:text-brand-400 opacity-0 group-hover:opacity-100 transition-opacity font-medium whitespace-nowrap">
-                    View details →
+                  <td className="px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap">{user.review_count ?? 0}</td>
+                  <td className="px-4 py-3 text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap">{user.created_at ? formatDate(user.created_at) : '—'}</td>
+                  <td className="px-4 py-3 text-xs text-brand-600 dark:text-[#00E5A0] opacity-0 group-hover:opacity-100 transition-opacity font-semibold whitespace-nowrap">
+                    View →
                   </td>
                 </tr>
               ))}
@@ -186,7 +188,6 @@ export default function AdminUsersPage() {
         </div>
       )}
 
-      {/* User detail slide-over */}
       {selected && (
         <UserDetailModal
           user={selected}

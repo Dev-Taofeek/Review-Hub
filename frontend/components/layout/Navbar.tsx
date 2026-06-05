@@ -170,7 +170,7 @@ export function Navbar() {
                     <motion.div
                       variants={reduced ? {} : dropdownVariants}
                       initial="hidden" animate="visible" exit="exit"
-                      className="absolute right-0 top-full mt-2.5 z-50 w-60 rounded-2xl py-2 overflow-hidden bg-white dark:bg-[#131520] border border-slate-200/80 dark:border-white/8 shadow-xl shadow-slate-900/15 dark:shadow-black/60"
+                      className="absolute right-0 top-full mt-2.5 z-50 w-60 rounded-2xl py-2 overflow-hidden bg-white dark:bg-[#131520] border border-slate-200/80 dark:border-white/[0.07] shadow-xl shadow-slate-900/15 dark:shadow-black/60"
                     >
                       {/* User info header */}
                       <div className="px-4 py-3 mb-1 border-b border-slate-100 dark:border-white/[0.06]">

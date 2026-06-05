@@ -120,16 +120,16 @@ export default function ModerationOverviewPage() {
           { href: '/moderation/reviews', icon: <Clock className="h-5 w-5" />,        title: 'Review Pending Queue',  desc: 'Approve or reject reviews awaiting moderation',   count: stats?.pending ?? 0,        color: 'bg-amber-50 dark:bg-amber-950/30 text-amber-600 dark:text-amber-400' },
           { href: '/moderation/reviews', icon: <AlertTriangle className="h-5 w-5" />, title: 'Investigate Flagged',   desc: 'Review content flagged for suspicious activity',   count: stats?.flagged ?? 0,        color: 'bg-orange-50 dark:bg-orange-950/30 text-orange-600 dark:text-orange-400' },
         ].map((action, i) => (
-          <Link key={i} href={action.href} className="group flex items-center gap-4 p-4 rounded-2xl border border-gray-200 dark:border-white/8 bg-white dark:bg-surface-dark-muted shadow-card card-hover">
+          <Link key={i} href={action.href} className="group flex items-center gap-4 p-4 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white dark:bg-[#0D1020] shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all duration-200">
             <div className={cn('h-11 w-11 rounded-xl flex items-center justify-center shrink-0', action.color)}>{action.icon}</div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">{action.title}</p>
+                <p className="text-sm font-semibold text-slate-900 dark:text-white">{action.title}</p>
                 {action.count > 0 && <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-red-100 dark:bg-red-950/50 text-red-600 dark:text-red-400">{action.count}</span>}
               </div>
-              <p className="text-xs text-gray-500 mt-0.5">{action.desc}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{action.desc}</p>
             </div>
-            <ArrowRight className="h-4 w-4 text-gray-400 group-hover:translate-x-0.5 transition-transform shrink-0" />
+            <ArrowRight className="h-4 w-4 text-slate-400 dark:text-slate-500 group-hover:translate-x-0.5 transition-transform shrink-0" />
           </Link>
         ))}
       </div>

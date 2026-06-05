@@ -61,7 +61,7 @@ export function UserTable({ users, currentUserId, onUpdate }: UserTableProps) {
 
   return (
     <>
-      <div className="overflow-x-auto rounded-xl border border-slate-100 dark:border-white/8">
+      <div className="overflow-x-auto rounded-xl border border-slate-100 dark:border-white/[0.07]">
         <table className="min-w-full divide-y divide-slate-100 dark:divide-white/8">
           <thead className="bg-slate-50 dark:bg-white/5">
             <tr>
@@ -72,7 +72,7 @@ export function UserTable({ users, currentUserId, onUpdate }: UserTableProps) {
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-50 dark:divide-white/5 bg-white dark:bg-surface-dark-muted">
+          <tbody className="divide-y divide-slate-50 dark:divide-white/5 bg-white dark:bg-[#0D1020]">
             {users.map((user) => (
               <tr key={user.id} className="hover:bg-slate-50/50 dark:hover:bg-white/3 transition-colors">
                 <td className="px-4 py-3">

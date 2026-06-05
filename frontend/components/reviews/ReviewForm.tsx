@@ -172,7 +172,7 @@ export function ReviewForm({ productId, onSuccess, onCancel, existingReview }: R
         </div>
       </div>
 
-      <div className="flex gap-3 justify-end pt-2 border-t border-slate-100 dark:border-white/8">
+      <div className="flex gap-3 justify-end pt-2 border-t border-slate-100 dark:border-white/[0.07]">
         {onCancel && (
           <Button type="button" variant="secondary" onClick={onCancel}>Cancel</Button>
         )}

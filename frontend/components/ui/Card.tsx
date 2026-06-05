@@ -18,8 +18,8 @@ export function Card({ children, className, hover = false, padding = 'md' }: Car
   return (
     <div
       className={cn(
-        'rounded-2xl border border-gray-100 bg-white shadow-card',
-        'dark:bg-surface-dark-muted dark:border-white/8',
+        'rounded-2xl border border-gray-100 bg-white shadow-sm',
+        'dark:bg-[#0D1020] dark:border-white/[0.07]',
         hover && 'card-hover cursor-pointer',
         paddings[padding],
         className
@@ -47,5 +47,5 @@ export function CardTitle({ children, className }: { children: React.ReactNode; 
 }
 
 export function CardDivider({ className }: { className?: string }) {
-  return <hr className={cn('border-gray-100 dark:border-white/8 my-4', className)} />;
+  return <hr className={cn('border-gray-100 dark:border-white/[0.07] my-4', className)} />;
 }

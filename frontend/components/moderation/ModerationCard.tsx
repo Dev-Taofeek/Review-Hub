@@ -39,7 +39,7 @@ export function ModerationCard({ review, onAction }: ModerationCardProps) {
   const spamScore = review.spam_score ?? 0;
 
   return (
-    <article className="rounded-2xl border border-slate-100 bg-white shadow-card dark:bg-surface-dark-muted dark:border-white/8 overflow-hidden">
+    <article className="rounded-2xl border border-slate-100 bg-white shadow-sm dark:bg-[#0D1020] dark:border-white/[0.07] overflow-hidden">
       {/* Spam score bar */}
       {spamScore > 0 && (
         <div className="h-1 w-full bg-slate-100">
@@ -87,7 +87,7 @@ export function ModerationCard({ review, onAction }: ModerationCardProps) {
         <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-3 mb-4">{review.body}</p>
 
         {/* Actions */}
-        <div className="flex items-center gap-2 pt-3 border-t border-slate-50 dark:border-white/8">
+        <div className="flex items-center gap-2 pt-3 border-t border-slate-50 dark:border-white/[0.07]">
           <Button
             size="sm" variant="secondary"
             icon={<CheckCircle className="h-4 w-4 text-emerald-600" />}

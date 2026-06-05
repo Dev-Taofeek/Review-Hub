@@ -96,7 +96,7 @@ export function ProductFilters({ initialFilters = {}, onFiltersChange }: Product
 
       {/* Advanced filters */}
       {showAdvanced && (
-        <div className="rounded-xl border border-slate-100 bg-white p-4 shadow-soft dark:bg-surface-dark-muted dark:border-white/8 animate-slide-down">
+        <div className="rounded-xl border border-slate-100 bg-white p-4 shadow-soft dark:bg-[#0D1020] dark:border-white/[0.07] animate-slide-down">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <Select
               label="Category"
