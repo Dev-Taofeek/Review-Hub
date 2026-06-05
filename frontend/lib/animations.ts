@@ -54,6 +54,34 @@ export const staggerItem: Variants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE_OUT } },
 };
 
+/* ── Slow stagger (for feature grids, etc.) ──────────── */
+export const staggerSlow: Variants = {
+  hidden:  {},
+  visible: { transition: { staggerChildren: 0.12, delayChildren: 0.08 } },
+};
+
+/* ── Orb float (animated background blobs) ───────────── */
+export const orbFloat = (delay = 0) => ({
+  animate: {
+    y:       [0, -22, 0],
+    scale:   [1, 1.08, 1],
+    opacity: [0.45, 0.65, 0.45],
+    transition: {
+      duration: 9 + delay,
+      repeat: Infinity,
+      ease: 'easeInOut' as const,
+      delay,
+    },
+  },
+});
+
+/* ── Page transition ─────────────────────────────────── */
+export const pageTransition: Variants = {
+  hidden:  { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE_OUT } },
+  exit:    { opacity: 0, y: -8, transition: { duration: 0.22 } },
+};
+
 /* ── Card hover / tap ─────────────────────────────────── */
 export const cardHover = {
   rest:  { y: 0,  scale: 1,    transition: { duration: 0.2, ease: 'easeOut' } },

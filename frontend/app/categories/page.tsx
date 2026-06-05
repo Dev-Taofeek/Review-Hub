@@ -7,7 +7,7 @@ import { ArrowRight, Package, Layers, Search } from 'lucide-react';
 import { productsApi } from '@/lib/api';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { cn } from '@/lib/utils';
-import { staggerContainer, staggerItem, fadeInUp } from '@/lib/animations';
+import { staggerContainer, staggerItem, fadeInUp, orbFloat, pageTransition } from '@/lib/animations';
 import type { Category } from '@/types';
 
 /* Gradient palettes cycling through categories */

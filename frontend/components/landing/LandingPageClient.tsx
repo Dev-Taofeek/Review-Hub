@@ -1,424 +1,300 @@
 'use client';
 
-import { useReducedMotion } from 'framer-motion';
-import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   ArrowRight, Star, Shield, Zap, Users, TrendingUp,
-  CheckCircle, ThumbsUp, Package, Sparkles, ChevronRight,
+  CheckCircle, ThumbsUp, Sparkles, Package,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { StarRating } from '@/components/ui/StarRating';
-import {
-  fadeInUp, fadeIn, staggerContainer, staggerItem,
-  slideInLeft, slideInRight, scaleIn, getVariants,
-} from '@/lib/animations';
+import { cn } from '@/lib/utils';
+import { staggerContainer, staggerItem, staggerFast, staggerSlow, orbFloat } from '@/lib/animations';
 
-/* ── Types ────────────────────────────────────────────── */
-interface StatItem   { value: string; label: string }
-interface ReviewData {
-  id: string; title: string; body: string; rating: number;
-  helpful_count: number; created_at: string;
-  user: { username?: string; full_name?: string } | null;
-  product: { name?: string; slug?: string; category?: { name?: string } } | null;
-}
 interface Props {
-  statItems: StatItem[];
-  recentReviews: ReviewData[];
+  statItems:     { value: string; label: string }[];
+  recentReviews: any[];
 }
 
-/* ── Feature cards ────────────────────────────────────── */
 const FEATURES = [
-  { icon: Shield,     title: 'Spam-Free Reviews',      desc: 'Advanced 10-signal detection automatically filters fake, paid, and abusive reviews.',       color: 'from-blue-500 to-indigo-600',   glow: 'rgba(99,102,241,0.25)' },
-  { icon: Star,       title: 'Verified Ratings',        desc: 'Helpful votes, rating distribution, and human moderation ensure quality you can trust.',    color: 'from-amber-400 to-orange-500',  glow: 'rgba(245,158,11,0.25)' },
-  { icon: Zap,        title: 'Lightning Fast',           desc: 'Server-rendered, edge-cached, and optimised for instant load on any connection.',           color: 'from-brand-500 to-teal-500',    glow: 'rgba(16,185,129,0.25)' },
-  { icon: Users,      title: 'Community Moderation',    desc: 'Report suspicious reviews, vote helpful ones up, and keep the ecosystem trustworthy.',      color: 'from-violet-500 to-purple-600', glow: 'rgba(139,92,246,0.25)' },
-  { icon: Shield,     title: 'Privacy First',            desc: 'Row-level security and encrypted auth protect your data at every layer of the stack.',      color: 'from-rose-500 to-pink-600',     glow: 'rgba(244,63,94,0.25)'  },
-  { icon: TrendingUp, title: 'Detailed Insights',       desc: 'Rating distributions, pros/cons, images, and more give you the complete picture.',          color: 'from-cyan-500 to-sky-600',      glow: 'rgba(14,165,233,0.25)' },
+  { icon: Shield,     title: 'Spam-free Reviews',    desc: 'Advanced heuristic detection filters fake and abusive reviews automatically.',    grad: 'from-blue-500 to-indigo-600',   bg: 'bg-blue-50   dark:bg-blue-950/30',   text: 'text-blue-600   dark:text-blue-400'   },
+  { icon: Star,       title: 'Verified Ratings',      desc: 'Rating distribution and helpful votes ensure quality influences every score.',    grad: 'from-amber-500 to-orange-500',  bg: 'bg-amber-50  dark:bg-amber-950/30',  text: 'text-amber-600  dark:text-amber-400'  },
+  { icon: Zap,        title: 'Lightning Fast',         desc: 'Server-side rendering and edge caching keep every page blazing fast.',           grad: 'from-brand-500 to-teal-500',    bg: 'bg-brand-50  dark:bg-brand-950/30',  text: 'text-brand-600  dark:text-brand-400'  },
+  { icon: Users,      title: 'Community Moderation',   desc: 'Report suspicious reviews and vote helpful ones up — together.',                 grad: 'from-violet-500 to-purple-600', bg: 'bg-violet-50 dark:bg-violet-950/30', text: 'text-violet-600 dark:text-violet-400' },
+  { icon: Shield,     title: 'Privacy First',          desc: 'Row-level security and secure auth protect every layer of your data.',           grad: 'from-rose-500 to-red-600',      bg: 'bg-rose-50   dark:bg-rose-950/30',   text: 'text-rose-600   dark:text-rose-400'   },
+  { icon: TrendingUp, title: 'Detailed Insights',      desc: 'Pros/cons, images, and rating distributions give you the full picture.',         grad: 'from-cyan-500 to-sky-600',      bg: 'bg-cyan-50   dark:bg-cyan-950/30',   text: 'text-cyan-600   dark:text-cyan-400'   },
 ];
 
-/* ── Animated stat number ─────────────────────────────── */
-function StatCard({ value, label, delay = 0 }: StatItem & { delay?: number }) {
-  const reduced = useReducedMotion();
-  return (
-    <motion.div
-      variants={getVariants(!!reduced, staggerItem)}
-      className="flex flex-col"
-    >
-      <span className="text-2xl xs:text-3xl font-bold text-white tabular-nums">{value}</span>
-      <span className="text-xs text-slate-400 mt-0.5">{label}</span>
-    </motion.div>
-  );
-}
+const STEPS = [
+  { icon: Package,     title: 'Find a Product',    desc: 'Search our growing catalog across every category.' },
+  { icon: Star,        title: 'Write Your Review', desc: 'Share your honest experience — rating, pros, cons, photos.'  },
+  { icon: CheckCircle, title: 'Help Others Shop',  desc: 'Your review goes live and helps thousands of real shoppers.' },
+];
 
-/* ── Floating review card ─────────────────────────────── */
-function FloatingReviewCard({ review, index }: { review: ReviewData; index: number }) {
-  const reduced = useReducedMotion();
-  const author  = review.user;
-  const product = review.product;
-  const initial = (author?.full_name || author?.username || '?')[0].toUpperCase();
-  const colors  = ['bg-brand-600', 'bg-violet-600', 'bg-amber-500', 'bg-cyan-600'];
-  const color   = colors[index % colors.length];
-
-  return (
-    <motion.div
-      variants={getVariants(!!reduced, slideInRight)}
-      animate={!reduced ? {
-        y: [0, index % 2 === 0 ? -8 : 8, 0],
-        transition: { duration: 4 + index, repeat: Infinity, ease: 'easeInOut', delay: index * 1.5 },
-      } : {}}
-      className={`rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md p-4 shadow-2xl ${index === 1 ? 'ml-6 mt-4' : ''}`}
-      style={{ maxWidth: 280 }}
-    >
-      <div className="flex items-start justify-between mb-3">
-        <div className="min-w-0 flex-1">
-          {product?.category?.name && (
-            <span className="text-[10px] font-bold uppercase tracking-wider text-brand-400 bg-brand-950/60 border border-brand-800/40 px-2 py-0.5 rounded-full">
-              {product.category.name}
-            </span>
-          )}
-          {product?.name && (
-            <p className="mt-1.5 text-sm font-semibold text-white truncate">{product.name}</p>
-          )}
-        </div>
-        <div className="flex gap-0.5 shrink-0 ml-2">
-          {Array.from({ length: Math.min(review.rating, 5) }).map((_, j) => (
-            <Star key={j} className="h-3 w-3 fill-amber-400 text-amber-400" />
-          ))}
-        </div>
-      </div>
-      <p className="text-xs font-medium text-slate-200 mb-1 line-clamp-1">{review.title}</p>
-      <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">{review.body}</p>
-      <div className="mt-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className={`h-5 w-5 rounded-full ${color} flex items-center justify-center text-white text-[9px] font-bold`}>
-            {initial}
-          </div>
-          <span className="text-[11px] text-slate-400">{author?.full_name || author?.username || 'Reviewer'}</span>
-          <span className="text-[11px] text-brand-400 font-semibold">✓ Verified</span>
-        </div>
-        {review.helpful_count > 0 && (
-          <div className="flex items-center gap-1 text-[10px] text-slate-500">
-            <ThumbsUp className="h-2.5 w-2.5" />{review.helpful_count}
-          </div>
-        )}
-      </div>
-    </motion.div>
-  );
-}
-
-/* ── Main component ────────────────────────────────────── */
 export function LandingPageClient({ statItems, recentReviews }: Props) {
   const reduced = useReducedMotion();
 
   return (
     <div className="flex flex-col overflow-hidden">
 
-      {/* ═══════════════════════════════════════════ HERO */}
+      {/* ── Hero ─────────────────────────────────────────────── */}
       <section
-        className="relative min-h-[92vh] flex items-center overflow-hidden"
-        style={{ background: 'linear-gradient(140deg, #020917 0%, #040f1f 40%, #061629 100%)' }}
+        className="relative flex flex-col lg:flex-row min-h-[92vh] overflow-hidden"
+        style={{ background: 'linear-gradient(140deg, #030711 0%, #060c1a 40%, #080f20 100%)' }}
       >
-        {/* Animated ambient orbs */}
+        {/* Animated orbs */}
         {!reduced && (
           <>
-            <motion.div
-              animate={{ scale: [1, 1.2, 1], opacity: [0.4, 0.6, 0.4] }}
-              transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -top-40 -right-20 w-[600px] h-[600px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse, rgba(5,150,105,0.2) 0%, transparent 70%)' }}
-            />
-            <motion.div
-              animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
-              transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-              className="absolute -bottom-32 -left-20 w-[500px] h-[500px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse, rgba(99,102,241,0.18) 0%, transparent 70%)' }}
-            />
-            <motion.div
-              animate={{ scale: [1, 1.1, 1], opacity: [0.2, 0.35, 0.2] }}
-              transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
-              className="absolute top-1/3 right-1/3 w-[300px] h-[300px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse, rgba(245,158,11,0.12) 0%, transparent 70%)' }}
-            />
+            <motion.div {...orbFloat(0).animate}
+              className="absolute -top-32 left-1/3 w-[700px] h-[600px] rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse, rgba(16,185,129,0.12) 0%, transparent 70%)' }} />
+            <motion.div {...orbFloat(3).animate}
+              className="absolute top-1/2 -right-24 w-[500px] h-[500px] rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse, rgba(99,102,241,0.10) 0%, transparent 70%)' }} />
+            <motion.div {...orbFloat(5).animate}
+              className="absolute -bottom-24 left-0 w-[400px] h-[400px] rounded-full pointer-events-none"
+              style={{ background: 'radial-gradient(ellipse, rgba(16,185,129,0.07) 0%, transparent 70%)' }} />
           </>
         )}
+        <div className="absolute inset-0 hero-grid-overlay pointer-events-none" />
+        <div className="absolute bottom-0 left-0 right-0 h-40 pointer-events-none"
+          style={{ background: 'linear-gradient(to top, #060c1a, transparent)' }} />
 
-        {/* Grid overlay */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.035]"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
-        />
-
-        <div className="relative mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-20 sm:py-28 w-full">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-
-            {/* Left — copy */}
-            <motion.div
-              variants={getVariants(!!reduced, staggerContainer)}
-              initial="hidden"
-              animate="visible"
-            >
-              {/* Badge */}
-              <motion.div variants={getVariants(!!reduced, staggerItem)} className="mb-6">
-                <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider text-brand-300 border border-brand-700/50 bg-brand-950/60 backdrop-blur-sm">
-                  <Sparkles className="h-3 w-3" />
-                  Trusted by real shoppers
-                </span>
-              </motion.div>
-
-              {/* H1 */}
-              <motion.h1
-                variants={getVariants(!!reduced, staggerItem)}
-                className="text-4xl xs:text-5xl sm:text-6xl lg:text-7xl font-black tracking-tighter text-white leading-[0.95] mb-6"
-              >
-                Reviews you can{' '}
-                <span
-                  className="block"
-                  style={{
-                    background: 'linear-gradient(135deg, #34d399 0%, #10b981 40%, #059669 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
-                >
-                  actually trust.
-                </span>
-              </motion.h1>
-
-              {/* Body */}
-              <motion.p
-                variants={getVariants(!!reduced, staggerItem)}
-                className="text-base sm:text-lg text-slate-400 leading-relaxed mb-8 max-w-lg"
-              >
-                Browse verified product reviews from real buyers. Community-moderated,
-                spam-filtered, and built so you shop with confidence every single time.
-              </motion.p>
-
-              {/* CTAs */}
-              <motion.div
-                variants={getVariants(!!reduced, staggerItem)}
-                className="flex flex-wrap gap-3 mb-12"
-              >
-                <Link href="/products">
-                  <motion.div whileHover={reduced ? {} : { scale: 1.03 }} whileTap={reduced ? {} : { scale: 0.97 }}>
-                    <Button
-                      size="lg"
-                      iconRight={<ArrowRight className="h-4 w-4" />}
-                      className="bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 shadow-lg shadow-brand-900/40 font-semibold"
-                    >
-                      Browse Products
-                    </Button>
-                  </motion.div>
-                </Link>
-                <Link href="/register">
-                  <motion.div whileHover={reduced ? {} : { scale: 1.03 }} whileTap={reduced ? {} : { scale: 0.97 }}>
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="border-white/15 text-white hover:bg-white/10 hover:border-white/25 backdrop-blur-sm font-semibold"
-                    >
-                      Write a Review
-                    </Button>
-                  </motion.div>
-                </Link>
-              </motion.div>
-
-              {/* Stats */}
-              <motion.div
-                variants={getVariants(!!reduced, staggerItem)}
-                className="grid grid-cols-2 xs:grid-cols-4 gap-4 pt-8 border-t border-white/[0.08]"
-              >
-                <motion.div variants={getVariants(!!reduced, staggerContainer)} initial="hidden" animate="visible"
-                  className="grid grid-cols-2 xs:grid-cols-4 gap-4 col-span-2 xs:col-span-4">
-                  {statItems.map((s, i) => (
-                    <StatCard key={s.label} {...s} delay={i * 0.1} />
-                  ))}
-                </motion.div>
-              </motion.div>
+        {/* Left: copy */}
+        <div className="relative flex flex-col justify-center lg:w-[54%] px-6 xs:px-8 sm:px-12 lg:pl-20 xl:pl-28 pt-20 pb-12 lg:py-0">
+          <motion.div variants={reduced ? {} : staggerContainer} initial="hidden" animate="visible">
+            <motion.div variants={reduced ? {} : staggerItem} className="mb-6">
+              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-400 bg-brand-950/60 border border-brand-800/40 px-3.5 py-1.5 rounded-full">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand-400 animate-pulse" aria-hidden="true" />
+                Trusted by real shoppers
+              </span>
             </motion.div>
 
-            {/* Right — floating review cards */}
-            <motion.div
-              variants={getVariants(!!reduced, staggerContainer)}
-              initial="hidden"
-              animate="visible"
-              className="relative hidden lg:flex flex-col gap-4 lg:pl-8"
-            >
-              {recentReviews.length > 0 ? (
-                <>
-                  {recentReviews.map((review, i) => (
-                    <FloatingReviewCard key={review.id} review={review} index={i} />
-                  ))}
-                  {/* Trust badge */}
-                  <motion.div
-                    variants={getVariants(!!reduced, scaleIn)}
-                    className="absolute -bottom-6 -left-4 flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white/8 backdrop-blur-md border border-white/12 shadow-xl"
-                  >
-                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-sm">
-                      <Shield className="h-4 w-4 text-white" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-bold text-white">Spam protected</p>
-                      <p className="text-[10px] text-slate-400">All reviews moderated</p>
-                    </div>
-                  </motion.div>
-                </>
-              ) : (
-                /* Placeholder when no reviews yet */
+            <motion.h1 variants={reduced ? {} : staggerItem}
+              className="text-5xl xs:text-6xl sm:text-7xl font-black tracking-tighter leading-[0.9] text-white mb-6">
+              The most trusted<br />
+              <span style={{
+                background: 'linear-gradient(135deg, #34d399 0%, #10b981 50%, #059669 100%)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+              }}>review platform.</span>
+            </motion.h1>
+
+            <motion.p variants={reduced ? {} : staggerItem}
+              className="text-lg text-slate-400 leading-relaxed max-w-lg mb-10">
+              Actually honest. Rigorously verified. Community-built.
+              Browse reviews from real buyers and make smarter decisions every time.
+            </motion.p>
+
+            <motion.div variants={reduced ? {} : staggerItem} className="flex flex-wrap gap-3 mb-12">
+              <Link href="/products">
+                <Button size="lg" iconRight={<ArrowRight className="h-4 w-4" />}
+                  className="h-12 px-6 text-base font-bold shadow-xl shadow-brand-900/40">
+                  Browse Products
+                </Button>
+              </Link>
+              <Link href="/register">
+                <Button size="lg" variant="outline"
+                  className="h-12 px-6 text-base font-bold border-white/15 text-white hover:bg-white/[0.07] hover:border-white/25">
+                  Write a Review
+                </Button>
+              </Link>
+            </motion.div>
+
+            <motion.div variants={reduced ? {} : staggerItem}
+              className="grid grid-cols-2 xs:grid-cols-4 gap-4 xs:gap-6 pt-8 border-t border-white/[0.07]">
+              {statItems.map((s) => (
+                <div key={s.label}>
+                  <p className="text-2xl xs:text-3xl font-black text-white tabular-nums">{s.value}</p>
+                  <p className="text-xs text-slate-500 mt-0.5 font-medium">{s.label}</p>
+                </div>
+              ))}
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Right: floating review cards */}
+        <div className="relative lg:w-[46%] flex items-center justify-center px-6 pb-16 lg:py-0">
+          <motion.div
+            initial={reduced ? {} : { opacity: 0, x: 40 }}
+            animate={reduced ? {} : { opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="w-full max-w-sm relative"
+          >
+            {recentReviews.length > 0 ? (
+              <div className="space-y-4">
+                {recentReviews.map((review: any, i: number) => {
+                  const author  = review.user as { username?: string; full_name?: string } | null;
+                  const product = review.product as { name?: string; category?: { name?: string } } | null;
+                  const initial = (author?.full_name || author?.username || '?')[0].toUpperCase();
+                  const colors  = ['bg-brand-600','bg-violet-600','bg-amber-500','bg-pink-600'];
+
+                  return (
+                    <motion.div key={review.id}
+                      initial={reduced ? {} : { opacity: 0, y: 20 }}
+                      animate={reduced ? {} : { opacity: 1, y: 0 }}
+                      transition={{ delay: 0.45 + i * 0.12, duration: 0.45 }}
+                      whileHover={reduced ? {} : { y: -3 }}
+                      className={cn('glass-dark rounded-2xl p-5', i === 1 ? 'lg:ml-8' : '')}
+                    >
+                      <div className="flex items-start justify-between mb-3">
+                        <div>
+                          {product?.category?.name && (
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-brand-400 bg-brand-950/60 border border-brand-800/40 px-2 py-0.5 rounded-full">{product.category.name}</span>
+                          )}
+                          {product?.name && <p className="mt-1.5 text-sm font-bold text-white truncate max-w-[180px]">{product.name}</p>}
+                        </div>
+                        <div className="flex gap-0.5 shrink-0">
+                          {Array.from({ length: Math.min(review.rating, 5) }).map((_: unknown, j: number) => (
+                            <Star key={j} className="h-3.5 w-3.5 fill-amber-400 text-amber-400" aria-hidden="true" />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-sm font-semibold text-slate-200 mb-1 line-clamp-1">{review.title}</p>
+                      <p className="text-xs text-slate-400 leading-relaxed line-clamp-2">{review.body}</p>
+                      <div className="mt-3 flex items-center gap-2">
+                        <div className={cn('h-6 w-6 rounded-full flex items-center justify-center text-white text-xs font-black shrink-0', colors[i % colors.length])} aria-hidden="true">
+                          {initial}
+                        </div>
+                        <span className="text-xs text-slate-400 font-medium">{author?.full_name || author?.username || 'Reviewer'}</span>
+                        <span className="text-[10px] font-bold text-brand-400">✓ Verified</span>
+                        {review.helpful_count > 0 && (
+                          <span className="ml-auto flex items-center gap-1 text-xs text-slate-500">
+                            <ThumbsUp className="h-3 w-3" aria-hidden="true" /> {review.helpful_count}
+                          </span>
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+
                 <motion.div
-                  variants={getVariants(!!reduced, scaleIn)}
-                  className="rounded-2xl border border-dashed border-white/15 bg-white/4 p-12 text-center backdrop-blur-sm"
+                  initial={reduced ? {} : { opacity: 0, scale: 0.85 }}
+                  animate={reduced ? {} : { opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.75, duration: 0.4, ease: [0.34,1.56,0.64,1] }}
+                  className="absolute -bottom-4 -left-4 glass-dark rounded-xl px-4 py-2.5 hidden lg:flex items-center gap-2"
                 >
-                  <Package className="h-12 w-12 text-brand-400 mx-auto mb-4" />
-                  <p className="text-sm font-semibold text-slate-300">No reviews yet</p>
-                  <p className="text-xs text-slate-500 mt-1">Be the first to review a product</p>
+                  <div className="h-8 w-8 rounded-lg bg-brand-950/60 border border-brand-800/40 flex items-center justify-center">
+                    <Shield className="h-4 w-4 text-brand-400" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-white">Spam protected</p>
+                    <p className="text-[10px] text-slate-500">All reviews moderated</p>
+                  </div>
                 </motion.div>
-              )}
-            </motion.div>
-
-          </div>
+              </div>
+            ) : (
+              <motion.div initial={reduced ? {} : { opacity: 0, y: 20 }} animate={reduced ? {} : { opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+                className="glass-dark rounded-2xl p-10 text-center">
+                <Star className="h-10 w-10 text-brand-400 mx-auto mb-3" aria-hidden="true" />
+                <p className="text-sm font-bold text-slate-300 mb-1">No reviews yet</p>
+                <p className="text-xs text-slate-500 mb-4">Be the first to review a product</p>
+                <Link href="/products"><Button size="sm" variant="outline" className="border-white/15 text-white hover:bg-white/[0.07]">Browse Products</Button></Link>
+              </motion.div>
+            )}
+          </motion.div>
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════ FEATURES */}
-      <section className="bg-slate-50 dark:bg-[#060c1a] py-20 sm:py-28 border-t border-slate-100 dark:border-white/[0.04]">
+      {/* ── Features ──────────────────────────────────────────── */}
+      <section className="bg-slate-50 dark:bg-[#060c1a] py-20 sm:py-28">
         <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18">
-
-          {/* Section label + heading */}
-          <motion.div
-            variants={getVariants(!!reduced, staggerContainer)}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-            className="mb-14 text-center"
-          >
-            <motion.p variants={getVariants(!!reduced, staggerItem)}
-              className="text-xs font-bold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400 mb-3">
-              Why ReviewHub
-            </motion.p>
-            <motion.h2 variants={getVariants(!!reduced, staggerItem)}
-              className="text-3xl xs:text-4xl sm:text-5xl font-black tracking-tight text-slate-900 dark:text-white mb-4">
-              Built for trust<br className="hidden sm:block" /> from day one.
+          <motion.div variants={reduced ? {} : staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}
+            className="mb-14 text-center max-w-xl mx-auto">
+            <motion.span variants={reduced ? {} : staggerItem}
+              className="inline-block text-[11px] font-black uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400 mb-4">Why ReviewHub</motion.span>
+            <motion.h2 variants={reduced ? {} : staggerItem}
+              className="text-3xl xs:text-4xl sm:text-5xl font-black tracking-tighter text-slate-900 dark:text-white mb-4">
+              Built for trust<br /><span className="text-gradient">from day one.</span>
             </motion.h2>
-            <motion.p variants={getVariants(!!reduced, staggerItem)}
-              className="text-base text-slate-500 dark:text-slate-400 max-w-xl mx-auto leading-relaxed">
-              Every feature exists to surface authentic opinions and filter noise —
-              so every review you read actually matters.
+            <motion.p variants={reduced ? {} : staggerItem} className="text-slate-500 dark:text-slate-400 text-base leading-relaxed">
+              Every feature surfaces authentic opinions and filters noise.
             </motion.p>
           </motion.div>
 
-          {/* Feature grid */}
-          <motion.div
-            variants={getVariants(!!reduced, staggerContainer)}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-60px' }}
-            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-          >
+          <motion.div variants={reduced ? {} : staggerSlow} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }}
+            className="grid gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {FEATURES.map((f) => (
-              <motion.div
-                key={f.title}
-                variants={getVariants(!!reduced, staggerItem)}
-                whileHover={reduced ? {} : { y: -4, transition: { duration: 0.2 } }}
-                className="group relative rounded-2xl border border-slate-200 dark:border-white/[0.07] bg-white dark:bg-[#0c1526] p-6 overflow-hidden cursor-default"
-              >
-                {/* Gradient glow on hover */}
-                {!reduced && (
-                  <div
-                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-2xl"
-                    style={{ background: `radial-gradient(ellipse at 0% 0%, ${f.glow} 0%, transparent 60%)` }}
-                  />
-                )}
-                {/* Top gradient accent */}
-                <div
-                  className="absolute top-0 left-0 right-0 h-0.5 rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  style={{ background: `linear-gradient(90deg, transparent, ${f.glow.replace('0.25', '0.8')}, transparent)` }}
-                />
-
-                <div className="relative">
-                  <div
-                    className="mb-4 h-11 w-11 rounded-xl flex items-center justify-center shadow-lg"
-                    style={{ background: `linear-gradient(135deg, ${f.color.replace('from-', '').replace('to-', '').split(' ').map(c => {
-                      const map: Record<string, string> = {
-                        'blue-500': '#3b82f6', 'indigo-600': '#4f46e5',
-                        'amber-400': '#fbbf24', 'orange-500': '#f97316',
-                        'brand-500': '#10b981', 'teal-500': '#14b8a6',
-                        'violet-500': '#8b5cf6', 'purple-600': '#9333ea',
-                        'rose-500': '#f43f5e', 'pink-600': '#db2777',
-                        'cyan-500': '#06b6d4', 'sky-600': '#0284c7',
-                      };
-                      return map[c] || '#10b981';
-                    }).join(', ')})` }}
-                  >
-                    <f.icon className="h-5 w-5 text-white" />
-                  </div>
-                  <h3 className="mb-2 text-base font-bold text-slate-900 dark:text-white">{f.title}</h3>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{f.desc}</p>
+              <motion.div key={f.title} variants={reduced ? {} : staggerItem}
+                whileHover={reduced ? {} : { y: -4 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+                className="group relative rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white dark:bg-[#0c1526] p-6 overflow-hidden hover:shadow-xl hover:shadow-black/5 dark:hover:shadow-black/40 transition-shadow duration-300">
+                <div className={cn('absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left', f.grad)} />
+                <div className={cn('mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl', f.bg)}>
+                  <f.icon className={cn('h-6 w-6', f.text)} aria-hidden="true" />
                 </div>
+                <h3 className="mb-2 text-base font-bold text-slate-900 dark:text-slate-100">{f.title}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </motion.div>
         </div>
       </section>
 
-      {/* ════════════════════════════════════════════ CTA */}
-      <section
-        className="relative overflow-hidden py-20 sm:py-28"
-        style={{ background: 'linear-gradient(135deg, #059669 0%, #047857 50%, #065f46 100%)' }}
-      >
-        {!reduced && (
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 60, repeat: Infinity, ease: 'linear' }}
-            className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full border border-white/10 pointer-events-none"
-          />
-        )}
-        <div className="relative mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 text-center">
-          <motion.div
-            variants={getVariants(!!reduced, staggerContainer)}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-80px' }}
-          >
-            <motion.p variants={getVariants(!!reduced, staggerItem)}
-              className="text-xs font-bold uppercase tracking-[0.2em] text-emerald-200 mb-4">
-              Join the community
-            </motion.p>
-            <motion.h2 variants={getVariants(!!reduced, staggerItem)}
-              className="text-3xl xs:text-4xl sm:text-5xl font-black tracking-tight text-white mb-4">
-              Ready to share your experience?
-            </motion.h2>
-            <motion.p variants={getVariants(!!reduced, staggerItem)}
-              className="text-base text-emerald-100 mb-10 max-w-lg mx-auto">
-              Join reviewers helping others make smarter decisions every day.
-            </motion.p>
-            <motion.div
-              variants={getVariants(!!reduced, staggerItem)}
-              className="flex flex-wrap items-center justify-center gap-4"
-            >
-              <Link href="/register">
-                <motion.div whileHover={reduced ? {} : { scale: 1.04 }} whileTap={reduced ? {} : { scale: 0.97 }}>
-                  <Button
-                    size="lg"
-                    iconRight={<ArrowRight className="h-4 w-4" />}
-                    className="bg-white text-brand-700 hover:bg-emerald-50 font-bold shadow-xl"
-                  >
-                    Get Started Free
-                  </Button>
+      {/* ── How it works ──────────────────────────────────────── */}
+      <section className="py-20 sm:py-28 bg-white dark:bg-[#0c1526] border-y border-slate-200/60 dark:border-white/[0.06]">
+        <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18">
+          <motion.div variants={reduced ? {} : staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-80px' }}>
+            <motion.div variants={reduced ? {} : staggerItem} className="text-center mb-14">
+              <span className="inline-block text-[11px] font-black uppercase tracking-[0.2em] text-brand-600 dark:text-brand-400 mb-4">How it works</span>
+              <h2 className="text-3xl xs:text-4xl sm:text-5xl font-black tracking-tighter text-slate-900 dark:text-white">Start in 60 seconds.</h2>
+            </motion.div>
+            <div className="grid gap-8 sm:gap-6 sm:grid-cols-3">
+              {STEPS.map((step, i) => (
+                <motion.div key={step.title} variants={reduced ? {} : staggerItem} className="relative text-center sm:text-left">
+                  <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
+                    <div className="relative shrink-0">
+                      <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-brand-50 to-brand-100 dark:from-brand-950/60 dark:to-brand-950/30 border border-brand-200/60 dark:border-brand-800/40 flex items-center justify-center shadow-sm">
+                        <step.icon className="h-8 w-8 text-brand-600 dark:text-brand-400" aria-hidden="true" />
+                      </div>
+                      <span className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-brand-600 text-white text-[10px] font-black flex items-center justify-center border-2 border-white dark:border-[#0c1526]">{i + 1}</span>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{step.title}</h3>
+                      <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{step.desc}</p>
+                    </div>
+                  </div>
                 </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── CTA ───────────────────────────────────────────────── */}
+      <section className="relative py-20 sm:py-28 overflow-hidden"
+        style={{ background: 'linear-gradient(140deg, #030711 0%, #040f1f 50%, #061629 100%)' }}>
+        {!reduced && (
+          <motion.div {...orbFloat(2).animate}
+            className="absolute inset-0 pointer-events-none"
+            style={{ background: 'radial-gradient(ellipse at 60% 50%, rgba(16,185,129,0.13) 0%, transparent 65%)' }} />
+        )}
+        <div className="absolute inset-0 hero-grid-overlay opacity-70 pointer-events-none" />
+        <div className="relative mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 text-center">
+          <motion.div variants={reduced ? {} : staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-60px' }}>
+            <motion.div variants={reduced ? {} : staggerItem} className="mb-4">
+              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-400 bg-brand-950/60 border border-brand-800/40 px-3.5 py-1.5 rounded-full">
+                <Sparkles className="h-3 w-3" aria-hidden="true" /> Free forever
+              </span>
+            </motion.div>
+            <motion.h2 variants={reduced ? {} : staggerItem}
+              className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter text-white leading-tight mb-5">
+              Ready to share your<br /><span className="text-gradient">honest experience?</span>
+            </motion.h2>
+            <motion.p variants={reduced ? {} : staggerItem}
+              className="text-slate-400 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+              Join thousands of reviewers helping millions of shoppers make smarter decisions.
+            </motion.p>
+            <motion.div variants={reduced ? {} : staggerItem} className="flex flex-wrap items-center justify-center gap-4">
+              <Link href="/register">
+                <Button size="lg" iconRight={<ArrowRight className="h-4 w-4" />}
+                  className="h-12 px-8 text-base font-bold shadow-xl shadow-brand-900/40">
+                  Get Started Free
+                </Button>
               </Link>
               <Link href="/products">
-                <motion.div whileHover={reduced ? {} : { scale: 1.04 }} whileTap={reduced ? {} : { scale: 0.97 }}>
-                  <Button
-                    size="lg"
-                    className="bg-white/10 text-white hover:bg-white/20 border border-white/20 font-semibold backdrop-blur-sm"
-                  >
-                    Browse Reviews
-                  </Button>
-                </motion.div>
+                <Button size="lg" variant="outline"
+                  className="h-12 px-8 text-base font-bold border-white/15 text-white hover:bg-white/[0.07] hover:border-white/25">
+                  Browse Reviews
+                </Button>
               </Link>
             </motion.div>
           </motion.div>

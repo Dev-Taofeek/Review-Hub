@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ChevronLeft, Plus, MessageSquare } from 'lucide-react';
 import { useProduct } from '@/hooks/useProducts';
 import { useReviews } from '@/hooks/useReviews';
@@ -19,6 +20,7 @@ import { ReviewForm } from '@/components/reviews/ReviewForm';
 import { ReportModal } from '@/components/reviews/ReportModal';
 import { RatingDistributionWidget } from '@/components/products/RatingDistribution';
 import { formatPrice, buildProductImageUrl } from '@/lib/utils';
+import { staggerContainer, staggerItem, pageTransition, fadeInUp } from '@/lib/animations';
 import type { Review } from '@/types';
 
 interface Props { slug: string }
@@ -68,7 +70,12 @@ export function ProductDetailClient({ slug }: Props) {
   const currentImage = images[selectedImage]?.url ?? '/placeholder-product.svg';
 
   return (
-    <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-8">
+    <motion.div
+      variants={pageTransition}
+      initial="hidden"
+      animate="visible"
+      className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-8"
+    >
       {/* Breadcrumb */}
       <nav className="mb-6">
         <Link href="/products" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-brand-600 transition-colors">
@@ -82,6 +89,15 @@ export function ProductDetailClient({ slug }: Props) {
         {/* Images */}
         <div>
           <div className="relative aspect-[4/3] sm:aspect-[3/2] overflow-hidden rounded-2xl bg-slate-100 dark:bg-white/5 mb-3">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedImage}
+                initial={{ opacity: 0, scale: 1.04 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.22, ease: 'easeOut' }}
+                className="absolute inset-0"
+              >
             <Image
               src={buildProductImageUrl({ url: currentImage })}
               alt={product.name}
@@ -90,6 +106,8 @@ export function ProductDetailClient({ slug }: Props) {
               className="object-contain p-4"
               priority
             />
+              </motion.div>
+            </AnimatePresence>
           </div>
           {images.length > 1 && (
             <div className="flex gap-2 overflow-x-auto">
@@ -193,7 +211,13 @@ export function ProductDetailClient({ slug }: Props) {
           />
         ) : (
           <>
-            <div className="grid gap-4 sm:grid-cols-2" role="list">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              animate="visible"
+              className="grid gap-4 sm:grid-cols-2"
+              role="list"
+            >
               {reviews.map((review) => (
                 <ReviewCard
                   key={review.id}
@@ -204,7 +228,7 @@ export function ProductDetailClient({ slug }: Props) {
                   onReport={setReportingReview}
                 />
               ))}
-            </div>
+            </motion.div>
             <div className="mt-8 flex justify-center">
               <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
             </div>
@@ -236,6 +260,6 @@ export function ProductDetailClient({ slug }: Props) {
         review={reportingReview}
         onClose={() => setReportingReview(null)}
       />
-    </div>
+    </motion.div>
   );
 }
