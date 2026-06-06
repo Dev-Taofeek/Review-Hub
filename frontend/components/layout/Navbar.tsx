@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
@@ -31,10 +31,18 @@ export function Navbar() {
   const { user, isAuthenticated, isAdmin, isModerator, signOut, loading } = useAuth();
   const [mobileOpen,  setMobileOpen]  = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [scrolled,    setScrolled]    = useState(false);
   const pathname = usePathname();
   const router   = useRouter();
   const dropRef  = useRef<HTMLDivElement>(null);
   const reduced  = useReducedMotion();
+
+  useEffect(() => {
+    const handler = () => setScrolled(window.scrollY > 28);
+    handler();
+    window.addEventListener('scroll', handler, { passive: true });
+    return () => window.removeEventListener('scroll', handler);
+  }, []);
 
   useEffect(() => {
     const h = (e: MouseEvent) => {
@@ -66,13 +74,15 @@ export function Navbar() {
 
   return (
     <header className={cn(
-      'sticky top-0 z-40',
-      'bg-white/95 dark:bg-[#06080F]/92',
-      'border-b border-slate-200/70 dark:border-white/[0.06]',
-      'backdrop-blur-xl',
-      'shadow-sm shadow-slate-900/5 dark:shadow-black/30',
+      'sticky top-0 z-40 backdrop-blur-xl transition-all duration-300',
+      scrolled
+        ? 'bg-white/98 dark:bg-[#06080F]/97 shadow-md shadow-slate-900/8 dark:shadow-black/40 border-b border-slate-200/60 dark:border-white/[0.07]'
+        : 'bg-white/92 dark:bg-[#06080F]/88 border-b border-slate-200/40 dark:border-white/[0.04] shadow-none',
     )}>
-      <div className="mx-auto flex h-[58px] max-w-[1600px] items-center justify-between px-4 xs:px-5 sm:px-8 lg:px-20">
+      <div className={cn(
+        'mx-auto flex max-w-[1600px] items-center justify-between px-4 xs:px-5 sm:px-8 lg:px-20 transition-all duration-300',
+        scrolled ? 'h-[44px]' : 'h-[48px]'
+      )}>
 
         {/* ── Logo ─────────────────────────────────── */}
         <Link href={isAuthenticated ? '/dashboard' : '/'} onClick={closeAll}
@@ -87,7 +97,8 @@ export function Navbar() {
           </motion.div>
           <div className="flex flex-col leading-none">
             <span className="text-[14px] font-black tracking-[-0.03em] text-slate-900 dark:text-white">ReviewHub</span>
-            <span className="text-[8px] font-bold uppercase tracking-[0.2em] text-brand-600 dark:text-[rgba(0,229,160,0.6)]">
+            <span className="text-[8px] font-bold uppercase tracking-[0.2em]"
+              style={{ color: 'var(--signal)', opacity: 0.8 }}>
               Verified Reviews
             </span>
           </div>
@@ -220,7 +231,7 @@ export function Navbar() {
                 whileHover={reduced ? {} : { scale: 1.02 }}
                 whileTap={reduced ? {} : { scale: 0.97 }}
                 onClick={() => { closeAll(); router.push('/register'); }}
-                className="hidden sm:flex h-8 px-3.5 rounded-xl text-sm font-bold text-black transition-all shadow-md shadow-brand-600/20"
+                className="hidden sm:flex items-center justify-center h-8 px-3.5 rounded-xl text-sm font-bold text-black transition-all shadow-md shadow-brand-600/20"
                 style={{ background: 'var(--signal)' }}
               >
                 Get started
@@ -357,7 +368,7 @@ export function Navbar() {
                     </button>
                   </Link>
                   <Link href="/register" onClick={closeAll} className="flex-1">
-                    <button className="w-full h-10 rounded-xl text-sm font-bold text-black shadow-md shadow-brand-600/20"
+                    <button className="w-full h-10 flex items-center justify-center rounded-xl text-sm font-bold text-black shadow-md shadow-brand-600/20"
                       style={{ background: 'var(--signal)' }}>
                       Get started
                     </button>

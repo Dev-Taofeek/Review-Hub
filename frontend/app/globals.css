@@ -24,8 +24,8 @@
     --text-1:  #0F172A;
     --text-2:  #475569;
     --text-3:  #94A3B8;
-    --signal:  #059669;
-    --signal-glow: rgba(5,150,105,0.25);
+    --signal:  #00B87A;
+    --signal-glow: rgba(0,184,122,0.28);
   }
 
   .dark {

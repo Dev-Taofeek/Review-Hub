@@ -2,14 +2,18 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, useReducedMotion } from 'framer-motion';
+import { useRef } from 'react';
+import {
+  motion, useReducedMotion,
+  useMotionValue, useTransform, useSpring,
+} from 'framer-motion';
 import { Star, MessageSquare, ArrowUpRight } from 'lucide-react';
 import { cn, formatPrice, buildProductImageUrl } from '@/lib/utils';
 import { staggerItem } from '@/lib/animations';
 import type { Product } from '@/types';
 
-/* Mini trust ring */
-function MiniRing({ rating, size = 40 }: { rating: number; size?: number }) {
+/* ── Mini trust ring ─────────────────────────────────── */
+function MiniRing({ rating, size = 36 }: { rating: number; size?: number }) {
   const score = Math.round((rating / 5) * 100);
   const R = (size - 6) / 2;
   const C = 2 * Math.PI * R;
@@ -17,116 +21,169 @@ function MiniRing({ rating, size = 40 }: { rating: number; size?: number }) {
   const color = score >= 85 ? '#00E5A0' : score >= 65 ? '#FBBF24' : '#FF6B6B';
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90" aria-hidden="true">
-      <circle cx={size/2} cy={size/2} r={R} fill="none" strokeWidth="3" stroke="rgba(255,255,255,0.06)" />
+      <circle cx={size/2} cy={size/2} r={R} fill="none" strokeWidth="3" stroke="rgba(255,255,255,0.12)" />
       <circle cx={size/2} cy={size/2} r={R} fill="none" strokeWidth="3"
         stroke={color} strokeLinecap="round"
         strokeDasharray={`${dash} ${C}`}
-        style={{ filter: `drop-shadow(0 0 3px ${color}80)` }}
+        style={{ filter: `drop-shadow(0 0 4px ${color}90)` }}
       />
     </svg>
   );
 }
 
+/* ── Sentiment ───────────────────────────────────────── */
+const getSentiment = (r: number) =>
+  r >= 4.5 ? { label: 'Exceptional', color: '#00E5A0' } :
+  r >= 4   ? { label: 'Excellent',   color: '#34d399'  } :
+  r >= 3   ? { label: 'Good',        color: '#FBBF24'  } :
+  r >= 2   ? { label: 'Mixed',       color: '#F97316'  } :
+             { label: 'Poor',         color: '#FF6B6B'  };
+
 export function ProductCard({ product, className }: { product: Product; className?: string }) {
   const reduced      = useReducedMotion();
+  const cardRef      = useRef<HTMLDivElement>(null);
   const primaryImage = product.images?.find(img => img.is_primary) ?? product.images?.[0];
   const rating       = product.average_rating ?? 0;
-  const reviews      = product.total_reviews ?? 0;
+  const reviews      = product.total_reviews  ?? 0;
   const hasRating    = rating > 0;
+  const sentiment    = getSentiment(rating);
 
-  /* Sentiment label */
-  const sentiment =
-    rating >= 4.5 ? { label: 'Exceptional', color: '#00E5A0' } :
-    rating >= 4   ? { label: 'Excellent',   color: '#34d399'  } :
-    rating >= 3   ? { label: 'Good',         color: '#FBBF24'  } :
-    rating >= 2   ? { label: 'Mixed',        color: '#F97316'  } :
-                    { label: 'Poor',          color: '#FF6B6B'  };
+  /* ── 3D tilt values ────────────────────────────────── */
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const rotateX = useTransform(mouseY, [-0.5, 0.5], reduced ? ['0deg','0deg'] : ['7deg','-7deg']);
+  const rotateY = useTransform(mouseX, [-0.5, 0.5], reduced ? ['0deg','0deg'] : ['-7deg','7deg']);
+  const gloss   = useTransform(mouseX, [-0.5, 0.5], ['rgba(255,255,255,0.04)', 'rgba(255,255,255,0.13)']);
+  const springX = useSpring(rotateX, { stiffness: 300, damping: 30 });
+  const springY = useSpring(rotateY, { stiffness: 300, damping: 30 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (reduced || !cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    mouseX.set((e.clientX - rect.left) / rect.width  - 0.5);
+    mouseY.set((e.clientY - rect.top)  / rect.height - 0.5);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+  };
 
   return (
     <motion.div
       variants={staggerItem}
-      whileHover={reduced ? {} : { y: -6, transition: { duration: 0.22, ease: [0.25,0.46,0.45,0.94] } }}
       className={cn('group', className)}
+      style={{ perspective: '1000px' }}
     >
       <Link href={`/products/${product.slug}`} aria-label={`View ${product.name}`}>
-        <article className={cn(
-          'relative rounded-2xl overflow-hidden h-full flex flex-col',
-          'transition-all duration-300',
-          /* Light mode */
-          'bg-white border border-slate-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.07),0_6px_20px_rgba(0,0,0,0.05)]',
-          'hover:border-emerald-200/60 hover:shadow-[0_4px_16px_rgba(0,0,0,0.1),0_0_0_1px_rgba(5,150,105,0.12)]',
-          /* Dark mode */
-          'dark:border-white/[0.07] dark:bg-[#0D1020]',
-          'dark:[box-shadow:0_0_0_1px_rgba(255,255,255,0.03)_inset,0_1px_0_rgba(255,255,255,0.05)_inset,0_8px_24px_rgba(0,0,0,0.4)]',
-          'dark:hover:border-[rgba(0,229,160,0.2)]',
-          'dark:hover:[box-shadow:0_0_0_1px_rgba(0,229,160,0.08),0_0_0_1px_rgba(255,255,255,0.04)_inset,0_16px_40px_rgba(0,0,0,0.5),0_0_24px_rgba(0,229,160,0.05)]',
-        )}>
-
-          {/* ── Image container ─────────────────────────── */}
-          <div className="relative aspect-[4/3] overflow-hidden bg-slate-50 dark:bg-white/[0.02] shrink-0">
-            <Image
-              src={buildProductImageUrl(primaryImage)}
-              alt={product.name}
-              fill
-              sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
-              className="object-contain p-5 transition-transform duration-500 group-hover:scale-105"
+        <motion.div
+          ref={cardRef}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          style={{ rotateX: springX, rotateY: springY, transformStyle: 'preserve-3d' }}
+          whileHover={reduced ? {} : { y: -6, scale: 1.015 }}
+          whileTap={reduced ? {} : { scale: 0.985 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+          className={cn(
+            'relative rounded-2xl overflow-hidden h-full flex flex-col cursor-pointer',
+            /* Light */
+            'bg-white border border-slate-200/80',
+            'shadow-[0_2px_8px_rgba(0,0,0,0.06),0_1px_3px_rgba(0,0,0,0.04)]',
+            'hover:border-emerald-200/70 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12),0_0_0_1px_rgba(5,150,105,0.1)]',
+            /* Dark */
+            'dark:bg-[#0D1020] dark:border-white/[0.07]',
+            'dark:[box-shadow:0_0_0_1px_rgba(255,255,255,0.03)_inset,0_1px_0_rgba(255,255,255,0.055)_inset,0_8px_24px_rgba(0,0,0,0.4)]',
+            'dark:hover:border-[rgba(0,229,160,0.22)]',
+            'dark:hover:[box-shadow:0_0_0_1px_rgba(0,229,160,0.1),0_0_0_1px_rgba(255,255,255,0.04)_inset,0_20px_48px_rgba(0,0,0,0.5),0_0_32px_rgba(0,229,160,0.08)]',
+            'transition-shadow duration-300',
+          )}
+        >
+          {/* Gloss sheen on tilt */}
+          {!reduced && (
+            <motion.div
+              className="absolute inset-0 pointer-events-none z-10 rounded-2xl"
+              style={{ background: gloss }}
             />
+          )}
+
+          {/* ── Image ─────────────────────────────────── */}
+          <div className="relative aspect-[4/3] overflow-hidden bg-slate-50 dark:bg-white/[0.02] shrink-0">
+            <motion.div
+              className="absolute inset-0"
+              whileHover={reduced ? {} : { scale: 1.06 }}
+              transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              <Image
+                src={buildProductImageUrl(primaryImage)}
+                alt={product.name}
+                fill
+                sizes="(max-width:640px) 100vw, (max-width:1024px) 50vw, 33vw"
+                className="object-contain p-5"
+              />
+            </motion.div>
 
             {/* Category pill */}
             {product.category?.name && (
-              <div className="absolute top-3 left-3 text-label-mono px-2.5 py-1 rounded-full"
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="absolute top-3 left-3 text-label-mono px-2.5 py-1 rounded-full z-10"
                 style={{
-                  background: 'rgba(0,0,0,0.55)',
+                  background: 'rgba(0,0,0,0.52)',
                   backdropFilter: 'blur(12px)',
-                  color: 'rgba(255,255,255,0.85)',
-                  border: '1px solid rgba(255,255,255,0.1)',
-                }}>
+                  color: 'rgba(255,255,255,0.9)',
+                  border: '1px solid rgba(255,255,255,0.12)',
+                }}
+              >
                 {product.category.icon && <span className="mr-1" aria-hidden="true">{product.category.icon}</span>}
                 {product.category.name}
-              </div>
+              </motion.div>
             )}
 
-            {/* Open indicator */}
-            <div className="absolute top-3 right-3 h-8 w-8 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-              style={{ background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(12px)' }}>
+            {/* Arrow on hover */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileHover={{ opacity: 1, scale: 1 }}
+              className="absolute top-3 right-3 h-8 w-8 rounded-lg flex items-center justify-center z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(12px)' }}
+            >
               <ArrowUpRight className="h-4 w-4 text-white" aria-hidden="true" />
-            </div>
+            </motion.div>
 
-            {/* Bottom rating ring overlay on hover */}
+            {/* Rating ring on hover */}
             {hasRating && (
-              <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center">
-                <MiniRing rating={rating} size={36} />
+              <div className="absolute bottom-2.5 right-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
+                <MiniRing rating={rating} />
               </div>
             )}
 
-            {/* Gradient fade at bottom */}
-            <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/20 to-transparent dark:from-black/40" />
+            <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-black/20 to-transparent dark:from-black/40" />
           </div>
 
-          {/* ── Info ────────────────────────────────────── */}
+          {/* ── Info ──────────────────────────────────── */}
           <div className="flex flex-col flex-1 p-4 gap-2">
-            {/* Brand */}
             <p className="text-label-mono" style={{ color: 'var(--text-3)' }}>{product.brand}</p>
 
-            {/* Name */}
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-2 leading-snug
-                           group-hover:text-emerald-700 dark:group-hover:text-[#00E5A0] transition-colors duration-200">
+            <h3 className="text-sm font-bold text-slate-900 dark:text-white line-clamp-2 leading-snug group-hover:text-emerald-700 dark:group-hover:text-[#00E5A0] transition-colors duration-200">
               {product.name}
             </h3>
 
-            {/* Rating + sentiment */}
+            {/* Rating */}
             <div className="flex items-center gap-2">
               {hasRating ? (
                 <>
                   <div className="flex gap-0.5">
                     {[1,2,3,4,5].map((s) => (
                       <Star key={s} className={cn('h-3 w-3',
-                        s <= Math.round(rating) ? 'fill-amber-400 text-amber-400' : 'fill-slate-200 dark:fill-white/10 text-transparent dark:text-transparent'
+                        s <= Math.round(rating)
+                          ? 'fill-amber-400 text-amber-400'
+                          : 'fill-slate-200 dark:fill-white/10 text-transparent'
                       )} />
                     ))}
                   </div>
                   <span className="text-data text-xs font-bold text-slate-700 dark:text-white">{rating.toFixed(1)}</span>
-                  <span className="text-xs font-semibold px-1.5 py-0.5 rounded-md"
+                  <span className="text-xs font-bold px-1.5 py-0.5 rounded-md"
                     style={{ background: `${sentiment.color}18`, color: sentiment.color, fontSize: '10px' }}>
                     {sentiment.label}
                   </span>
@@ -136,9 +193,8 @@ export function ProductCard({ product, className }: { product: Product; classNam
               )}
             </div>
 
-            {/* Price + review count */}
-            <div className="flex items-center justify-between mt-auto pt-3"
-              style={{ borderTop: '1px solid var(--line)' }}>
+            {/* Price + count */}
+            <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-100 dark:border-white/[0.06]">
               <span className="text-data text-base font-black text-slate-900 dark:text-white">
                 {formatPrice(product.price)}
               </span>
@@ -151,12 +207,18 @@ export function ProductCard({ product, className }: { product: Product; classNam
             </div>
           </div>
 
-          {/* Bottom signal line */}
-          <div
-            className="absolute bottom-0 left-0 right-0 h-[2px] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"
-            style={{ background: `linear-gradient(90deg, ${hasRating ? sentiment.color : 'var(--signal)'}, transparent)` }}
+          {/* Signal bottom accent */}
+          <motion.div
+            className="absolute bottom-0 left-0 right-0 h-[2px]"
+            initial={{ scaleX: 0 }}
+            whileHover={reduced ? {} : { scaleX: 1 }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            style={{
+              background: `linear-gradient(90deg, ${hasRating ? sentiment.color : '#00E5A0'}, transparent)`,
+              transformOrigin: 'left',
+            }}
           />
-        </article>
+        </motion.div>
       </Link>
     </motion.div>
   );

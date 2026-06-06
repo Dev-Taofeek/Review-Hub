@@ -1,19 +1,80 @@
 'use client';
 
 import Link from 'next/link';
-import { motion, useReducedMotion, useInView } from 'framer-motion';
+import { motion, useReducedMotion, useInView, useMotionValue, useSpring } from 'framer-motion';
 import { useRef } from 'react';
 import {
   ArrowRight, Shield, Zap, Users, Star,
   CheckCircle, ChevronDown, Sparkles,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { AnimatedHeadline } from '@/components/ui/AnimatedHeadline';
 import { cn } from '@/lib/utils';
-import { staggerContainer, staggerItem, orbFloat } from '@/lib/animations';
+import { staggerContainer, staggerItem, staggerSlow, orbFloat } from '@/lib/animations';
 
 interface Props {
   statItems:     { value: string; label: string }[];
   recentReviews: any[];
+}
+
+/* ── Magnetic CTA button ───────────────────────────────── */
+function MagneticCTA({
+  href, children, primary = false,
+}: { href: string; children: React.ReactNode; primary?: boolean }) {
+  const ref     = useRef<HTMLButtonElement>(null);
+  const reduced = useReducedMotion();
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 200, damping: 18, mass: 0.1 });
+  const springY = useSpring(y, { stiffness: 200, damping: 18, mass: 0.1 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (reduced || !ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    x.set((e.clientX - rect.left - rect.width  / 2) * 0.28);
+    y.set((e.clientY - rect.top  - rect.height / 2) * 0.28);
+  };
+  const reset = () => { x.set(0); y.set(0); };
+
+  return (
+    <Link href={href}>
+      <motion.button
+        ref={ref}
+        style={{ x: springX, y: springY, ...(primary ? { background: 'var(--signal)' } : {}) }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={reset}
+        whileTap={reduced ? {} : { scale: 0.96 }}
+        className={cn(
+          'inline-flex items-center gap-2 h-12 px-6 rounded-xl font-bold text-sm transition-shadow duration-300',
+          primary
+            ? 'text-black shadow-[0_0_0_1px_rgba(0,229,160,0.5),0_0_24px_rgba(0,229,160,0.25)] hover:shadow-[0_0_0_1px_rgba(0,229,160,0.7),0_0_40px_rgba(0,229,160,0.4)]'
+            : 'border border-white/15 text-white hover:bg-white/[0.07] hover:border-white/25'
+        )}
+      >
+        {children}
+      </motion.button>
+    </Link>
+  );
+}
+
+/* ── Scroll counter ────────────────────────────────────── */
+function ScrollCounter({ value, label }: { value: string; label: string }) {
+  const ref    = useRef(null);
+  const inView = useInView(ref, { once: true, margin: '-40px' });
+  const reduced = useReducedMotion();
+  return (
+    <div ref={ref} className="flex flex-col">
+      <motion.span
+        className="text-data text-2xl xs:text-3xl font-black text-white"
+        initial={reduced ? {} : { opacity: 0, y: 10 }}
+        animate={inView || reduced ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+      >
+        {value}
+      </motion.span>
+      <span className="text-label-mono mt-0.5" style={{ color: 'var(--text-2)' }}>{label}</span>
+    </div>
+  );
 }
 
 /* ── Scroll-aware section ── */
@@ -132,7 +193,7 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
           Full viewport. No noise. Pure signal.
       ════════════════════════════════════════════════════ */}
       <section
-        className="relative min-h-[100svh] flex flex-col overflow-hidden"
+        className="relative flex flex-col overflow-hidden"
         style={{ background: 'linear-gradient(160deg, #030610 0%, #06080F 40%, #090D1C 100%)' }}
       >
         {/* Ambient light — positions chosen for visual balance */}
@@ -157,7 +218,7 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
         {/* ── Copy + Cards ── */}
         <div className="relative flex-1 flex items-center">
           <div className="mx-auto w-full max-w-[1600px] px-6 xs:px-8 sm:px-12 lg:px-20 xl:px-28">
-            <div className="grid lg:grid-cols-[1fr_420px] xl:grid-cols-[1fr_480px] gap-12 xl:gap-20 items-center min-h-[80vh] py-20">
+            <div className="grid lg:grid-cols-[1fr_420px] xl:grid-cols-[1fr_480px] gap-8 xl:gap-16 items-center py-8 sm:py-12">
 
               {/* LEFT: The statement */}
               <motion.div
@@ -174,18 +235,25 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
                   </span>
                 </motion.div>
 
-                {/* HEADLINE — maximum drama */}
-                <motion.h1 variants={reduced ? {} : staggerItem}
-                  className="font-black text-white leading-[0.88] tracking-[-0.05em] mb-8"
-                  style={{ fontSize: 'clamp(3rem, 7.5vw, 5.5rem)' }}>
-                  The truth about<br />
-                  <span style={{
-                    background: 'linear-gradient(135deg, #00E5A0 0%, #00B880 100%)',
-                    WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                  }}>
-                    every product.
-                  </span>
-                </motion.h1>
+                {/* HEADLINE — word-by-word reveal */}
+                <motion.div variants={reduced ? {} : staggerItem}>
+                  <h1 className="font-black text-white leading-[1.07] tracking-[-0.02em] mb-8"
+                    style={{ fontSize: 'clamp(2.6rem, 7vw, 5.5rem)' }}>
+                    <AnimatedHeadline delay={0.15}>The truth about</AnimatedHeadline>
+                    <motion.span
+                      initial={reduced ? {} : { opacity: 0, y: 22, scale: 0.95 }}
+                      animate={reduced ? {} : { opacity: 1, y: 0,  scale: 1    }}
+                      transition={{ delay: 0.5, duration: 0.65, ease: [0.34, 1.3, 0.64, 1] }}
+                      style={{
+                        display: 'block',
+                        background: 'linear-gradient(135deg, #00E5A0 0%, #00B880 100%)',
+                        WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+                      }}
+                    >
+                      every product.
+                    </motion.span>
+                  </h1>
+                </motion.div>
 
                 {/* Body */}
                 <motion.p variants={reduced ? {} : staggerItem}
@@ -195,42 +263,23 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
                   Built so you never have to guess again.
                 </motion.p>
 
-                {/* CTAs */}
+                {/* CTAs — magnetic buttons */}
                 <motion.div variants={reduced ? {} : staggerItem} className="flex flex-wrap gap-3 mb-14">
-                  <Link href="/products">
-                    <motion.button
-                      whileHover={reduced ? {} : { scale: 1.02 }}
-                      whileTap={reduced ? {} : { scale: 0.97 }}
-                      className="inline-flex items-center gap-2 h-12 px-6 rounded-xl font-bold text-sm text-black transition-all"
-                      style={{
-                        background: 'var(--signal)',
-                        boxShadow: '0 0 0 1px rgba(0,229,160,0.5), 0 0 24px rgba(0,229,160,0.25)',
-                      }}
-                    >
-                      Browse Products <ArrowRight className="h-4 w-4" />
-                    </motion.button>
-                  </Link>
-                  <Link href="/register">
-                    <motion.button
-                      whileHover={reduced ? {} : { scale: 1.02 }}
-                      whileTap={reduced ? {} : { scale: 0.97 }}
-                      className="inline-flex items-center gap-2 h-12 px-6 rounded-xl font-bold text-sm transition-all"
-                      style={{
-                        background: 'rgba(255,255,255,0.06)',
-                        border: '1px solid rgba(255,255,255,0.12)',
-                        color: 'rgba(255,255,255,0.8)',
-                      }}
-                    >
-                      Write a Review
-                    </motion.button>
-                  </Link>
+                  <MagneticCTA href="/products" primary>
+                    Browse Products <ArrowRight className="h-4 w-4" />
+                  </MagneticCTA>
+                  <MagneticCTA href="/register">
+                    Write a Review
+                  </MagneticCTA>
                 </motion.div>
 
-                {/* Stats — monospace data display */}
+                {/* Stats — scroll-triggered counters */}
                 <motion.div variants={reduced ? {} : staggerItem}
-                  className="grid grid-cols-2 xs:grid-cols-4 gap-6 pt-8"
+                  className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8"
                   style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
-                  {statItems.map((s) => <StatPill key={s.label} value={s.value} label={s.label} />)}
+                  {statItems.map((s) => (
+                    <ScrollCounter key={s.label} value={s.value} label={s.label} />
+                  ))}
                 </motion.div>
               </motion.div>
 
@@ -269,18 +318,6 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
             </div>
           </div>
         </div>
-
-        {/* Scroll indicator */}
-        {!reduced && (
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 opacity-30"
-          >
-            <span className="text-label-mono text-white">scroll</span>
-            <ChevronDown className="h-4 w-4 text-white" />
-          </motion.div>
-        )}
       </section>
 
       {/* ════════════════════════════════════════════════════
@@ -374,7 +411,7 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
                         <span className="text-xs font-medium text-slate-600 dark:text-slate-400">{item.label}</span>
                         <span className="text-data text-xs font-bold" style={{ color: item.color }}>{item.pct}%</span>
                       </div>
-                      <div className="h-1.5 rounded-full overflow-hidden bg-slate-200 dark:bg-white/[0.06]">
+                      <div className="h-3 rounded-full overflow-hidden bg-slate-200 dark:bg-white/[0.06]">
                         <motion.div className="h-full rounded-full"
                           initial={{ width: 0 }}
                           whileInView={{ width: `${item.pct}%` }}
@@ -439,36 +476,19 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
             </span>
             <h2 className="font-black tracking-[-0.04em] text-white leading-tight mb-5"
               style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)' }}>
-              Your signal<br />
-              <span className="text-gradient">starts here.</span>
+              Your signal
+              <span className="text-gradient"> starts here.</span>
             </h2>
             <p className="text-lg max-w-lg mx-auto mb-10" style={{ color: 'var(--text-2)' }}>
               Join thousands of reviewers who are already helping millions of people shop smarter.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <Link href="/register">
-                <motion.button
-                  whileHover={reduced ? {} : { scale: 1.02 }}
-                  whileTap={reduced ? {} : { scale: 0.97 }}
-                  className="inline-flex items-center gap-2 h-13 px-8 rounded-xl font-bold text-base text-black"
-                  style={{
-                    background: 'var(--signal)',
-                    boxShadow: '0 0 0 1px rgba(0,229,160,0.5), 0 0 32px rgba(0,229,160,0.3)',
-                  }}
-                >
-                  Get Started Free <ArrowRight className="h-4 w-4" />
-                </motion.button>
-              </Link>
-              <Link href="/products">
-                <motion.button
-                  whileHover={reduced ? {} : { scale: 1.02 }}
-                  whileTap={reduced ? {} : { scale: 0.97 }}
-                  className="inline-flex items-center gap-2 h-13 px-8 rounded-xl font-bold text-base"
-                  style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.75)' }}
-                >
-                  Browse Reviews
-                </motion.button>
-              </Link>
+              <MagneticCTA href="/register" primary>
+                Get Started Free <ArrowRight className="h-4 w-4" />
+              </MagneticCTA>
+              <MagneticCTA href="/products">
+                Browse Reviews
+              </MagneticCTA>
             </div>
           </RevealSection>
         </div>
