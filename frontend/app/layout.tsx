@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import { ConditionalShell } from '@/components/layout/ConditionalShell';
 import { ScrollToTop } from '@/components/ScrollToTop';
+import { ScrollProgress } from '@/components/ui/ScrollProgress';
 import { ThemeProvider } from '@/lib/theme';
 import './globals.css';
 
@@ -81,6 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to main content
         </a>
         <ThemeProvider>
+          <ScrollProgress />
           <ScrollToTop />
           <ConditionalShell>{children}</ConditionalShell>
           <Toaster

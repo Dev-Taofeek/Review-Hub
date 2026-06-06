@@ -141,30 +141,44 @@ export default function CategoriesPage() {
               {filtered.map((cat, i) => {
                 const grad = GRADIENTS[i % GRADIENTS.length];
                 return (
-                  <motion.div key={cat.id} variants={reduced ? {} : staggerItem} whileHover={reduced ? {} : { y: -6, transition: { duration: 0.2 } }}>
+                  <motion.div
+                    key={cat.id}
+                    variants={reduced ? {} : staggerItem}
+                    whileHover={reduced ? {} : { y: -7, scale: 1.02 }}
+                    whileTap={reduced ? {} : { scale: 0.97 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+                    style={{ perspective: '800px' }}
+                  >
                   <Link
                     key={cat.id}
                     href={`/categories/${cat.slug}`}
-                    className="group relative overflow-hidden rounded-2xl border border-slate-200/60 dark:border-white/[0.07] bg-white dark:bg-[#0c1526] hover:-translate-y-1 hover:shadow-xl transition-all duration-200 cursor-pointer"
-                    style={{ '--hover-shadow': grad.shadow } as React.CSSProperties}
+                    className="group relative overflow-hidden rounded-2xl border border-slate-200/60 dark:border-white/[0.07] bg-white dark:bg-[#0D1020] transition-all duration-300 cursor-pointer block"
+                    style={{
+                      boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
+                    }}
                   >
-                    {/* Top gradient strip */}
+                    {/* Top gradient strip with glow */}
                     <div
                       className="h-1.5 w-full"
-                      style={{ background: `linear-gradient(90deg, ${grad.from}, ${grad.to})` }}
+                      style={{
+                        background: `linear-gradient(90deg, ${grad.from}, ${grad.to})`,
+                        boxShadow: `0 0 12px ${grad.shadow}`,
+                      }}
                     />
 
                     <div className="p-5 flex flex-col items-center text-center gap-3">
-                      {/* Icon circle */}
-                      <div
-                        className="h-14 w-14 rounded-2xl flex items-center justify-center text-2xl shadow-lg group-hover:scale-110 transition-transform duration-200"
+                      {/* Icon — scale + rotate on hover */}
+                      <motion.div
+                        whileHover={reduced ? {} : { scale: 1.12, rotate: -6 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+                        className="h-14 w-14 rounded-2xl flex items-center justify-center text-2xl"
                         style={{
                           background: `linear-gradient(135deg, ${grad.from}, ${grad.to})`,
-                          boxShadow: `0 6px 20px ${grad.shadow}`,
+                          boxShadow: `0 8px 24px ${grad.shadow}`,
                         }}
                       >
                         {cat.icon || '📦'}
-                      </div>
+                      </motion.div>
 
                       {/* Name */}
                       <div>

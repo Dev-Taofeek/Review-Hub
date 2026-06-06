@@ -17,7 +17,7 @@ import { RoleBadge } from '@/components/ui/Badge';
 import { StarRating } from '@/components/ui/StarRating';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 import { cn, formatRelativeTime, truncate } from '@/lib/utils';
-import { staggerContainer, staggerItem, orbFloat, pageTransition } from '@/lib/animations';
+import { staggerContainer, staggerItem, staggerFast, orbFloat, pageTransition, fadeInUp } from '@/lib/animations';
 
 interface DashboardStats {
   overview: {
@@ -188,6 +188,7 @@ export default function DashboardPage() {
               const raw = ov[card.key as keyof typeof ov] as number;
               return (
                 <motion.div key={card.key} variants={reduced ? {} : staggerItem}
+                  whileHover={reduced ? {} : { y: -5, scale: 1.015, transition: { type: 'spring', stiffness: 280, damping: 22 } }}
                   className="rounded-2xl p-5 relative overflow-hidden bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07] shadow-sm dark:shadow-[0_8px_24px_rgba(0,0,0,0.3)]">
                   {/* Accent glow background */}
                   <div className="absolute top-0 right-0 w-24 h-24 rounded-full pointer-events-none"
