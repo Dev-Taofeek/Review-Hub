@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Input, Select } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useCategories } from '@/hooks/useProducts';
@@ -65,7 +66,7 @@ export function ProductFilters({ initialFilters = {}, onFiltersChange }: Product
   return (
     <div className="flex flex-col gap-3">
       {/* Search + sort row */}
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2">
         <div className="flex-1">
           <Input
             placeholder="Search products…"
@@ -78,14 +79,14 @@ export function ProductFilters({ initialFilters = {}, onFiltersChange }: Product
           options={SORT_OPTIONS}
           value={filters.sortBy}
           onChange={(e) => update('sortBy', e.target.value)}
-          className="w-44 shrink-0"
+          className="w-full"
         />
         <Button
           variant={showAdvanced ? 'primary' : 'outline'}
           size="md"
           icon={<SlidersHorizontal className="h-4 w-4" />}
           onClick={() => setShowAdvanced(!showAdvanced)}
-          className="shrink-0"
+          className="w-full shrink-0"
         >
           Filters
           {hasActive && (
@@ -95,9 +96,16 @@ export function ProductFilters({ initialFilters = {}, onFiltersChange }: Product
       </div>
 
       {/* Advanced filters */}
-      {showAdvanced && (
-        <div className="rounded-xl border border-slate-100 bg-white p-4 shadow-soft dark:bg-[#0D1020] dark:border-white/[0.07] animate-slide-down">
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      <AnimatePresence initial={false}>
+        {showAdvanced && (
+        <motion.div
+          initial={{ opacity: 0, height: 0, y: -6 }}
+          animate={{ opacity: 1, height: 'auto', y: 0 }}
+          exit={{ opacity: 0, height: 0, y: -6 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+          className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm"
+        >
+          <div className="grid grid-cols-1 gap-3">
             <Select
               label="Category"
               options={[{ value: '', label: 'All categories' }, ...categories.map((c) => ({ value: c.slug, label: c.name }))]}
@@ -134,8 +142,9 @@ export function ProductFilters({ initialFilters = {}, onFiltersChange }: Product
               </Button>
             </div>
           )}
-        </div>
-      )}
+        </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

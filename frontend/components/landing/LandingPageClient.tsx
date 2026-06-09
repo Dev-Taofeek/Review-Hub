@@ -1,499 +1,192 @@
 'use client';
 
 import Link from 'next/link';
-import { motion, useReducedMotion, useInView, useMotionValue, useSpring } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
-  ArrowRight, Shield, Zap, Users, Star,
-  CheckCircle, ChevronDown, Sparkles,
+  ArrowRight, BadgeCheck, Flag, Gauge, MessageSquareWarning,
+  SearchCheck, ShieldCheck, Sparkles, Star, Users,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { AnimatedHeadline } from '@/components/ui/AnimatedHeadline';
 import { cn } from '@/lib/utils';
-import { staggerContainer, staggerItem, staggerSlow, orbFloat } from '@/lib/animations';
+import { staggerContainer, staggerItem } from '@/lib/animations';
 
 interface Props {
-  statItems:     { value: string; label: string }[];
+  statItems: { value: string; label: string }[];
   recentReviews: any[];
 }
 
-/* ── Magnetic CTA button ───────────────────────────────── */
-function MagneticCTA({
-  href, children, primary = false,
-}: { href: string; children: React.ReactNode; primary?: boolean }) {
-  const ref     = useRef<HTMLButtonElement>(null);
-  const reduced = useReducedMotion();
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 200, damping: 18, mass: 0.1 });
-  const springY = useSpring(y, { stiffness: 200, damping: 18, mass: 0.1 });
+const distribution = [
+  { label: '5', value: 72 },
+  { label: '4', value: 18 },
+  { label: '3', value: 7 },
+  { label: '2', value: 2 },
+  { label: '1', value: 1 },
+];
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (reduced || !ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    x.set((e.clientX - rect.left - rect.width  / 2) * 0.28);
-    y.set((e.clientY - rect.top  - rect.height / 2) * 0.28);
-  };
-  const reset = () => { x.set(0); y.set(0); };
-
+function TrustRing({ score }: { score: number }) {
+  const r = 42;
+  const c = 2 * Math.PI * r;
   return (
-    <Link href={href}>
-      <motion.button
-        ref={ref}
-        style={{ x: springX, y: springY, ...(primary ? { background: 'var(--signal)' } : {}) }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={reset}
-        whileTap={reduced ? {} : { scale: 0.96 }}
-        className={cn(
-          'inline-flex items-center gap-2 h-12 px-6 rounded-xl font-bold text-sm transition-shadow duration-300',
-          primary
-            ? 'text-black shadow-[0_0_0_1px_rgba(0,229,160,0.5),0_0_24px_rgba(0,229,160,0.25)] hover:shadow-[0_0_0_1px_rgba(0,229,160,0.7),0_0_40px_rgba(0,229,160,0.4)]'
-            : 'border border-white/15 text-white hover:bg-white/[0.07] hover:border-white/25'
-        )}
-      >
-        {children}
-      </motion.button>
-    </Link>
-  );
-}
-
-/* ── Scroll counter ────────────────────────────────────── */
-function ScrollCounter({ value, label }: { value: string; label: string }) {
-  const ref    = useRef(null);
-  const inView = useInView(ref, { once: true, margin: '-40px' });
-  const reduced = useReducedMotion();
-  return (
-    <div ref={ref} className="flex flex-col">
-      <motion.span
-        className="text-data text-2xl xs:text-3xl font-black text-white"
-        initial={reduced ? {} : { opacity: 0, y: 10 }}
-        animate={inView || reduced ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-      >
-        {value}
-      </motion.span>
-      <span className="text-label-mono mt-0.5" style={{ color: 'var(--text-2)' }}>{label}</span>
-    </div>
-  );
-}
-
-/* ── Scroll-aware section ── */
-function RevealSection({ children, className, delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
-  const ref     = useRef(null);
-  const inView  = useInView(ref, { once: true, margin: '-80px' });
-  const reduced = useReducedMotion();
-
-  return (
-    <motion.div ref={ref}
-      initial={reduced ? {} : { opacity: 0, y: 32 }}
-      animate={inView || reduced ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.55, delay, ease: [0.25, 0.46, 0.45, 0.94] }}
-      className={className}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-/* ── Trust score ring (SVG) ── */
-function TrustRing({ score, label }: { score: number; label: string }) {
-  const R = 36; const C = 2 * Math.PI * R;
-  const dash = (score / 100) * C;
-  const color = score >= 85 ? '#00E5A0' : score >= 60 ? '#FBBF24' : '#FF6B6B';
-
-  return (
-    <div className="relative inline-flex items-center justify-center">
-      <svg width="88" height="88" viewBox="0 0 88 88" className="-rotate-90">
-        <circle cx="44" cy="44" r={R} fill="none" strokeWidth="5" stroke="rgba(255,255,255,0.07)" />
+    <div className="relative h-28 w-28">
+      <svg viewBox="0 0 104 104" className="-rotate-90">
+        <circle cx="52" cy="52" r={r} fill="none" stroke="rgba(247,242,232,.12)" strokeWidth="8" />
         <motion.circle
-          cx="44" cy="44" r={R} fill="none" strokeWidth="5"
-          stroke={color} strokeLinecap="round"
-          strokeDasharray={`${dash} ${C}`}
-          initial={{ strokeDasharray: `0 ${C}` }}
-          animate={{ strokeDasharray: `${dash} ${C}` }}
-          transition={{ duration: 1.2, delay: 0.4, ease: [0.34, 1.1, 0.64, 1] }}
-          style={{ filter: `drop-shadow(0 0 6px ${color}80)` }}
+          cx="52"
+          cy="52"
+          r={r}
+          fill="none"
+          stroke="var(--primary)"
+          strokeLinecap="round"
+          strokeWidth="8"
+          strokeDasharray={`${(score / 100) * c} ${c}`}
+          initial={{ strokeDasharray: `0 ${c}` }}
+          animate={{ strokeDasharray: `${(score / 100) * c} ${c}` }}
+          transition={{ duration: 1.2, ease: 'easeOut' }}
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-data text-lg font-black" style={{ color }}>{score}</span>
-        <span className="text-[8px] font-bold uppercase tracking-[0.15em] opacity-50 text-white">{label}</span>
+        <span className="text-data text-3xl font-black">{score}</span>
+        <span className="text-label-mono text-[9px] text-[var(--muted)]">Trust</span>
       </div>
-    </div>
-  );
-}
-
-/* ── Floating review card ── */
-function FloatingCard({ review, delay = 0, offset = false }: { review: any; delay?: number; offset?: boolean }) {
-  const author  = review.user as { username?: string; full_name?: string } | null;
-  const product = review.product as { name?: string; category?: { name?: string } } | null;
-  const reduced = useReducedMotion();
-
-  return (
-    <motion.div
-      initial={reduced ? {} : { opacity: 0, y: 20, scale: 0.96 }}
-      animate={reduced ? {} : { opacity: 1, y: 0, scale: 1 }}
-      transition={{ delay, duration: 0.5, ease: [0.34, 1.1, 0.64, 1] }}
-      whileHover={reduced ? {} : { y: -5, scale: 1.01 }}
-      className={cn('glass-void rounded-2xl p-5 w-full max-w-[320px]', offset && 'ml-8')}
-      style={{ boxShadow: '0 0 0 1px rgba(0,229,160,0.08), 0 20px 48px rgba(0,0,0,0.5)' }}
-    >
-      {/* Top */}
-      <div className="flex items-start justify-between mb-3">
-        <div className="flex-1 min-w-0">
-          {product?.category?.name && (
-            <span className="text-label-mono" style={{ color: 'var(--signal)' }}>{product.category.name}</span>
-          )}
-          {product?.name && <p className="text-sm font-bold text-white mt-1 truncate">{product.name}</p>}
-        </div>
-        <div className="flex gap-0.5 ml-3 shrink-0">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <Star key={i} className={cn('h-3 w-3', i < review.rating ? 'fill-amber-400 text-amber-400' : 'fill-white/10 text-white/10')} />
-          ))}
-        </div>
-      </div>
-
-      {/* Review text */}
-      <p className="text-xs text-white/60 leading-relaxed line-clamp-2 mb-3">{review.body}</p>
-
-      {/* Author + trust indicator */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="h-6 w-6 rounded-full bg-gradient-to-br from-signal to-brand-700 flex items-center justify-center text-[10px] font-black text-white shrink-0">
-            {(author?.full_name || author?.username || '?')[0].toUpperCase()}
-          </div>
-          <span className="text-[11px] font-medium text-white/50">{author?.full_name || author?.username}</span>
-        </div>
-        <span className="text-[10px] font-bold text-signal flex items-center gap-1">
-          <CheckCircle className="h-3 w-3" /> Verified
-        </span>
-      </div>
-    </motion.div>
-  );
-}
-
-/* ── STAT pill ── */
-function StatPill({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="flex flex-col">
-      <span className="text-data text-2xl sm:text-3xl font-black text-white">{value}</span>
-      <span className="text-label-mono mt-0.5" style={{ color: 'var(--text-2)' }}>{label}</span>
     </div>
   );
 }
 
 export function LandingPageClient({ statItems, recentReviews }: Props) {
   const reduced = useReducedMotion();
+  const review = recentReviews[0];
 
   return (
-    <div className="flex flex-col">
-
-      {/* ════════════════════════════════════════════════════
-          HERO — "The Truth Machine"
-          Full viewport. No noise. Pure signal.
-      ════════════════════════════════════════════════════ */}
-      <section
-        className="relative flex flex-col overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, #030610 0%, #06080F 40%, #090D1C 100%)' }}
-      >
-        {/* Ambient light — positions chosen for visual balance */}
-        {!reduced && (
-          <>
-            <motion.div {...orbFloat(0).animate} className="absolute pointer-events-none"
-              style={{ top: '-15%', left: '35%', width: '600px', height: '600px', background: 'radial-gradient(ellipse, rgba(0,229,160,0.09) 0%, transparent 70%)' }} />
-            <motion.div {...orbFloat(4).animate} className="absolute pointer-events-none"
-              style={{ top: '20%', right: '-10%', width: '500px', height: '500px', background: 'radial-gradient(ellipse, rgba(139,92,246,0.07) 0%, transparent 70%)' }} />
-            <motion.div {...orbFloat(7).animate} className="absolute pointer-events-none"
-              style={{ bottom: '0%', left: '10%', width: '350px', height: '350px', background: 'radial-gradient(ellipse, rgba(0,229,160,0.05) 0%, transparent 70%)' }} />
-          </>
-        )}
-
-        {/* Grid */}
-        <div className="absolute inset-0 grid-signal pointer-events-none" />
-
-        {/* Bottom gradient bridge to next section */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 pointer-events-none"
-          style={{ background: 'linear-gradient(to top, #06080F, transparent)' }} />
-
-        {/* ── Copy + Cards ── */}
-        <div className="relative flex-1 flex items-center">
-          <div className="mx-auto w-full max-w-[1600px] px-6 xs:px-8 sm:px-12 lg:px-20 xl:px-28">
-            <div className="grid lg:grid-cols-[1fr_420px] xl:grid-cols-[1fr_480px] gap-8 xl:gap-16 items-center py-8 sm:py-12">
-
-              {/* LEFT: The statement */}
-              <motion.div
-                variants={reduced ? {} : staggerContainer}
-                initial="hidden"
-                animate="visible"
-              >
-                {/* Signal label */}
-                <motion.div variants={reduced ? {} : staggerItem} className="mb-8">
-                  <span className="inline-flex items-center gap-2 text-label-mono px-3 py-1.5 rounded-full"
-                    style={{ background: 'rgba(0,229,160,0.08)', border: '1px solid rgba(0,229,160,0.2)', color: 'var(--signal)' }}>
-                    <span className="dot-live" aria-hidden="true" />
-                    Trusted Review Intelligence
-                  </span>
-                </motion.div>
-
-                {/* HEADLINE — word-by-word reveal */}
-                <motion.div variants={reduced ? {} : staggerItem}>
-                  <h1 className="font-black text-white leading-[1.07] tracking-[-0.02em] mb-8"
-                    style={{ fontSize: 'clamp(2.6rem, 7vw, 5.5rem)' }}>
-                    <AnimatedHeadline delay={0.15}>The truth about</AnimatedHeadline>
-                    <motion.span
-                      initial={reduced ? {} : { opacity: 0, y: 22, scale: 0.95 }}
-                      animate={reduced ? {} : { opacity: 1, y: 0,  scale: 1    }}
-                      transition={{ delay: 0.5, duration: 0.65, ease: [0.34, 1.3, 0.64, 1] }}
-                      style={{
-                        display: 'block',
-                        background: 'linear-gradient(135deg, #00E5A0 0%, #00B880 100%)',
-                        WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                      }}
-                    >
-                      every product.
-                    </motion.span>
-                  </h1>
-                </motion.div>
-
-                {/* Body */}
-                <motion.p variants={reduced ? {} : staggerItem}
-                  className="text-base sm:text-lg leading-[1.7] max-w-[480px] mb-10"
-                  style={{ color: 'var(--text-2)' }}>
-                  Verified reviews from real buyers. Spam-filtered. Community-moderated.
-                  Built so you never have to guess again.
-                </motion.p>
-
-                {/* CTAs — magnetic buttons */}
-                <motion.div variants={reduced ? {} : staggerItem} className="flex flex-wrap gap-3 mb-14">
-                  <MagneticCTA href="/products" primary>
-                    Browse Products <ArrowRight className="h-4 w-4" />
-                  </MagneticCTA>
-                  <MagneticCTA href="/register">
-                    Write a Review
-                  </MagneticCTA>
-                </motion.div>
-
-                {/* Stats — scroll-triggered counters */}
-                <motion.div variants={reduced ? {} : staggerItem}
-                  className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8"
-                  style={{ borderTop: '1px solid rgba(255,255,255,0.07)' }}>
-                  {statItems.map((s) => (
-                    <ScrollCounter key={s.label} value={s.value} label={s.label} />
-                  ))}
-                </motion.div>
-              </motion.div>
-
-              {/* RIGHT: Floating review cards with trust rings */}
-              <div className="relative hidden lg:flex flex-col gap-4 items-end">
-                {recentReviews.length > 0 ? (
-                  <>
-                    {recentReviews.map((review, i) => (
-                      <FloatingCard key={review.id} review={review} delay={0.4 + i * 0.15} offset={i === 1} />
-                    ))}
-
-                    {/* Trust score ring */}
-                    <motion.div
-                      initial={reduced ? {} : { opacity: 0, scale: 0.8 }}
-                      animate={reduced ? {} : { opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.9, duration: 0.5, ease: [0.34, 1.2, 0.64, 1] }}
-                      className="absolute -bottom-8 -left-12 glass-void rounded-2xl p-4 flex items-center gap-4"
-                    >
-                      <TrustRing score={94} label="Trust" />
-                      <div>
-                        <p className="text-sm font-bold text-white">High Confidence</p>
-                        <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-2)' }}>94 reviews verified</p>
-                      </div>
-                    </motion.div>
-                  </>
-                ) : (
-                  <motion.div initial={reduced ? {} : { opacity: 0 }} animate={reduced ? {} : { opacity: 1 }} transition={{ delay: 0.5 }}
-                    className="glass-void rounded-2xl p-10 text-center w-full max-w-[320px]">
-                    <TrustRing score={94} label="Trust" />
-                    <p className="text-sm font-bold text-white mt-4 mb-1">Zero spam guaranteed</p>
-                    <p className="text-xs" style={{ color: 'var(--text-2)' }}>AI + human moderation</p>
-                  </motion.div>
-                )}
-              </div>
-
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════
-          TRUST PROOF — "The Numbers Don't Lie"
-      ════════════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 bg-white dark:bg-[#0D1020] border-y border-slate-200/60 dark:border-white/[0.05]">
-        <div className="mx-auto max-w-[1600px] px-6 xs:px-8 sm:px-12 lg:px-20">
-          <RevealSection className="flex flex-wrap items-center justify-center gap-12 sm:gap-20">
-            {[
-              { val: '99.2%',   desc: 'Spam detection accuracy' },
-              { val: '<2hrs',   desc: 'Average moderation time' },
-              { val: '4.8★',    desc: 'Platform trust score'    },
-              { val: '0 fakes', desc: 'Verified purchase system' },
-            ].map((item) => (
-              <div key={item.desc} className="text-center">
-                <p className="text-data font-black text-2xl sm:text-3xl mb-1" style={{ color: 'var(--signal)' }}>{item.val}</p>
-                <p className="text-label-mono" style={{ color: 'var(--text-3)' }}>{item.desc}</p>
-              </div>
-            ))}
-          </RevealSection>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════
-          INTELLIGENCE GRID — "The System"
-      ════════════════════════════════════════════════════ */}
-      <section className="py-24 sm:py-32 bg-slate-50 dark:bg-[#06080F]">
-        <div className="mx-auto max-w-[1600px] px-6 xs:px-8 sm:px-12 lg:px-20">
-
-          <RevealSection className="mb-16">
-            <p className="text-label-mono mb-4" style={{ color: 'var(--signal)' }}>The Intelligence</p>
-            <h2 className="font-black tracking-[-0.04em] text-slate-900 dark:text-white leading-tight"
-              style={{ fontSize: 'clamp(2rem, 4.5vw, 3.5rem)' }}>
-              Built to surface truth.<br />
-              <span className="text-slate-500 dark:text-slate-400">Not just reviews.</span>
-            </h2>
-          </RevealSection>
-
-          {/* Asymmetric bento grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-
-            {/* Big card — spans 2 */}
-            <RevealSection delay={0.1} className="sm:col-span-2 lg:col-span-2">
-              <div className="h-full rounded-2xl p-7 overflow-hidden relative"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(0,229,160,0.08) 0%, rgba(0,229,160,0.03) 100%)',
-                  border: '1px solid rgba(0,229,160,0.15)',
-                }}>
-                <div className="absolute inset-0 dot-signal opacity-50" />
-                <div className="relative">
-                  <div className="h-12 w-12 rounded-xl mb-5 flex items-center justify-center"
-                    style={{ background: 'rgba(0,229,160,0.15)', border: '1px solid rgba(0,229,160,0.25)' }}>
-                    <Shield className="h-6 w-6" style={{ color: 'var(--signal)' }} />
-                  </div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Intelligent Spam Detection</h3>
-                  <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                    Our multi-layer heuristic engine scores every review across 12 signals — URL patterns, text velocity, rating anomalies, and duplicate detection — before a single word reaches you.
-                  </p>
-                  <div className="mt-6 grid grid-cols-3 gap-3">
-                    {[{ n: '12', l: 'Signals' }, { n: '99.2%', l: 'Accuracy' }, { n: '0.8s', l: 'Per review' }].map(item => (
-                      <div key={item.l} className="rounded-xl p-3 text-center" style={{ background: 'rgba(0,229,160,0.07)', border: '1px solid rgba(0,229,160,0.12)' }}>
-                        <p className="text-data font-black text-lg" style={{ color: 'var(--signal)' }}>{item.n}</p>
-                        <p className="text-label-mono mt-0.5" style={{ color: 'var(--text-3)' }}>{item.l}</p>
-                      </div>
-                    ))}
-                  </div>
+    <div className="trust-shell">
+      <section className="relative overflow-hidden border-b border-[var(--border)]">
+        <div className="absolute inset-0 signal-grid opacity-60" />
+        <div className="relative mx-auto grid min-h-[calc(100vh-48px)] max-w-[1600px] grid-cols-1 gap-8 px-5 py-10 sm:px-8 lg:grid-cols-[1.02fr_.98fr] lg:px-20 lg:py-14">
+          <motion.div
+            variants={reduced ? {} : staggerContainer}
+            initial="hidden"
+            animate="visible"
+            className="flex flex-col justify-center"
+          >
+            <motion.span variants={reduced ? {} : staggerItem} className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-label-mono text-[var(--primary)]">
+              <span className="dot-live" />
+              Verified trust + product discovery
+            </motion.span>
+            <motion.h1 variants={reduced ? {} : staggerItem} className="max-w-4xl text-5xl font-black leading-[1.02] text-[var(--foreground)] sm:text-6xl lg:text-7xl">
+              Product reviews with receipts, signals, and human context.
+            </motion.h1>
+            <motion.p variants={reduced ? {} : staggerItem} className="mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]">
+              ReviewHub turns verified buyer opinions into clear buying confidence, blending community moderation, abuse detection, and editorial product discovery.
+            </motion.p>
+            <motion.div variants={reduced ? {} : staggerItem} className="mt-8 flex flex-wrap gap-3">
+              <Link href="/products">
+                <Button size="lg" iconRight={<ArrowRight className="h-4 w-4" />}>Discover Products</Button>
+              </Link>
+              <Link href="/register">
+                <Button size="lg" variant="outline">Write a Review</Button>
+              </Link>
+            </motion.div>
+            <motion.div variants={reduced ? {} : staggerItem} className="mt-10 grid grid-cols-2 gap-3 border-t border-[var(--border)] pt-6 sm:grid-cols-4">
+              {statItems.map((item) => (
+                <div key={item.label}>
+                  <p className="text-data text-2xl font-black text-[var(--foreground)]">{item.value}</p>
+                  <p className="mt-1 text-label-mono text-[var(--muted)]">{item.label}</p>
                 </div>
-              </div>
-            </RevealSection>
+              ))}
+            </motion.div>
+          </motion.div>
 
-            {/* Tall card */}
-            <RevealSection delay={0.2} className="row-span-2">
-              <div className="h-full rounded-2xl p-7 relative overflow-hidden bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07]">
-                <div className="h-12 w-12 rounded-xl mb-5 flex items-center justify-center"
-                  style={{ background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.2)' }}>
-                  <Users className="h-6 w-6" style={{ color: '#A78BFA' }} />
+          <motion.div
+            initial={reduced ? {} : { opacity: 0, x: 32 }}
+            animate={reduced ? {} : { opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+            className="flex items-center"
+          >
+            <div className="review-intel-card relative w-full overflow-hidden rounded-[2rem] p-5 sm:p-7">
+              <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-[var(--secondary)]/10 blur-3xl" />
+              <div className="relative rounded-3xl forest-panel p-5">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="text-label-mono text-emerald-300">Review Intelligence</p>
+                    <h2 className="mt-2 text-2xl font-black text-[#F7F2E8]">Confidence snapshot</h2>
+                    <p className="mt-1 text-sm text-[#C8BFAE]">Live quality signals for buyer-safe discovery.</p>
+                  </div>
+                  <TrustRing score={94} />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Community Verified</h3>
-                <p className="text-sm leading-relaxed mb-6 text-slate-600 dark:text-slate-400">
-                  Real reviewers, real purchases. Every helpful vote, every report — the community keeps the signal clean.
-                </p>
-                {/* Trust levels visualization */}
-                <div className="space-y-3">
+
+                <div className="mt-6 grid grid-cols-2 gap-3">
                   {[
-                    { label: 'Verified Buyers',   pct: 68, color: '#00E5A0' },
-                    { label: 'Regular Users',      pct: 25, color: '#A78BFA' },
-                    { label: 'New Members',         pct: 7,  color: '#4A5568' },
-                  ].map(item => (
-                    <div key={item.label}>
-                      <div className="flex justify-between mb-1">
-                        <span className="text-xs font-medium text-slate-600 dark:text-slate-400">{item.label}</span>
-                        <span className="text-data text-xs font-bold" style={{ color: item.color }}>{item.pct}%</span>
-                      </div>
-                      <div className="h-3 rounded-full overflow-hidden bg-slate-200 dark:bg-white/[0.06]">
-                        <motion.div className="h-full rounded-full"
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${item.pct}%` }}
-                          transition={{ duration: 0.8, ease: 'easeOut' }}
-                          viewport={{ once: true }}
-                          style={{ background: item.color, boxShadow: `0 0 8px ${item.color}60` }}
-                        />
-                      </div>
+                    { icon: <BadgeCheck />, label: 'Verified score', value: '91%', color: 'text-emerald-300' },
+                    { icon: <ShieldCheck />, label: 'Trust signal', value: 'High', color: 'text-cyan-200' },
+                    { icon: <Flag />, label: 'Flagged spam', value: '12', color: 'text-amber-300' },
+                    { icon: <Gauge />, label: 'Mod confidence', value: '98%', color: 'text-emerald-300' },
+                  ].map((item) => (
+                    <div key={item.label} className="rounded-2xl border border-white/10 bg-white/[0.045] p-4">
+                      <div className={cn('mb-3 [&>svg]:h-5 [&>svg]:w-5', item.color)}>{item.icon}</div>
+                      <p className="text-data text-2xl font-black text-[#F7F2E8]">{item.value}</p>
+                      <p className="mt-1 text-xs font-bold text-[#C8BFAE]">{item.label}</p>
                     </div>
                   ))}
                 </div>
-              </div>
-            </RevealSection>
 
-            {/* Standard card */}
-            <RevealSection delay={0.3}>
-              <div className="rounded-2xl p-7 bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07]">
-                <div className="h-12 w-12 rounded-xl mb-5 flex items-center justify-center"
-                  style={{ background: 'rgba(251,191,36,0.12)', border: '1px solid rgba(251,191,36,0.2)' }}>
-                  <Zap className="h-6 w-6 text-amber-400" />
+                <div className="mt-6 rounded-2xl border border-white/10 bg-[#031A14]/55 p-4">
+                  <div className="mb-3 flex items-center justify-between">
+                    <p className="text-sm font-bold text-[#F7F2E8]">Rating distribution</p>
+                    <p className="text-label-mono text-amber-300">Quality weighted</p>
+                  </div>
+                  <div className="space-y-2.5">
+                    {distribution.map((row, index) => (
+                      <div key={row.label} className="flex items-center gap-3">
+                        <span className="flex w-7 items-center gap-1 text-xs font-bold text-[#F7F2E8]">{row.label}<Star className="h-3 w-3 fill-amber-300 text-amber-300" /></span>
+                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/10">
+                          <motion.div
+                            className="h-full rounded-full bg-[var(--secondary)]"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${row.value}%` }}
+                            transition={{ duration: 0.8, delay: 0.15 + index * 0.06 }}
+                          />
+                        </div>
+                        <span className="w-8 text-right text-data text-xs font-bold text-[#C8BFAE]">{row.value}%</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Real-Time Moderation</h3>
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                  Reviews go live in under 2 hours. Not 2 days. Speed without compromise.
-                </p>
               </div>
-            </RevealSection>
 
-            {/* Minimal card */}
-            <RevealSection delay={0.4}>
-              <div className="rounded-2xl p-7 bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07]">
-                <div className="h-12 w-12 rounded-xl mb-5 flex items-center justify-center"
-                  style={{ background: 'rgba(0,229,160,0.08)', border: '1px solid rgba(0,229,160,0.18)' }}>
-                  <Star className="h-6 w-6" style={{ color: 'var(--signal)' }} />
+              <motion.div
+                whileHover={reduced ? {} : { y: -4 }}
+                className="relative mx-auto -mt-5 max-w-md rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-xl"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--primary-soft)] text-[var(--primary)]">
+                    <Users className="h-5 w-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-black text-[var(--foreground)]">{review?.title || 'Battery matched real-world claims'}</p>
+                    <p className="text-xs text-[var(--muted)]">{review?.body || 'Verified buyer review passed quality and duplicate checks.'}</p>
+                  </div>
+                  <Sparkles className="h-5 w-5 text-[var(--secondary)]" />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">Bayesian Ratings</h3>
-                <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                  Scores weighted by reviewer credibility. A 5-star from a verified buyer counts more.
-                </p>
-              </div>
-            </RevealSection>
-          </div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════════════════
-          CTA — "Your signal starts here"
-      ════════════════════════════════════════════════════ */}
-      <section className="relative py-24 sm:py-32 overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, #030610 0%, #06080F 100%)' }}>
-        {!reduced && (
-          <motion.div {...orbFloat(2).animate} className="absolute inset-0 pointer-events-none"
-            style={{ background: 'radial-gradient(ellipse at 60% 50%, rgba(0,229,160,0.10) 0%, transparent 65%)' }} />
-        )}
-        <div className="absolute inset-0 grid-signal opacity-70 pointer-events-none" />
-
-        <div className="relative mx-auto max-w-[1600px] px-6 xs:px-8 sm:px-12 lg:px-20 text-center">
-          <RevealSection>
-            <span className="inline-flex items-center gap-2 text-label-mono px-3 py-1.5 rounded-full mb-8"
-              style={{ background: 'rgba(0,229,160,0.08)', border: '1px solid rgba(0,229,160,0.2)', color: 'var(--signal)' }}>
-              <Sparkles className="h-3 w-3" /> Free. No card required.
-            </span>
-            <h2 className="font-black tracking-[-0.04em] text-white leading-tight mb-5"
-              style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)' }}>
-              Your signal
-              <span className="text-gradient"> starts here.</span>
-            </h2>
-            <p className="text-lg max-w-lg mx-auto mb-10" style={{ color: 'var(--text-2)' }}>
-              Join thousands of reviewers who are already helping millions of people shop smarter.
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <MagneticCTA href="/register" primary>
-                Get Started Free <ArrowRight className="h-4 w-4" />
-              </MagneticCTA>
-              <MagneticCTA href="/products">
-                Browse Reviews
-              </MagneticCTA>
+              </motion.div>
             </div>
-          </RevealSection>
+          </motion.div>
         </div>
       </section>
 
+      <section className="mx-auto grid max-w-[1600px] gap-4 px-5 py-12 sm:px-8 md:grid-cols-3 lg:px-20">
+        {[
+          { icon: <SearchCheck />, title: 'Discovery that explains itself', text: 'Product cards carry rating quality, verified buyer ratios, and moderation signals instead of simple star counts.' },
+          { icon: <MessageSquareWarning />, title: 'Reviews with human texture', text: 'Pros, cons, helpful votes, and report flows make every opinion feel accountable and useful.' },
+          { icon: <ShieldCheck />, title: 'Moderation built into the brand', text: 'Queue priority, audit trails, and abuse indicators make transparency visible, not buried.' },
+        ].map((feature) => (
+          <motion.div key={feature.title} whileHover={reduced ? {} : { y: -4 }} className="trust-card rounded-2xl p-6">
+            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-[var(--primary-soft)] text-[var(--primary)] [&>svg]:h-5 [&>svg]:w-5">
+              {feature.icon}
+            </div>
+            <h3 className="text-xl font-black text-[var(--foreground)]">{feature.title}</h3>
+            <p className="mt-3 text-sm leading-7 text-[var(--muted)]">{feature.text}</p>
+          </motion.div>
+        ))}
+      </section>
     </div>
   );
 }

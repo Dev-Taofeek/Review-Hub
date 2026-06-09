@@ -74,17 +74,17 @@ export default function RegisterPage() {
         initial="hidden"
         animate="visible"
         className="hidden lg:flex lg:w-[52%] xl:w-[56%] flex-col relative overflow-hidden"
-        style={{ background: 'linear-gradient(140deg, #020917 0%, #040f1f 40%, #061629 100%)' }}
+        style={{ background: 'linear-gradient(140deg, #031A14 0%, #06251D 48%, #083528 100%)' }}
       >
         {/* Orbs */}
         {!reduced && (
           <>
             <motion.div animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.6, 0.4] }} transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
               className="absolute -top-20 right-0 w-[450px] h-[450px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse, rgba(5,150,105,0.2) 0%, transparent 70%)' }} />
+              style={{ background: 'radial-gradient(ellipse, rgba(16,185,129,0.20) 0%, transparent 70%)' }} />
             <motion.div animate={{ scale: [1, 1.1, 1], opacity: [0.25, 0.4, 0.25] }} transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
               className="absolute -bottom-32 -left-16 w-[400px] h-[400px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse, rgba(124,58,237,0.15) 0%, transparent 70%)' }} />
+              style={{ background: 'radial-gradient(ellipse, rgba(245,158,11,0.12) 0%, transparent 70%)' }} />
           </>
         )}
         <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
@@ -164,7 +164,7 @@ export default function RegisterPage() {
         variants={reduced ? {} : slideInRight}
         initial="hidden"
         animate="visible"
-        className="flex flex-1 flex-col justify-center px-4 xs:px-6 py-10 sm:px-12 lg:px-16 xl:px-20 bg-slate-50 dark:bg-[#060c1a] overflow-y-auto"
+        className="flex flex-1 flex-col justify-center overflow-y-auto bg-[var(--background)] px-4 py-10 xs:px-6 sm:px-12 lg:px-16 xl:px-20"
       >
         <div className="lg:hidden mb-10">
           <Link href="/" className="inline-flex items-center gap-2.5">

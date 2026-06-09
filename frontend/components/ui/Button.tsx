@@ -17,29 +17,23 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variants: Record<Variant, string> = {
   primary: [
-    'bg-gradient-to-r from-brand-600 to-brand-700',
-    'text-white font-semibold',
-    'shadow-lg shadow-brand-900/30',
-    'hover:from-brand-500 hover:to-brand-600 hover:shadow-brand-900/50',
-    'active:from-brand-700 active:to-brand-800',
-    'disabled:from-brand-400 disabled:to-brand-500 disabled:shadow-none',
-    'border border-brand-500/30',
+    'bg-[var(--primary)] text-white font-bold',
+    'shadow-lg shadow-emerald-900/20',
+    'hover:brightness-110',
+    'active:brightness-95',
+    'disabled:shadow-none',
+    'border border-emerald-900/10',
   ].join(' '),
 
   secondary: [
-    'bg-white/90 text-slate-800 font-semibold',
-    'border border-slate-200',
-    'shadow-sm',
-    'hover:bg-white hover:border-slate-300 hover:shadow-md',
-    'dark:bg-white/[0.07] dark:text-slate-200 dark:border-white/[0.1]',
-    'dark:hover:bg-white/[0.11] dark:hover:border-white/[0.15]',
+    'bg-[var(--surface)] text-[var(--foreground)] font-bold',
+    'border border-[var(--border)] shadow-sm',
+    'hover:bg-[var(--surface-soft)] hover:shadow-md',
   ].join(' '),
 
   ghost: [
-    'text-slate-600 font-medium',
-    'hover:bg-slate-100 hover:text-slate-900',
-    'dark:text-slate-400',
-    'dark:hover:bg-white/[0.07] dark:hover:text-slate-100',
+    'text-[var(--muted)] font-bold',
+    'hover:bg-[var(--surface-soft)] hover:text-[var(--foreground)]',
   ].join(' '),
 
   danger: [
@@ -51,11 +45,9 @@ const variants: Record<Variant, string> = {
   ].join(' '),
 
   outline: [
-    'border border-slate-200 bg-transparent',
-    'text-slate-700 font-medium',
-    'hover:bg-slate-50 hover:border-slate-300',
-    'dark:border-white/[0.1] dark:text-slate-300',
-    'dark:hover:bg-white/[0.05] dark:hover:border-white/[0.18]',
+    'border border-[var(--border)] bg-transparent',
+    'text-[var(--foreground)] font-bold',
+    'hover:bg-[var(--surface-soft)] hover:border-[var(--primary)]',
   ].join(' '),
 };
 
@@ -79,7 +71,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         transition={{ type: 'spring', stiffness: 420, damping: 26 }}
         className={cn(
           'inline-flex items-center justify-center transition-all duration-150',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]',
           'disabled:pointer-events-none disabled:opacity-50',
           variants[variant],
           sizes[size],

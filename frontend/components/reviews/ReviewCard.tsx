@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { ThumbsUp, Flag, Pencil, Trash2, CheckCircle2, ChevronDown, Star, Shield } from 'lucide-react';
+import { ThumbsUp, Flag, Pencil, Trash2, CheckCircle2, ChevronDown, Star, Shield, Sparkles } from 'lucide-react';
 import { Avatar } from '@/components/ui/Avatar';
 import { StatusBadge } from '@/components/ui/Badge';
 import { VerifiedBadge } from '@/components/ui/VerifiedBadge';
@@ -17,7 +17,7 @@ import type { Review, User } from '@/types';
 
 /* Rating color system — precise, intentional */
 const RATING_SYSTEM: Record<number, { label: string; accent: string; bg: string; border: string }> = {
-  5: { label: 'Exceptional', accent: '#00E5A0', bg: 'rgba(0,229,160,0.08)',  border: 'rgba(0,229,160,0.18)'  },
+  5: { label: 'Exceptional', accent: '#10B981', bg: 'rgba(16,185,129,0.10)',  border: 'rgba(16,185,129,0.22)'  },
   4: { label: 'Excellent',   accent: '#34D399', bg: 'rgba(52,211,153,0.08)', border: 'rgba(52,211,153,0.18)' },
   3: { label: 'Good',         accent: '#FBBF24', bg: 'rgba(251,191,36,0.08)', border: 'rgba(251,191,36,0.18)' },
   2: { label: 'Mixed',        accent: '#F97316', bg: 'rgba(249,115,22,0.08)', border: 'rgba(249,115,22,0.18)' },
@@ -77,15 +77,7 @@ export function ReviewCard({ review, currentUser, onEdit, onDelete, onReport, sh
       variants={staggerItem}
       whileHover={reduced ? {} : { y: -3, transition: { duration: 0.18, ease: 'easeOut' } }}
       className={cn(
-        'relative rounded-2xl overflow-hidden transition-all duration-300',
-        /* Base light */
-        'bg-white border border-slate-200/80',
-        'shadow-[0_1px_3px_rgba(0,0,0,0.07),0_6px_20px_rgba(0,0,0,0.05)]',
-        'hover:shadow-[0_4px_16px_rgba(0,0,0,0.1)]',
-        /* Base dark */
-        'dark:bg-[#0D1020] dark:border-white/[0.07]',
-        'dark:[box-shadow:0_0_0_1px_rgba(255,255,255,0.03)_inset,0_1px_0_rgba(255,255,255,0.05)_inset,0_8px_24px_rgba(0,0,0,0.35)]',
-        'dark:hover:[box-shadow:0_0_0_1px_rgba(255,255,255,0.05)_inset,0_1px_0_rgba(255,255,255,0.08)_inset,0_12px_32px_rgba(0,0,0,0.45)]',
+        'relative rounded-3xl overflow-hidden transition-all duration-300 trust-card trust-card-hover',
         /* High-signal: verified reviews get special treatment */
         signalWeight === 'high' && 'dark:border-[rgba(0,229,160,0.12)]',
       )}
@@ -110,13 +102,13 @@ export function ReviewCard({ review, currentUser, onEdit, onDelete, onReport, sh
             <Avatar src={review.user?.avatar_url} name={review.user?.full_name || review.user?.username} size="md" />
             <div className="min-w-0">
               <div className="flex items-center gap-1.5 flex-wrap">
-                <span className="text-sm font-bold text-slate-900 dark:text-white truncate">
+                  <span className="text-sm font-black text-[var(--foreground)] truncate">
                   {review.user?.username || review.user?.full_name || 'Anonymous'}
                 </span>
                 {isVerified && <VerifiedBadge size="sm" />}
                 {review.is_verified_purchase && (
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full"
-                    style={{ background: 'rgba(0,229,160,0.10)', border: '1px solid rgba(0,229,160,0.22)', color: '#00E5A0' }}>
+                    style={{ background: 'var(--primary-soft)', border: '1px solid rgba(16,185,129,0.22)', color: 'var(--primary)' }}>
                     <CheckCircle2 className="h-2.5 w-2.5" aria-hidden="true" />
                     Verified
                   </span>
@@ -140,9 +132,14 @@ export function ReviewCard({ review, currentUser, onEdit, onDelete, onReport, sh
         </div>
 
         {/* ── Title ───────────────────────────────────── */}
-        <h4 className="text-[15px] font-bold text-slate-900 dark:text-white leading-snug mb-2">
-          {review.title}
-        </h4>
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <h4 className="text-[15px] font-black text-[var(--foreground)] leading-snug">
+            {review.title}
+          </h4>
+          <span className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--surface-soft)] px-2 py-0.5 text-[10px] font-black text-[var(--accent)]">
+            <Sparkles className="h-3 w-3" /> Quality {Math.min(98, 68 + review.rating * 6 + Math.min(helpful, 10))}
+          </span>
+        </div>
 
         {/* ── Body ────────────────────────────────────── */}
         <div>
@@ -152,7 +149,7 @@ export function ReviewCard({ review, currentUser, onEdit, onDelete, onReport, sh
               initial={reduced ? {} : { opacity: 0 }}
               animate={reduced ? {} : { opacity: 1 }}
               transition={{ duration: 0.2 }}
-              className={cn('text-sm leading-relaxed text-slate-600 dark:text-slate-300', !expanded && longBody && 'line-clamp-3')}
+              className={cn('text-sm leading-relaxed text-[var(--muted)]', !expanded && longBody && 'line-clamp-3')}
             >
               {review.body}
             </motion.p>
@@ -178,7 +175,7 @@ export function ReviewCard({ review, currentUser, onEdit, onDelete, onReport, sh
                 <div className="flex flex-wrap gap-1.5">
                   {review.pros!.map((p, i) => (
                     <span key={i} className="text-xs font-medium px-2.5 py-0.5 rounded-full"
-                      style={{ background: 'rgba(0,229,160,0.08)', border: '1px solid rgba(0,229,160,0.18)', color: '#00B880' }}>
+                      style={{ background: 'var(--primary-soft)', border: '1px solid rgba(16,185,129,0.20)', color: 'var(--primary)' }}>
                       {p}
                     </span>
                   ))}

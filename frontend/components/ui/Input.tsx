@@ -6,20 +6,19 @@ import { cn } from '@/lib/utils';
 /* ── Shared field base ──────────────────────────────────── */
 const fieldBase = [
   'w-full rounded-xl border',
-  'bg-white dark:bg-[#0c1830]',
+  'bg-[var(--surface)]',
   'px-3.5 py-2.5 text-sm',
-  'text-slate-900 dark:text-slate-100',
-  'placeholder:text-slate-400 dark:placeholder:text-slate-600',
+  'text-[var(--foreground)]',
+  'placeholder:text-[var(--text-3)]',
   'shadow-sm',
   'transition-all duration-150',
-  'focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500',
-  'dark:focus:ring-brand-500/30 dark:focus:border-brand-500/70',
-  'hover:border-slate-300 dark:hover:border-white/15',
-  'disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-slate-50 dark:disabled:bg-white/5',
+  'focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-[var(--primary)]',
+  'hover:border-[var(--primary)]',
+  'disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[var(--surface-soft)]',
 ].join(' ');
 
 const fieldBorder = {
-  normal: 'border-slate-200 dark:border-white/[0.09]',
+  normal: 'border-[var(--border)]',
   error:  'border-red-400 dark:border-red-500/70 focus:ring-red-400/50 focus:border-red-400',
 };
 
@@ -38,14 +37,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={inputId} className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+          <label htmlFor={inputId} className="text-sm font-bold text-[var(--foreground)]">
             {label}
             {rest.required && <span className="ml-1 text-red-500" aria-hidden="true">*</span>}
           </label>
         )}
         <div className="relative">
           {icon && (
-            <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 [&>svg]:h-4 [&>svg]:w-4">
+            <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)] [&>svg]:h-4 [&>svg]:w-4">
               {icon}
             </span>
           )}
@@ -64,7 +63,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             {...rest}
           />
           {iconRight && (
-            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 [&>svg]:h-4 [&>svg]:w-4">
+            <span className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[var(--muted)] [&>svg]:h-4 [&>svg]:w-4">
               {iconRight}
             </span>
           )}
@@ -76,7 +75,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           </p>
         )}
         {hint && !error && (
-          <p id={`${inputId}-hint`} className="text-xs text-slate-400 dark:text-slate-500">{hint}</p>
+          <p id={`${inputId}-hint`} className="text-xs text-[var(--muted)]">{hint}</p>
         )}
       </div>
     );
@@ -97,7 +96,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={inputId} className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+          <label htmlFor={inputId} className="text-sm font-bold text-[var(--foreground)]">
             {label}
             {rest.required && <span className="ml-1 text-red-500" aria-hidden="true">*</span>}
           </label>
@@ -120,7 +119,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             {error}
           </p>
         )}
-        {hint && !error && <p className="text-xs text-slate-400 dark:text-slate-500">{hint}</p>}
+        {hint && !error && <p className="text-xs text-[var(--muted)]">{hint}</p>}
       </div>
     );
   }
@@ -141,7 +140,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label htmlFor={inputId} className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+          <label htmlFor={inputId} className="text-sm font-bold text-[var(--foreground)]">
             {label}
           </label>
         )}

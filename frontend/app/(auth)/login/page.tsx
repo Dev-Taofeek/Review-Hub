@@ -15,10 +15,10 @@ import { staggerContainer, staggerItem, fadeInUp, slideInLeft, slideInRight } fr
 import toast from 'react-hot-toast';
 
 const PERKS = [
-  { icon: Star,      text: 'Write and manage product reviews',   color: 'bg-amber-500/20 text-amber-400' },
-  { icon: ThumbsUp,  text: 'Vote on helpful reviews',            color: 'bg-brand-500/20  text-brand-400' },
-  { icon: Shield,    text: 'Report suspicious content',          color: 'bg-blue-500/20   text-blue-400'  },
-  { icon: BarChart2, text: 'Track your full review history',     color: 'bg-violet-500/20 text-violet-400'},
+  { icon: Star,      text: 'Write and manage product reviews',   color: 'bg-amber-300/15 text-amber-300' },
+  { icon: ThumbsUp,  text: 'Vote on helpful reviews',            color: 'bg-emerald-300/15 text-emerald-300' },
+  { icon: Shield,    text: 'Report suspicious content',          color: 'bg-cyan-300/15 text-cyan-200'  },
+  { icon: BarChart2, text: 'Track your full review history',     color: 'bg-emerald-300/10 text-emerald-200'},
 ];
 
 const STATS = [
@@ -74,7 +74,7 @@ function LoginForm() {
         initial="hidden"
         animate="visible"
         className="hidden lg:flex lg:w-[54%] xl:w-[58%] flex-col relative overflow-hidden"
-        style={{ background: 'linear-gradient(140deg, #020917 0%, #040f1f 40%, #061629 100%)' }}
+        style={{ background: 'linear-gradient(140deg, #031A14 0%, #06251D 48%, #083528 100%)' }}
       >
         {/* Orbs */}
         {!reduced && (
@@ -83,13 +83,13 @@ function LoginForm() {
               animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.7, 0.5] }}
               transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
               className="absolute -top-32 -right-24 w-[500px] h-[500px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse, rgba(5,150,105,0.22) 0%, transparent 70%)' }}
+              style={{ background: 'radial-gradient(ellipse, rgba(16,185,129,0.20) 0%, transparent 70%)' }}
             />
             <motion.div
               animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
               transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
               className="absolute -bottom-40 -left-20 w-[400px] h-[400px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse, rgba(99,102,241,0.18) 0%, transparent 70%)' }}
+              style={{ background: 'radial-gradient(ellipse, rgba(245,158,11,0.12) 0%, transparent 70%)' }}
             />
           </>
         )}
@@ -109,13 +109,13 @@ function LoginForm() {
             <Link href="/" className="flex items-center gap-3 group">
               <motion.div
                 whileHover={reduced ? {} : { scale: 1.08, rotate: -5 }}
-                className="h-10 w-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-900/50"
+                className="h-10 w-10 rounded-xl bg-[var(--primary)] flex items-center justify-center shadow-lg shadow-emerald-900/30"
               >
                 <Star className="h-5 w-5 fill-white text-white" />
               </motion.div>
               <div>
                 <span className="text-lg font-black text-white tracking-tight">ReviewHub</span>
-                <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-brand-400 -mt-0.5">Verified Reviews</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-300 -mt-0.5">Verified Reviews</p>
               </div>
             </Link>
           </motion.div>
@@ -128,7 +128,7 @@ function LoginForm() {
             className="py-16"
           >
             <motion.div variants={reduced ? {} : staggerItem} className="mb-3">
-              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-400 bg-brand-950/60 border border-brand-800/40 px-3 py-1 rounded-full">
+              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-300 bg-emerald-300/10 border border-emerald-300/20 px-3 py-1 rounded-full">
                 <Sparkles className="h-3 w-3" />
                 Trusted community
               </span>
@@ -148,7 +148,7 @@ function LoginForm() {
             </motion.h1>
 
             <motion.p variants={reduced ? {} : staggerItem}
-              className="text-slate-400 text-base leading-relaxed mb-10 max-w-sm">
+              className="text-[#C8BFAE] text-base leading-relaxed mb-10 max-w-sm">
               Join our community of verified reviewers helping millions of shoppers make smarter purchase decisions.
             </motion.p>
 
@@ -165,7 +165,7 @@ function LoginForm() {
                   <div className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 ${perk.color}`}>
                     <perk.icon className="h-4 w-4" />
                   </div>
-                  <span className="text-sm text-slate-300 font-medium">{perk.text}</span>
+                  <span className="text-sm text-[#F7F2E8] font-medium">{perk.text}</span>
                 </motion.li>
               ))}
             </motion.ul>
@@ -176,14 +176,14 @@ function LoginForm() {
               {STATS.map((s) => (
                 <div key={s.label}>
                   <p className="text-2xl font-black text-white tabular-nums">{s.value}</p>
-                  <p className="text-xs text-slate-500 mt-0.5">{s.label}</p>
+                  <p className="text-xs text-[#C8BFAE] mt-0.5">{s.label}</p>
                 </div>
               ))}
             </motion.div>
           </motion.div>
 
           {/* Footer */}
-          <p className="text-xs text-slate-600 mt-auto">
+          <p className="text-xs text-[#C8BFAE] mt-auto">
             &copy; {new Date().getFullYear()} ReviewHub. Built for trust.
           </p>
         </div>
@@ -194,15 +194,15 @@ function LoginForm() {
         variants={reduced ? {} : slideInRight}
         initial="hidden"
         animate="visible"
-        className="flex flex-1 flex-col justify-center px-4 xs:px-6 py-10 sm:px-12 lg:px-16 xl:px-20 bg-slate-50 dark:bg-[#060c1a]"
+        className="flex flex-1 flex-col justify-center bg-[var(--background)] px-4 py-10 xs:px-6 sm:px-12 lg:px-16 xl:px-20"
       >
         {/* Mobile logo */}
         <div className="lg:hidden mb-10">
           <Link href="/" className="inline-flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg">
+            <div className="h-9 w-9 rounded-xl bg-[var(--primary)] flex items-center justify-center shadow-lg">
               <Star className="h-4.5 w-4.5 fill-white text-white" />
             </div>
-            <span className="text-base font-black text-slate-900 dark:text-white">ReviewHub</span>
+            <span className="text-base font-black text-[var(--foreground)]">ReviewHub</span>
           </Link>
         </div>
 
@@ -213,10 +213,10 @@ function LoginForm() {
           className="w-full max-w-sm mx-auto"
         >
           <motion.div variants={reduced ? {} : staggerItem} className="mb-8">
-            <h2 className="text-2xl xs:text-3xl font-black tracking-tight text-slate-900 dark:text-white">Welcome back</h2>
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+            <h2 className="text-2xl xs:text-3xl font-black tracking-tight text-[var(--foreground)]">Welcome back</h2>
+            <p className="mt-2 text-sm text-[var(--muted)]">
               Don't have an account?{' '}
-              <Link href="/register" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 transition-colors">
+              <Link href="/register" className="font-semibold text-[var(--primary)] transition-colors">
                 Create one free →
               </Link>
             </p>
@@ -265,7 +265,7 @@ function LoginForm() {
               <Button
                 type="submit"
                 loading={loading}
-                className="w-full bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-500 hover:to-brand-600 shadow-lg shadow-brand-900/25 font-bold text-base h-12 rounded-xl"
+                className="h-12 w-full text-base font-bold"
                 iconRight={!loading ? <ArrowRight className="h-4 w-4" /> : undefined}
               >
                 {loading ? 'Signing in…' : 'Sign in'}
@@ -275,13 +275,13 @@ function LoginForm() {
 
           <motion.div variants={reduced ? {} : staggerItem}
             className="mt-8 flex items-center gap-3">
-            <div className="flex-1 h-px bg-slate-200 dark:bg-white/[0.07]" />
-            <span className="text-xs text-slate-400 font-medium">secure & encrypted</span>
-            <div className="flex-1 h-px bg-slate-200 dark:bg-white/[0.07]" />
+            <div className="h-px flex-1 bg-[var(--border)]" />
+            <span className="text-xs font-medium text-[var(--muted)]">secure & encrypted</span>
+            <div className="h-px flex-1 bg-[var(--border)]" />
           </motion.div>
 
           <motion.p variants={reduced ? {} : staggerItem}
-            className="mt-6 text-center text-xs text-slate-400 leading-relaxed">
+            className="mt-6 text-center text-xs text-[var(--muted)] leading-relaxed">
             By signing in you agree to our{' '}
             <Link href="/terms" className="text-brand-600 dark:text-brand-400 hover:underline">Terms</Link>
             {' '}and{' '}

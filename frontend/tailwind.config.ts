@@ -18,6 +18,18 @@ const config: Config = {
     },
     extend: {
       colors: {
+        trust: {
+          background: 'var(--background)',
+          foreground: 'var(--foreground)',
+          surface: 'var(--surface)',
+          soft: 'var(--surface-soft)',
+          primary: 'var(--primary)',
+          secondary: 'var(--secondary)',
+          accent: 'var(--accent)',
+          border: 'var(--border)',
+          muted: 'var(--muted)',
+          danger: 'var(--danger)',
+        },
         /* ── Brand / Signal ──────────────────────────── */
         brand: {
           50:  '#ecfdf5',
@@ -75,9 +87,9 @@ const config: Config = {
       },
 
       fontFamily: {
-        sans:  ['Inter', 'system-ui', 'sans-serif'],
+        sans:  ['var(--font-manrope)', 'system-ui', 'sans-serif'],
         mono:  ['JetBrains Mono', 'Fira Code', 'ui-monospace', 'monospace'],
-        display: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['var(--font-sora)', 'system-ui', 'sans-serif'],
       },
 
       backgroundImage: {

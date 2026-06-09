@@ -8,12 +8,12 @@ interface BadgeProps {
 }
 
 const variants = {
-  default: 'bg-slate-100  text-slate-600  border-slate-200  dark:bg-white/10 dark:text-slate-300',
-  success: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-  warning: 'bg-amber-50   text-amber-700   border-amber-200',
+  default: 'bg-[var(--surface-soft)] text-[var(--muted)] border-[var(--border)]',
+  success: 'bg-[var(--primary-soft)] text-[var(--primary)] border-emerald-200/60 dark:border-emerald-300/20',
+  warning: 'bg-[var(--secondary-soft)] text-amber-700 dark:text-amber-300 border-amber-200/70 dark:border-amber-300/20',
   danger:  'bg-red-50     text-red-700     border-red-200',
-  info:    'bg-blue-50    text-blue-700    border-blue-200',
-  purple:  'bg-purple-50  text-purple-700  border-purple-200',
+  info:    'bg-[var(--accent-soft)] text-cyan-700 dark:text-cyan-200 border-cyan-200/70 dark:border-cyan-300/20',
+  purple:  'bg-[var(--surface-soft)] text-[var(--foreground)] border-[var(--border)]',
 };
 
 const sizes = {

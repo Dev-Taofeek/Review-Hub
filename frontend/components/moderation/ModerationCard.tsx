@@ -39,10 +39,10 @@ export function ModerationCard({ review, onAction }: ModerationCardProps) {
   const spamScore = review.spam_score ?? 0;
 
   return (
-    <article className="rounded-2xl border border-slate-100 bg-white shadow-sm dark:bg-[#0D1020] dark:border-white/[0.07] overflow-hidden">
+    <article className="trust-card overflow-hidden rounded-3xl">
       {/* Spam score bar */}
       {spamScore > 0 && (
-        <div className="h-1 w-full bg-slate-100">
+        <div className="h-1 w-full bg-[var(--surface-soft)]">
           <div
             className={`h-full transition-all ${spamScore >= 70 ? 'bg-red-500' : spamScore >= 30 ? 'bg-amber-400' : 'bg-emerald-400'}`}
             style={{ width: `${spamScore}%` }}
@@ -56,10 +56,10 @@ export function ModerationCard({ review, onAction }: ModerationCardProps) {
           <div className="flex items-center gap-3">
             <Avatar src={review.user?.avatar_url} name={review.user?.full_name || review.user?.username} size="sm" />
             <div>
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+              <p className="text-sm font-black text-[var(--foreground)]">
                 {review.user?.username || 'Anonymous'}
               </p>
-              <p className="text-xs text-slate-400">{formatRelativeTime(review.created_at)}</p>
+              <p className="text-xs text-[var(--muted)]">{formatRelativeTime(review.created_at)}</p>
             </div>
           </div>
           <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
@@ -75,19 +75,19 @@ export function ModerationCard({ review, onAction }: ModerationCardProps) {
 
         {/* Product */}
         {review.product && (
-          <p className="text-xs text-slate-500 mb-2">
-            Product: <span className="font-medium text-slate-700 dark:text-slate-300">{(review.product as { name?: string }).name}</span>
+          <p className="mb-2 text-xs text-[var(--muted)]">
+            Product: <span className="font-bold text-[var(--foreground)]">{(review.product as { name?: string }).name}</span>
           </p>
         )}
 
         <div className="flex items-center gap-2 mb-2">
           <StarRating rating={review.rating} size="sm" />
-          <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{review.title}</span>
+          <span className="text-sm font-black text-[var(--foreground)]">{review.title}</span>
         </div>
-        <p className="text-sm text-slate-600 dark:text-slate-300 line-clamp-3 mb-4">{review.body}</p>
+        <p className="mb-4 line-clamp-3 text-sm text-[var(--muted)]">{review.body}</p>
 
         {/* Actions */}
-        <div className="flex items-center gap-2 pt-3 border-t border-slate-50 dark:border-white/[0.07]">
+        <div className="flex items-center gap-2 border-t border-[var(--border)] pt-3">
           <Button
             size="sm" variant="secondary"
             icon={<CheckCircle className="h-4 w-4 text-emerald-600" />}

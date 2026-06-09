@@ -83,7 +83,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
       onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in" aria-hidden="true" />
+      <div className="absolute inset-0 bg-[#031A14]/62 backdrop-blur-sm animate-fade-in" aria-hidden="true" />
 
       {/* Dialog */}
       <div
@@ -93,8 +93,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
         aria-labelledby={title ? 'modal-title' : undefined}
         aria-describedby={description ? 'modal-description' : undefined}
         className={cn(
-          'relative z-10 w-full rounded-2xl bg-white shadow-modal animate-scale-in',
-          'dark:bg-[#0D1020] dark:border dark:border-white/10',
+          'relative z-10 w-full rounded-2xl trust-card shadow-modal animate-scale-in',
           'flex flex-col max-h-[90vh]',
           sizes[size],
           className
@@ -102,21 +101,21 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
       >
         {/* Header */}
         {(title || description) && (
-          <div className="flex items-start justify-between gap-4 px-6 pt-6 pb-4 border-b border-slate-100 dark:border-white/10 shrink-0">
+          <div className="flex items-start justify-between gap-4 px-6 pt-6 pb-4 border-b border-[var(--border)] shrink-0">
             <div>
               {title && (
-                <h2 id="modal-title" className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+                <h2 id="modal-title" className="text-lg font-bold text-[var(--foreground)]">
                   {title}
                 </h2>
               )}
               {description && (
-                <p id="modal-description" className="mt-1 text-sm text-slate-500">{description}</p>
+                <p id="modal-description" className="mt-1 text-sm text-[var(--muted)]">{description}</p>
               )}
             </div>
             <button
               onClick={onClose}
               aria-label="Close dialog"
-              className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600 dark:hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+              className="rounded-lg p-1 text-[var(--muted)] hover:bg-[var(--surface-soft)] hover:text-[var(--foreground)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
             >
               <X className="h-5 w-5" aria-hidden="true" />
             </button>
@@ -126,7 +125,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
           <button
             onClick={onClose}
             aria-label="Close dialog"
-            className="absolute right-4 top-4 z-10 rounded-lg p-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+            className="absolute right-4 top-4 z-10 rounded-lg p-1 text-[var(--muted)] hover:bg-[var(--surface-soft)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
           >
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
