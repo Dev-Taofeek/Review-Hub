@@ -29,9 +29,8 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
         onClick={() => onPageChange(page - 1)}
         disabled={page === 1}
         className={cn(
-          'flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 transition-colors',
-          'hover:bg-slate-100 disabled:opacity-40 disabled:pointer-events-none',
-          'dark:text-slate-300 dark:hover:bg-white/10'
+          'flex h-9 w-9 items-center justify-center rounded-lg text-[var(--muted)] transition-colors',
+          'hover:bg-[var(--surface-soft)] disabled:opacity-40 disabled:pointer-events-none'
         )}
       >
         <ChevronLeft className="h-4 w-4" />
@@ -39,7 +38,7 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
 
       {getPages().map((p, i) =>
         p === '...' ? (
-          <span key={`ellipsis-${i}`} className="flex h-9 w-9 items-center justify-center text-slate-400 text-sm">
+          <span key={`ellipsis-${i}`} className="flex h-9 w-9 items-center justify-center text-[var(--muted)] text-sm">
             ···
           </span>
         ) : (
@@ -50,7 +49,7 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
               'flex h-9 w-9 items-center justify-center rounded-lg text-sm font-medium transition-colors',
               p === page
                 ? 'bg-brand-600 text-white shadow-brand-sm'
-                : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/10'
+                : 'text-[var(--muted)] hover:bg-[var(--surface-soft)]'
             )}
           >
             {p}
@@ -62,9 +61,8 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
         onClick={() => onPageChange(page + 1)}
         disabled={page === totalPages}
         className={cn(
-          'flex h-9 w-9 items-center justify-center rounded-lg text-slate-600 transition-colors',
-          'hover:bg-slate-100 disabled:opacity-40 disabled:pointer-events-none',
-          'dark:text-slate-300 dark:hover:bg-white/10'
+          'flex h-9 w-9 items-center justify-center rounded-lg text-[var(--muted)] transition-colors',
+          'hover:bg-[var(--surface-soft)] disabled:opacity-40 disabled:pointer-events-none'
         )}
       >
         <ChevronRight className="h-4 w-4" />

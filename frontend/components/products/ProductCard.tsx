@@ -158,7 +158,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
               </div>
             )}
 
-            <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#031A14]/45 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-16 bg-[#031A14]/20" />
           </div>
 
           {/* ── Info ──────────────────────────────────── */}
@@ -181,7 +181,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
                       <Star key={s} className={cn('h-3 w-3',
                         s <= Math.round(rating)
                           ? 'fill-amber-400 text-amber-400'
-                          : 'fill-slate-200 dark:fill-white/10 text-transparent'
+                          : 'fill-[var(--border)] text-transparent'
                       )} />
                     ))}
                   </div>
@@ -223,7 +223,7 @@ export function ProductCard({ product, className }: { product: Product; classNam
             whileHover={reduced ? {} : { scaleX: 1 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
             style={{
-              background: `linear-gradient(90deg, ${hasRating ? sentiment.color : '#00E5A0'}, transparent)`,
+              background: hasRating ? sentiment.color : 'var(--primary)',
               transformOrigin: 'left',
             }}
           />

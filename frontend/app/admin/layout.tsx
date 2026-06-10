@@ -11,7 +11,7 @@ const adminNav = [
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="trust-shell min-h-screen">
-      <div className="border-b border-emerald-300/15" style={{ background: 'linear-gradient(90deg, #031A14 0%, #06251D 50%, #031A14 100%)' }}>
+      <div className="border-b border-emerald-300/15 bg-[#06251D]">
         <div className="mx-auto flex h-8 max-w-[1600px] items-center justify-between px-3 xs:px-4 sm:px-6 lg:px-18">
           <div className="flex items-center gap-2">
             <span className="flex items-center gap-1.5">

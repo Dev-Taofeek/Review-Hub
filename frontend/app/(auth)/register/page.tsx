@@ -74,27 +74,15 @@ export default function RegisterPage() {
         initial="hidden"
         animate="visible"
         className="hidden lg:flex lg:w-[52%] xl:w-[56%] flex-col relative overflow-hidden"
-        style={{ background: 'linear-gradient(140deg, #031A14 0%, #06251D 48%, #083528 100%)' }}
+        style={{ background: '#06251D' }}
       >
-        {/* Orbs */}
-        {!reduced && (
-          <>
-            <motion.div animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.6, 0.4] }} transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -top-20 right-0 w-[450px] h-[450px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse, rgba(16,185,129,0.20) 0%, transparent 70%)' }} />
-            <motion.div animate={{ scale: [1, 1.1, 1], opacity: [0.25, 0.4, 0.25] }} transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
-              className="absolute -bottom-32 -left-16 w-[400px] h-[400px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse, rgba(245,158,11,0.12) 0%, transparent 70%)' }} />
-          </>
-        )}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
-          style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '48px 48px' }} />
+        <div className="absolute inset-x-0 top-0 h-1 bg-[var(--secondary)]" />
 
         <div className="relative flex flex-col h-full px-12 xl:px-16 py-12">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group w-fit mb-auto">
             <motion.div whileHover={reduced ? {} : { scale: 1.08, rotate: -5 }}
-              className="h-10 w-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-900/50">
+              className="h-10 w-10 rounded-xl bg-[var(--primary)] flex items-center justify-center shadow-lg shadow-emerald-900/30">
               <Star className="h-5 w-5 fill-white text-white" />
             </motion.div>
             <div>
@@ -114,12 +102,7 @@ export default function RegisterPage() {
             <motion.h1 variants={reduced ? {} : staggerItem}
               className="text-4xl xl:text-5xl font-black text-white tracking-tighter leading-[0.95] mb-5">
               Start sharing your<br />
-              <span style={{
-                background: 'linear-gradient(135deg, #34d399, #10b981, #059669)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              }}>
-                honest experiences.
-              </span>
+              <span className="text-emerald-300">honest experiences.</span>
             </motion.h1>
             <motion.p variants={reduced ? {} : staggerItem}
               className="text-slate-400 text-base leading-relaxed mb-10 max-w-sm">
@@ -168,7 +151,7 @@ export default function RegisterPage() {
       >
         <div className="lg:hidden mb-10">
           <Link href="/" className="inline-flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg">
+            <div className="h-9 w-9 rounded-xl bg-[var(--primary)] flex items-center justify-center shadow-lg">
               <Star className="h-4.5 w-4.5 fill-white text-white" />
             </div>
             <span className="text-base font-black text-slate-900 dark:text-white">ReviewHub</span>
@@ -241,7 +224,7 @@ export default function RegisterPage() {
 
             <motion.div variants={reduced ? {} : staggerItem} className="pt-2">
               <Button type="submit" loading={loading}
-                className="w-full bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-500 hover:to-brand-600 shadow-lg shadow-brand-900/25 font-bold text-base h-12 rounded-xl"
+                className="w-full font-bold text-base h-12 rounded-xl"
                 iconRight={!loading ? <ArrowRight className="h-4 w-4" /> : undefined}>
                 {loading ? 'Creating account…' : 'Create free account'}
               </Button>

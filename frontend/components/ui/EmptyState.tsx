@@ -27,18 +27,18 @@ export function EmptyState({ icon, title, description, action, className }: Empt
         <motion.div
           variants={reduced ? {} : staggerItem}
           whileHover={reduced ? {} : { scale: 1.08, rotate: [0, -5, 5, 0], transition: { duration: 0.4 } }}
-          className="mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-slate-100 dark:bg-white/[0.06] text-slate-400 shadow-inner"
+          className="mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-[var(--surface-soft)] text-[var(--primary)] shadow-inner"
         >
           <span className="[&>svg]:h-10 [&>svg]:w-10">{icon}</span>
         </motion.div>
       )}
       <motion.h3 variants={reduced ? {} : staggerItem}
-        className="mb-2 text-lg font-bold text-slate-900 dark:text-slate-100">
+        className="mb-2 text-lg font-bold text-[var(--foreground)]">
         {title}
       </motion.h3>
       {description && (
         <motion.p variants={reduced ? {} : staggerItem}
-          className="mb-6 max-w-xs text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+          className="mb-6 max-w-xs text-sm text-[var(--muted)] leading-relaxed">
           {description}
         </motion.p>
       )}

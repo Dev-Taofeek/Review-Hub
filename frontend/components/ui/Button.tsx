@@ -37,10 +37,10 @@ const variants: Record<Variant, string> = {
   ].join(' '),
 
   danger: [
-    'bg-gradient-to-r from-red-600 to-red-700',
+    'bg-red-600',
     'text-white font-semibold',
     'shadow-md shadow-red-900/25',
-    'hover:from-red-500 hover:to-red-600',
+    'hover:bg-red-500',
     'border border-red-500/30',
   ].join(' '),
 

@@ -130,11 +130,11 @@ const SECTIONS = [
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#06080F]">
+    <div className="min-h-screen bg-[var(--background)]">
 
       {/* Hero */}
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'repeating-linear-gradient(0deg,#fff 0,#fff 1px,transparent 1px,transparent 40px),repeating-linear-gradient(90deg,#fff 0,#fff 1px,transparent 1px,transparent 40px)' }} />
+      <div className="bg-[#06251D] relative overflow-hidden">
+        <div className="absolute inset-x-0 top-0 h-1 bg-[var(--secondary)]" />
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 relative">
           <div className="flex items-center gap-2 mb-4">
             <Link href="/" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">

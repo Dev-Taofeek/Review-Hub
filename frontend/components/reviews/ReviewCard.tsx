@@ -83,8 +83,7 @@ export function ReviewCard({ review, currentUser, onEdit, onDelete, onReport, sh
       )}
     >
       {/* Rating accent line — visual signal strength indicator */}
-      <div className="absolute top-0 left-0 right-0 h-[2px]"
-        style={{ background: `linear-gradient(90deg, ${rs.accent}, transparent 60%)`, opacity: 0.8 }} />
+      <div className="absolute left-0 right-0 top-0 h-[2px]" style={{ background: rs.accent, opacity: 0.8 }} />
 
       {/* High-signal badge — reviews with many helpful votes get a crown */}
       {signalWeight === 'high' && (
@@ -123,7 +122,7 @@ export function ReviewCard({ review, currentUser, onEdit, onDelete, onReport, sh
             style={{ background: rs.bg, border: `1px solid ${rs.border}` }}>
             <div className="flex gap-0.5">
               {[1,2,3,4,5].map((s) => (
-                <Star key={s} className={cn('h-3 w-3', s <= review.rating ? 'fill-current text-current' : 'fill-slate-200 dark:fill-white/10 text-transparent')}
+                <Star key={s} className={cn('h-3 w-3', s <= review.rating ? 'fill-current text-current' : 'fill-[var(--border)] text-transparent')}
                   style={s <= review.rating ? { color: rs.accent } : {}} />
               ))}
             </div>

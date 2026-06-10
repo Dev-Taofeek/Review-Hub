@@ -71,8 +71,8 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
               <span className="dot-live" />
               Verified trust + product discovery
             </motion.span>
-            <motion.h1 variants={reduced ? {} : staggerItem} className="max-w-4xl text-5xl font-black leading-[1.02] text-[var(--foreground)] sm:text-6xl lg:text-7xl">
-              Product reviews with receipts, signals, and human context.
+            <motion.h1 variants={reduced ? {} : staggerItem} className="max-w-3xl text-5xl font-black leading-[1.02] text-[var(--foreground)] sm:text-6xl lg:text-7xl">
+              Reviews you can trust.
             </motion.h1>
             <motion.p variants={reduced ? {} : staggerItem} className="mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]">
               ReviewHub turns verified buyer opinions into clear buying confidence, blending community moderation, abuse detection, and editorial product discovery.
@@ -102,7 +102,7 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
             className="flex items-center"
           >
             <div className="review-intel-card relative w-full overflow-hidden rounded-[2rem] p-5 sm:p-7">
-              <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-[var(--secondary)]/10 blur-3xl" />
+              <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-[var(--secondary-soft)]" />
               <div className="relative rounded-3xl forest-panel p-5">
                 <div className="flex items-start justify-between gap-4">
                   <div>

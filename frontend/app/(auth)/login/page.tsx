@@ -74,33 +74,9 @@ function LoginForm() {
         initial="hidden"
         animate="visible"
         className="hidden lg:flex lg:w-[54%] xl:w-[58%] flex-col relative overflow-hidden"
-        style={{ background: 'linear-gradient(140deg, #031A14 0%, #06251D 48%, #083528 100%)' }}
+        style={{ background: '#06251D' }}
       >
-        {/* Orbs */}
-        {!reduced && (
-          <>
-            <motion.div
-              animate={{ scale: [1, 1.2, 1], opacity: [0.5, 0.7, 0.5] }}
-              transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-              className="absolute -top-32 -right-24 w-[500px] h-[500px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse, rgba(16,185,129,0.20) 0%, transparent 70%)' }}
-            />
-            <motion.div
-              animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
-              transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
-              className="absolute -bottom-40 -left-20 w-[400px] h-[400px] rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse, rgba(245,158,11,0.12) 0%, transparent 70%)' }}
-            />
-          </>
-        )}
-
-        {/* Grid */}
-        <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
-        />
+        <div className="absolute inset-x-0 top-0 h-1 bg-[var(--secondary)]" />
 
         <div className="relative flex flex-col h-full px-12 xl:px-16 py-12">
           {/* Logo */}
@@ -139,12 +115,7 @@ function LoginForm() {
               className="text-4xl xl:text-5xl font-black text-white tracking-tighter leading-[0.95] mb-5"
             >
               Reviews from people<br />
-              <span style={{
-                background: 'linear-gradient(135deg, #34d399, #10b981, #059669)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-              }}>
-                who actually bought it.
-              </span>
+              <span className="text-emerald-300">who actually bought it.</span>
             </motion.h1>
 
             <motion.p variants={reduced ? {} : staggerItem}

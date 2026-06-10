@@ -31,7 +31,7 @@ export default function MyReviewsPage() {
       variants={reduced ? {} : pageTransition}
       initial="hidden"
       animate="visible"
-      className="min-h-screen bg-slate-50 dark:bg-[#060c1a]"
+      className="min-h-screen bg-[var(--background)]"
     >
       <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-8 sm:py-10">
 
@@ -45,7 +45,7 @@ export default function MyReviewsPage() {
           <motion.div variants={reduced ? {} : staggerItem} className="flex items-start justify-between gap-4 flex-wrap">
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center shadow-lg shadow-violet-900/25">
+                <div className="h-10 w-10 rounded-xl bg-[var(--primary)] flex items-center justify-center shadow-lg shadow-emerald-900/20">
                   <BookOpen className="h-5 w-5 text-white" />
                 </div>
                 <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">My Reviews</h1>

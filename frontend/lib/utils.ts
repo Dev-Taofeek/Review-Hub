@@ -77,19 +77,19 @@ export function getStatusColor(status: string): string {
     flagged:   'text-orange-600 bg-orange-50 border-orange-200',
     rejected:  'text-red-600    bg-red-50    border-red-200',
     resolved:  'text-emerald-600 bg-emerald-50 border-emerald-200',
-    dismissed: 'text-slate-500  bg-slate-50  border-slate-200',
+    dismissed: 'text-[var(--muted)] bg-[var(--surface-soft)] border-[var(--border)]',
     reviewed:  'text-blue-600   bg-blue-50   border-blue-200',
   };
-  return map[status] ?? 'text-slate-600 bg-slate-50 border-slate-200';
+  return map[status] ?? 'text-[var(--muted)] bg-[var(--surface-soft)] border-[var(--border)]';
 }
 
 export function getRoleColor(role: string): string {
   const map: Record<string, string> = {
     admin:     'text-purple-600 bg-purple-50 border-purple-200',
     moderator: 'text-blue-600   bg-blue-50   border-blue-200',
-    user:      'text-slate-600  bg-slate-50  border-slate-200',
+    user:      'text-[var(--muted)] bg-[var(--surface-soft)] border-[var(--border)]',
   };
-  return map[role] ?? 'text-slate-600 bg-slate-50 border-slate-200';
+  return map[role] ?? 'text-[var(--muted)] bg-[var(--surface-soft)] border-[var(--border)]';
 }
 
 export function buildProductImageUrl(image?: { url: string } | null, fallback = '/placeholder-product.svg'): string {

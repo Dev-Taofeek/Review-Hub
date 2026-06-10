@@ -17,32 +17,32 @@ export function ThemeToggle({ className }: { className?: string }) {
         'relative flex h-8 w-[3.25rem] items-center rounded-full border transition-all duration-300',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2',
         isDark
-          ? 'bg-[#0d1e3d] border-[#1e3a5f]'
-          : 'bg-gray-100 border-gray-200',
+          ? 'bg-[#06251D] border-[var(--border)]'
+          : 'bg-[var(--surface-soft)] border-[var(--border)]',
         className
       )}
     >
       {/* Sun icon — left side */}
       <Sun className={cn(
         'absolute left-1.5 h-3.5 w-3.5 transition-all duration-300',
-        isDark ? 'opacity-25 text-slate-500 scale-90' : 'opacity-100 text-amber-500 scale-100'
+        isDark ? 'opacity-40 text-[var(--muted)] scale-90' : 'opacity-100 text-amber-500 scale-100'
       )} />
 
       {/* Moon icon — right side */}
       <Moon className={cn(
         'absolute right-1.5 h-3.5 w-3.5 transition-all duration-300',
-        isDark ? 'opacity-100 text-blue-400 scale-100' : 'opacity-25 text-gray-400 scale-90'
+        isDark ? 'opacity-100 text-cyan-200 scale-100' : 'opacity-40 text-[var(--muted)] scale-90'
       )} />
 
       {/* Sliding thumb */}
       <span className={cn(
         'absolute h-6 w-6 rounded-full shadow-sm transition-all duration-300 flex items-center justify-center',
         isDark
-          ? 'translate-x-[1.5rem] bg-[#1e3a5f] border border-[#2d5a8e]'
-          : 'translate-x-0.5 bg-white border border-gray-200 shadow-xs'
+          ? 'translate-x-[1.5rem] bg-[var(--primary)] border border-emerald-300/30'
+          : 'translate-x-0.5 bg-[var(--surface)] border border-[var(--border)] shadow-xs'
       )}>
         {isDark
-          ? <Moon className="h-3 w-3 text-blue-300" />
+          ? <Moon className="h-3 w-3 text-cyan-100" />
           : <Sun className="h-3 w-3 text-amber-500" />
         }
       </span>

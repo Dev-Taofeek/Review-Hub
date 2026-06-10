@@ -119,7 +119,7 @@ export default function NewProductPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#060c1a]">
+    <div className="min-h-screen bg-[var(--background)]">
       <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-8 sm:py-10">
 
         {/* Back */}
@@ -139,7 +139,7 @@ export default function NewProductPage() {
             {/* Header */}
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-600/25">
+                <div className="h-12 w-12 rounded-2xl bg-[var(--primary)] flex items-center justify-center shadow-lg shadow-emerald-900/20">
                   <Package className="h-6 w-6 text-white" />
                 </div>
                 <div>
@@ -233,7 +233,7 @@ export default function NewProductPage() {
                   type="submit"
                   loading={submitting}
                   icon={uploadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-                  className="bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-500 hover:to-brand-600 shadow-lg shadow-brand-600/25 px-6"
+                  className="shadow-lg shadow-emerald-900/20 px-6"
                 >
                   {submitting
                     ? uploadingImage ? 'Uploading image…' : 'Creating product…'
@@ -249,7 +249,7 @@ export default function NewProductPage() {
 
               {/* Card header */}
               <div className="px-5 py-4 border-b border-slate-100 dark:border-white/[0.05] flex items-center gap-2.5">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-sm">
+                <div className="h-8 w-8 rounded-lg bg-[var(--accent)] flex items-center justify-center shadow-sm">
                   <Camera className="h-4 w-4 text-white" />
                 </div>
                 <div>
@@ -271,7 +271,7 @@ export default function NewProductPage() {
                         className="w-full h-full object-cover"
                       />
                       {/* Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-[#031A14]/25" />
 
                       {/* Remove button */}
                       <button

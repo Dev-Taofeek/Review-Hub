@@ -57,7 +57,7 @@ export function StarRating({
           >
             {/* Background star */}
             <Star
-              className={cn(sizes[size], 'text-slate-200 dark:text-slate-700')}
+              className={cn(sizes[size], 'text-[var(--border)]')}
               fill="currentColor"
             />
             {/* Filled star (full or half) */}
@@ -78,7 +78,7 @@ export function StarRating({
         );
       })}
       {showValue && (
-        <span className="ml-1.5 text-sm font-medium text-slate-700 dark:text-slate-300">
+        <span className="ml-1.5 text-sm font-medium text-[var(--foreground)]">
           {rating.toFixed(1)}
         </span>
       )}

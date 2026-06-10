@@ -18,22 +18,22 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-auto border-t border-slate-200/60 dark:border-white/[0.06] bg-white dark:bg-[#0c1526]">
+    <footer className="mt-auto border-t border-[var(--border)] bg-[var(--surface)]">
       <div className="mx-auto max-w-[1600px] px-3 xs:px-4 sm:px-6 lg:px-18 py-12 sm:py-14">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:grid-cols-5">
 
           {/* Brand */}
           <div className="col-span-2 lg:col-span-2">
             <Link href="/" className="inline-flex items-center gap-3 mb-4 group">
-              <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-md shadow-brand-900/25 group-hover:shadow-brand-900/40 transition-shadow">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--primary)] shadow-md shadow-emerald-900/20 transition-shadow">
                 <Star className="h-4.5 w-4.5 fill-white text-white" aria-hidden="true" />
               </div>
               <div>
-                <span className="text-[15px] font-black tracking-tight text-slate-900 dark:text-white block">ReviewHub</span>
-                <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-brand-600 dark:text-brand-400">Verified Reviews</span>
+                <span className="block text-[15px] font-black tracking-tight text-[var(--foreground)]">ReviewHub</span>
+                <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-[var(--primary)]">Verified Reviews</span>
               </div>
             </Link>
-            <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-[260px]">
+            <p className="max-w-[260px] text-sm leading-relaxed text-[var(--muted)]">
               The most trusted platform for honest product reviews. Community-built, spam-free.
             </p>
             <div className="flex items-center gap-3 mt-5">
@@ -43,7 +43,7 @@ export function Footer() {
               ].map(({ icon: Icon, href, label }) => (
                 <a key={label} href={href} target="_blank" rel="noopener noreferrer"
                   aria-label={label}
-                  className="h-8 w-8 rounded-lg border border-slate-200 dark:border-white/[0.08] bg-slate-50 dark:bg-white/[0.04] flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:border-slate-300 dark:hover:border-white/15 transition-all">
+                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-soft)] text-[var(--muted)] transition-all hover:border-[var(--primary)] hover:text-[var(--primary)]">
                   <Icon className="h-3.5 w-3.5" aria-hidden="true" />
                 </a>
               ))}
@@ -53,12 +53,12 @@ export function Footer() {
           {/* Nav groups */}
           {Object.entries(LINKS).map(([group, links]) => (
             <div key={group}>
-              <p className="text-[11px] font-black uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500 mb-4">{group}</p>
+              <p className="mb-4 text-[11px] font-black uppercase tracking-[0.15em] text-[var(--muted)]">{group}</p>
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link.href}>
                     <Link href={link.href}
-                      className="text-sm text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors font-medium">
+                      className="text-sm font-medium text-[var(--muted)] transition-colors hover:text-[var(--primary)]">
                       {link.label}
                     </Link>
                   </li>
@@ -69,12 +69,12 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 pt-6 border-t border-slate-200/60 dark:border-white/[0.06] flex flex-col xs:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-slate-400 dark:text-slate-600">
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-[var(--border)] pt-6 xs:flex-row">
+          <p className="text-xs text-[var(--muted)]">
             &copy; {year} ReviewHub. All rights reserved.
           </p>
-          <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-600">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand-500 animate-pulse" aria-hidden="true" />
+          <div className="flex items-center gap-1.5 text-xs text-[var(--muted)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[var(--primary)]" aria-hidden="true" />
             All systems operational
           </div>
         </div>

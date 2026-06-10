@@ -22,7 +22,7 @@ export function Avatar({ src, name, size = 'md', className }: AvatarProps) {
   return (
     <div
       className={cn(
-        'relative shrink-0 overflow-hidden rounded-full bg-gradient-to-br from-brand-400 to-brand-600',
+        'relative shrink-0 overflow-hidden rounded-full bg-[var(--primary)]',
         container,
         className
       )}

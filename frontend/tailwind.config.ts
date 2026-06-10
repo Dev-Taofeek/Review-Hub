@@ -54,7 +54,7 @@ const config: Config = {
         void: {
           900: '#04060E',
           800: '#080A14',
-          700: '#0D1020',
+          700: '#06251D',
           600: '#12162B',
           500: '#181D35',
           400: '#1E2440',
@@ -66,7 +66,7 @@ const config: Config = {
           subtle:        '#f3f4f6',
           dark:          '#080d1a',
           'dark-muted':  '#0d1526',
-          'dark-subtle': '#111c30',
+          'dark-subtle': '#083528',
         },
         /* ── Accent palette ──────────────────────────── */
         violet: {
@@ -90,13 +90,6 @@ const config: Config = {
         sans:  ['var(--font-manrope)', 'system-ui', 'sans-serif'],
         mono:  ['JetBrains Mono', 'Fira Code', 'ui-monospace', 'monospace'],
         display: ['var(--font-sora)', 'system-ui', 'sans-serif'],
-      },
-
-      backgroundImage: {
-        'gradient-radial':  'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-signal':  'linear-gradient(135deg, #00E5A0 0%, #00B37A 100%)',
-        'gradient-void':    'linear-gradient(140deg, #04060E 0%, #0D1020 100%)',
-        'gradient-aurora':  'linear-gradient(135deg, #00E5A0 0%, #8B5CF6 50%, #FF6B6B 100%)',
       },
 
       boxShadow: {

@@ -18,18 +18,16 @@ import { formatDate, cn } from '@/lib/utils';
 import { staggerContainer, staggerItem, pageTransition } from '@/lib/animations';
 import toast from 'react-hot-toast';
 
-const ROLE_META: Record<string, { label: string; from: string; to: string; glow: string; desc: string }> = {
-  admin:     { label: 'Admin',     from: '#7c3aed', to: '#6d28d9', glow: '0 8px 32px rgba(124,58,237,0.35)', desc: 'Full platform access' },
-  moderator: { label: 'Moderator', from: '#2563eb', to: '#1d4ed8', glow: '0 8px 32px rgba(37,99,235,0.35)',  desc: 'Reviews & reports access' },
-  user:      { label: 'Reviewer',  from: '#059669', to: '#047857', glow: '0 8px 32px rgba(5,150,105,0.35)',  desc: 'Community member' },
+const ROLE_META: Record<string, { label: string; color: string; glow: string; desc: string }> = {
+  admin:     { label: 'Admin',     color: '#0891B2', glow: '0 8px 32px rgba(8,145,178,0.18)', desc: 'Full platform access' },
+  moderator: { label: 'Moderator', color: '#F59E0B', glow: '0 8px 32px rgba(245,158,11,0.18)', desc: 'Reviews & reports access' },
+  user:      { label: 'Reviewer',  color: '#047857', glow: '0 8px 32px rgba(4,120,87,0.18)', desc: 'Community member' },
 };
 
 /* Reusable card */
 const Card = ({ children, className }: { children: React.ReactNode; className?: string }) => (
   <div className={cn(
-    'rounded-2xl bg-white dark:bg-[#0D1020]',
-    'border border-slate-200/80 dark:border-white/[0.07]',
-    'shadow-sm',
+    'trust-card rounded-3xl',
     className
   )}>
     {children}
@@ -81,14 +79,12 @@ export default function ProfilePage() {
     <motion.div
       variants={reduced ? {} : pageTransition}
       initial="hidden" animate="visible"
-      className="min-h-screen bg-slate-50 dark:bg-[#06080F]"
+      className="min-h-screen bg-[var(--background)]"
     >
       {/* ── Cover hero ──────────────────────────────────── */}
       <div className="relative h-40 sm:h-52 overflow-hidden">
-        <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${role.from} 0%, ${role.to} 100%)` }} />
-        <div className="absolute inset-0 hero-grid-overlay opacity-50" />
-        <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/[0.06]" />
-        <div className="absolute right-20 top-5 h-32 w-32 rounded-full bg-white/[0.04]" />
+        <div className="absolute inset-0 bg-[var(--surface)]" />
+        <div className="absolute inset-x-0 bottom-0 h-1" style={{ background: role.color }} />
       </div>
 
       <div className="mx-auto max-w-4xl px-4 xs:px-5 sm:px-8">
@@ -103,7 +99,7 @@ export default function ProfilePage() {
             <div className="flex flex-col sm:flex-row gap-5 sm:gap-6 sm:items-end">
               {/* Avatar */}
               <div className="relative self-start shrink-0">
-                <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-2xl overflow-hidden border-4 border-white dark:border-[#0D1020] shadow-lg"
+                <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-2xl overflow-hidden border-4 border-[var(--surface)] shadow-lg"
                   style={{ boxShadow: role.glow }}>
                   <Avatar src={user.avatar_url} name={user.full_name || user.username} size="xl" className="w-full h-full rounded-none" />
                 </div>
@@ -198,14 +194,12 @@ export default function ProfilePage() {
 
             {/* Role badge */}
             <motion.div variants={reduced ? {} : staggerItem}>
-              <div className="rounded-2xl p-5 relative overflow-hidden"
-                style={{ background: `linear-gradient(135deg, ${role.from} 0%, ${role.to} 100%)`, boxShadow: role.glow }}>
-                <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full bg-white/10 pointer-events-none" />
-                <div className="absolute inset-0 card-texture pointer-events-none" />
+              <div className="trust-card rounded-3xl p-5 relative overflow-hidden" style={{ boxShadow: role.glow }}>
+                <div className="absolute inset-x-0 top-0 h-1" style={{ background: role.color }} />
                 <div className="relative">
-                  <ShieldCheck className="h-6 w-6 text-white mb-2" />
-                  <p className="text-sm font-black text-white">{role.label}</p>
-                  <p className="text-xs text-white/70 mt-0.5">{role.desc}</p>
+                  <ShieldCheck className="h-6 w-6 mb-2" style={{ color: role.color }} />
+                  <p className="text-sm font-black text-[var(--foreground)]">{role.label}</p>
+                  <p className="text-xs text-[var(--muted)] mt-0.5">{role.desc}</p>
                 </div>
               </div>
             </motion.div>

@@ -81,12 +81,12 @@ export function ReviewForm({ productId, onSuccess, onCancel, existingReview }: R
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       {/* Rating */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+        <label className="block text-sm font-medium text-[var(--foreground)] mb-2">
           Your Rating <span className="text-red-500">*</span>
         </label>
         <StarRating rating={rating} size="lg" interactive onChange={setRating} />
         {rating > 0 && (
-          <p className="mt-1 text-xs text-slate-500">
+          <p className="mt-1 text-xs text-[var(--muted)]">
             {['', 'Poor', 'Fair', 'Good', 'Very Good', 'Excellent'][rating]}
           </p>
         )}
@@ -112,8 +112,8 @@ export function ReviewForm({ productId, onSuccess, onCancel, existingReview }: R
 
       {/* Pros */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-          Pros <span className="text-slate-400 font-normal">(optional)</span>
+        <label className="block text-sm font-medium text-[var(--foreground)] mb-2">
+          Pros <span className="text-[var(--muted)] font-normal">(optional)</span>
         </label>
         <div className="flex flex-col gap-2">
           {pros.map((pro, i) => (
@@ -126,7 +126,7 @@ export function ReviewForm({ productId, onSuccess, onCancel, existingReview }: R
               />
               {pros.length > 1 && (
                 <button type="button" onClick={() => removeItem(pros, setPros, i)}
-                  className="p-2 text-slate-400 hover:text-red-500 transition-colors">
+                  className="p-2 text-[var(--muted)] hover:text-red-500 transition-colors">
                   <X className="h-4 w-4" />
                 </button>
               )}
@@ -143,8 +143,8 @@ export function ReviewForm({ productId, onSuccess, onCancel, existingReview }: R
 
       {/* Cons */}
       <div>
-        <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-          Cons <span className="text-slate-400 font-normal">(optional)</span>
+        <label className="block text-sm font-medium text-[var(--foreground)] mb-2">
+          Cons <span className="text-[var(--muted)] font-normal">(optional)</span>
         </label>
         <div className="flex flex-col gap-2">
           {cons.map((con, i) => (
@@ -157,7 +157,7 @@ export function ReviewForm({ productId, onSuccess, onCancel, existingReview }: R
               />
               {cons.length > 1 && (
                 <button type="button" onClick={() => removeItem(cons, setCons, i)}
-                  className="p-2 text-slate-400 hover:text-red-500 transition-colors">
+                  className="p-2 text-[var(--muted)] hover:text-red-500 transition-colors">
                   <X className="h-4 w-4" />
                 </button>
               )}
@@ -172,7 +172,7 @@ export function ReviewForm({ productId, onSuccess, onCancel, existingReview }: R
         </div>
       </div>
 
-      <div className="flex gap-3 justify-end pt-2 border-t border-slate-100 dark:border-white/[0.07]">
+      <div className="flex gap-3 justify-end pt-2 border-t border-[var(--border)]">
         {onCancel && (
           <Button type="button" variant="secondary" onClick={onCancel}>Cancel</Button>
         )}

@@ -11,7 +11,7 @@ import { StatsCard } from '@/components/admin/StatsCard';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { adminApi } from '@/lib/api';
 import { formatRelativeTime, cn } from '@/lib/utils';
-import { staggerContainer, staggerItem, staggerFast, pageTransition, orbFloat } from '@/lib/animations';
+import { staggerContainer, staggerItem, staggerFast, pageTransition } from '@/lib/animations';
 import { AnimatedCounter } from '@/components/ui/AnimatedCounter';
 
 interface Analytics {
@@ -73,17 +73,9 @@ export default function AdminOverviewPage() {
       {/* ── Command centre banner ───────────────────────── */}
       <div
         className="relative overflow-hidden rounded-2xl p-6 sm:p-8"
-        style={{ background: 'linear-gradient(140deg, #020917 0%, #061529 45%, #09233d 100%)' }}
+        style={{ background: '#06251D' }}
       >
-        {!reduced && (
-          <>
-            <motion.div {...orbFloat(0).animate} className="absolute top-0 right-0 w-72 h-72 rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse, rgba(5,150,105,0.16) 0%, transparent 70%)', transform: 'translate(30%,-30%)' }} />
-            <motion.div {...orbFloat(4).animate} className="absolute bottom-0 left-1/4 w-48 h-48 rounded-full pointer-events-none"
-              style={{ background: 'radial-gradient(ellipse, rgba(99,102,241,0.12) 0%, transparent 70%)', transform: 'translateY(40%)' }} />
-          </>
-        )}
-        <div className="absolute inset-0 hero-grid-overlay pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-1 bg-[var(--secondary)] pointer-events-none" />
 
         <div className="relative flex flex-col sm:flex-row sm:items-center gap-5 sm:justify-between">
           <motion.div variants={reduced ? {} : staggerItem} initial="hidden" animate="visible">
@@ -168,7 +160,7 @@ export default function AdminOverviewPage() {
         >
           <div className="px-5 sm:px-6 py-4 border-b border-slate-100 dark:border-white/[0.05] flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-sm">
+              <div className="h-8 w-8 rounded-lg bg-[var(--secondary)] flex items-center justify-center shadow-sm">
                 <TrendingUp className="h-4 w-4 text-white" />
               </div>
               <h2 className="font-bold text-slate-900 dark:text-white">Top Products</h2>
@@ -211,7 +203,7 @@ export default function AdminOverviewPage() {
                       whileInView={{ width: `${pct}%` }}
                       transition={{ duration: 0.7, ease: 'easeOut', delay: 0.1 + i * 0.05 }}
                       viewport={{ once: true }}
-                      className="h-full rounded-full bg-gradient-to-r from-brand-500 to-brand-400"
+                      className="h-full rounded-full bg-[var(--primary)]"
                     />
                   </div>
                 </motion.div>
@@ -230,7 +222,7 @@ export default function AdminOverviewPage() {
         >
           <div className="px-5 sm:px-6 py-4 border-b border-slate-100 dark:border-white/[0.05] flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-violet-500 to-purple-700 flex items-center justify-center shadow-sm">
+              <div className="h-8 w-8 rounded-lg bg-[var(--accent)] flex items-center justify-center shadow-sm">
                 <Activity className="h-4 w-4 text-white" />
               </div>
               <h2 className="font-bold text-slate-900 dark:text-white">Recent Reviews</h2>
@@ -260,7 +252,7 @@ export default function AdminOverviewPage() {
                   <p className="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate">{r.title}</p>
                   {r.user && (
                     <div className="flex items-center gap-1.5 mt-0.5">
-                      <div className="h-4 w-4 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-[8px] font-black shrink-0">
+                      <div className="h-4 w-4 rounded-full bg-[var(--primary)] flex items-center justify-center text-white text-[8px] font-black shrink-0">
                         {(r.user.username || '?')[0].toUpperCase()}
                       </div>
                       <p className="text-xs text-slate-400">@{r.user.username}</p>
@@ -287,7 +279,7 @@ export default function AdminOverviewPage() {
       >
         <div className="px-5 sm:px-6 py-4 border-b border-slate-100 dark:border-white/[0.05] flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-sm">
+            <div className="h-8 w-8 rounded-lg bg-[var(--accent)] flex items-center justify-center shadow-sm">
               <BarChart3 className="h-4 w-4 text-white" />
             </div>
             <h2 className="font-bold text-slate-900 dark:text-white">Platform Health</h2>

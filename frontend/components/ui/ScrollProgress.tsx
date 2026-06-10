@@ -18,7 +18,7 @@ export function ScrollProgress() {
       style={{
         scaleX,
         height: '2px',
-        background: 'linear-gradient(90deg, #00E5A0, #059669, #34d399)',
+        background: 'var(--primary)',
         boxShadow: '0 0 8px rgba(0,229,160,0.6)',
       }}
       aria-hidden="true"
