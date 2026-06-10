@@ -3,11 +3,9 @@
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
-  ArrowRight, BadgeCheck, Flag, Gauge, MessageSquareWarning,
-  SearchCheck, ShieldCheck, Sparkles, Star, Users,
+  ArrowRight, MessageSquareWarning, SearchCheck, ShieldCheck, Star,
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
-import { cn } from '@/lib/utils';
 import { staggerContainer, staggerItem } from '@/lib/animations';
 
 interface Props {
@@ -15,46 +13,33 @@ interface Props {
   recentReviews: any[];
 }
 
-const distribution = [
-  { label: '5', value: 72 },
-  { label: '4', value: 18 },
-  { label: '3', value: 7 },
-  { label: '2', value: 2 },
-  { label: '1', value: 1 },
-];
-
-function TrustRing({ score }: { score: number }) {
-  const r = 42;
-  const c = 2 * Math.PI * r;
-  return (
-    <div className="relative h-28 w-28">
-      <svg viewBox="0 0 104 104" className="-rotate-90">
-        <circle cx="52" cy="52" r={r} fill="none" stroke="rgba(247,242,232,.12)" strokeWidth="8" />
-        <motion.circle
-          cx="52"
-          cy="52"
-          r={r}
-          fill="none"
-          stroke="var(--primary)"
-          strokeLinecap="round"
-          strokeWidth="8"
-          strokeDasharray={`${(score / 100) * c} ${c}`}
-          initial={{ strokeDasharray: `0 ${c}` }}
-          animate={{ strokeDasharray: `${(score / 100) * c} ${c}` }}
-          transition={{ duration: 1.2, ease: 'easeOut' }}
-        />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-data text-3xl font-black">{score}</span>
-        <span className="text-label-mono text-[9px] text-[var(--muted)]">Trust</span>
-      </div>
-    </div>
-  );
-}
-
 export function LandingPageClient({ statItems, recentReviews }: Props) {
   const reduced = useReducedMotion();
-  const review = recentReviews[0];
+  const categoryLinks = ['Electronics', 'Home', 'Beauty', 'Fitness', 'Appliances', 'Travel gear'];
+  const fallbackReviews = [
+    {
+      title: 'Clear photos, honest battery notes',
+      body: 'The review matched what arrived, including the small downsides I wanted to know before buying.',
+      rating: 5,
+      user: { full_name: 'Maya R.' },
+      product: { name: 'Wireless headphones' },
+    },
+    {
+      title: 'Useful before checkout',
+      body: 'The best comments were from verified buyers and helped me compare two similar models quickly.',
+      rating: 4,
+      user: { full_name: 'Jon A.' },
+      product: { name: 'Countertop blender' },
+    },
+    {
+      title: 'No hype, just the details',
+      body: 'I could see why people liked it and where it fell short after a few weeks of use.',
+      rating: 5,
+      user: { full_name: 'Sofia K.' },
+      product: { name: 'Running shoes' },
+    },
+  ];
+  const rawReviews = (recentReviews?.length ? recentReviews : fallbackReviews).slice(0, 3);
 
   return (
     <div className="trust-shell">
@@ -102,71 +87,76 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
             className="flex items-center"
           >
             <div className="review-intel-card relative w-full overflow-hidden rounded-[2rem] p-5 sm:p-7">
-              <div className="absolute right-0 top-0 h-40 w-40 rounded-full bg-[var(--secondary-soft)]" />
-              <div className="relative rounded-3xl forest-panel p-5">
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-label-mono text-emerald-300">Review Intelligence</p>
-                    <h2 className="mt-2 text-2xl font-black text-[#F7F2E8]">Confidence snapshot</h2>
-                    <p className="mt-1 text-sm text-[#C8BFAE]">Live quality signals for buyer-safe discovery.</p>
+              <div className="rounded-[1.35rem] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-xl shadow-emerald-900/10">
+                <div className="border-b border-[var(--border)] pb-5">
+                  <p className="text-label-mono text-[var(--primary)]">Review search</p>
+                  <h2 className="mt-2 text-2xl font-black text-[var(--foreground)]">What are you looking for?</h2>
+                  <div className="mt-4 flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-sm font-bold text-[var(--muted)]">
+                    <SearchCheck className="h-5 w-5 shrink-0 text-[var(--primary)]" />
+                    <span className="truncate">Search products, brands, or categories</span>
                   </div>
-                  <TrustRing score={94} />
                 </div>
 
-                <div className="mt-6 grid grid-cols-2 gap-3">
-                  {[
-                    { icon: <BadgeCheck />, label: 'Verified score', value: '91%', color: 'text-emerald-300' },
-                    { icon: <ShieldCheck />, label: 'Trust signal', value: 'High', color: 'text-cyan-200' },
-                    { icon: <Flag />, label: 'Flagged spam', value: '12', color: 'text-amber-300' },
-                    { icon: <Gauge />, label: 'Mod confidence', value: '98%', color: 'text-emerald-300' },
-                  ].map((item) => (
-                    <div key={item.label} className="rounded-2xl border border-white/10 bg-white/[0.045] p-4">
-                      <div className={cn('mb-3 [&>svg]:h-5 [&>svg]:w-5', item.color)}>{item.icon}</div>
-                      <p className="text-data text-2xl font-black text-[#F7F2E8]">{item.value}</p>
-                      <p className="mt-1 text-xs font-bold text-[#C8BFAE]">{item.label}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="mt-6 rounded-2xl border border-white/10 bg-[#031A14]/55 p-4">
-                  <div className="mb-3 flex items-center justify-between">
-                    <p className="text-sm font-bold text-[#F7F2E8]">Rating distribution</p>
-                    <p className="text-label-mono text-amber-300">Quality weighted</p>
-                  </div>
-                  <div className="space-y-2.5">
-                    {distribution.map((row, index) => (
-                      <div key={row.label} className="flex items-center gap-3">
-                        <span className="flex w-7 items-center gap-1 text-xs font-bold text-[#F7F2E8]">{row.label}<Star className="h-3 w-3 fill-amber-300 text-amber-300" /></span>
-                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/10">
-                          <motion.div
-                            className="h-full rounded-full bg-[var(--secondary)]"
-                            initial={{ width: 0 }}
-                            animate={{ width: `${row.value}%` }}
-                            transition={{ duration: 0.8, delay: 0.15 + index * 0.06 }}
-                          />
-                        </div>
-                        <span className="w-8 text-right text-data text-xs font-bold text-[#C8BFAE]">{row.value}%</span>
-                      </div>
+                <div className="border-b border-[var(--border)] py-5">
+                  <p className="text-sm font-black text-[var(--foreground)]">Popular categories</p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {categoryLinks.map((category) => (
+                      <Link
+                        key={category}
+                        href={`/products?category=${encodeURIComponent(category)}`}
+                        className="rounded-full border border-[var(--border)] bg-[var(--background)] px-3 py-1.5 text-xs font-extrabold text-[var(--foreground)] transition hover:border-[var(--primary)] hover:text-[var(--primary)]"
+                      >
+                        {category}
+                      </Link>
                     ))}
                   </div>
                 </div>
-              </div>
 
-              <motion.div
-                whileHover={reduced ? {} : { y: -4 }}
-                className="relative mx-auto -mt-5 max-w-md rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-xl"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[var(--primary-soft)] text-[var(--primary)]">
-                    <Users className="h-5 w-5" />
+                <div className="pt-5">
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-sm font-black text-[var(--foreground)]">Recent reviews</p>
+                    <Link href="/products" className="text-xs font-black text-[var(--primary)] hover:underline">
+                      See all
+                    </Link>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-black text-[var(--foreground)]">{review?.title || 'Battery matched real-world claims'}</p>
-                    <p className="text-xs text-[var(--muted)]">{review?.body || 'Verified buyer review passed quality and duplicate checks.'}</p>
+                  <div className="mt-3 space-y-3">
+                    {rawReviews.map((item, index) => {
+                      const author = item.user?.full_name || item.user?.username || item.author || 'Verified buyer';
+                      const product = item.product?.name || (typeof item.product === 'string' ? item.product : 'Reviewed product');
+                      const rating = Math.max(0, Math.min(5, Math.round(Number(item.rating) || 5)));
+                      return (
+                        <motion.div
+                          key={`${item.title || product}-${index}`}
+                          whileHover={reduced ? {} : { y: -2 }}
+                          className="rounded-2xl border border-[var(--border)] bg-[var(--background)] p-4"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--primary-soft)] text-sm font-black text-[var(--primary)]">
+                              {String(author).charAt(0).toUpperCase()}
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                                <p className="truncate text-sm font-black text-[var(--foreground)]">{author}</p>
+                                <div className="flex items-center">
+                                  {Array.from({ length: 5 }).map((_, starIndex) => (
+                                    <Star
+                                      key={starIndex}
+                                      className={`h-3.5 w-3.5 ${starIndex < rating ? 'fill-[var(--secondary)] text-[var(--secondary)]' : 'fill-[var(--border)] text-[var(--border)]'}`}
+                                    />
+                                  ))}
+                                </div>
+                              </div>
+                              <p className="mt-1 truncate text-xs font-bold text-[var(--muted)]">{product}</p>
+                              <p className="mt-2 text-sm font-black text-[var(--foreground)]">{item.title || 'Recent review'}</p>
+                              <p className="mt-1 line-clamp-2 text-xs leading-5 text-[var(--muted)]">{item.body || item.text || 'A verified buyer shared enough detail to make the product easier to judge.'}</p>
+                            </div>
+                          </div>
+                        </motion.div>
+                      );
+                    })}
                   </div>
-                  <Sparkles className="h-5 w-5 text-[var(--secondary)]" />
                 </div>
-              </motion.div>
+              </div>
             </div>
           </motion.div>
         </div>

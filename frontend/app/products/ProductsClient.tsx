@@ -15,6 +15,7 @@ import { staggerContainer, staggerItem, fadeInUp, fadeIn } from '@/lib/animation
 
 export function ProductsClient() {
   const [page, setPage] = useState(1);
+  const [selectedDiscoveryTag, setSelectedDiscoveryTag] = useState('Verified picks');
   const { products, total, totalPages, loading, filters, setFilters } = useProducts({ page });
   const { isAuthenticated } = useAuth();
   const reduced = useReducedMotion();
@@ -57,9 +58,19 @@ export function ProductsClient() {
         </motion.div>
 
         <div className="mb-5 flex gap-2 overflow-x-auto pb-1">
-          {['Verified picks', 'High confidence', 'Most reviewed', 'New arrivals', 'Buyer favorites'].map((chip, i) => (
-            <button key={chip} className="shrink-0 rounded-full border border-[var(--border)] bg-[var(--surface)] px-4 py-2 text-xs font-extrabold text-[var(--muted)] transition hover:border-[var(--primary)] hover:text-[var(--primary)]">
-              {i === 0 && <BadgeCheck className="mr-1 inline h-3.5 w-3.5" />}
+          {['Verified picks', 'High confidence', 'Most reviewed', 'New arrivals', 'Buyer favorites'].map((chip) => (
+            <button
+              key={chip}
+              type="button"
+              aria-pressed={selectedDiscoveryTag === chip}
+              onClick={() => setSelectedDiscoveryTag(chip)}
+              className={`shrink-0 rounded-full border px-4 py-2 text-xs font-extrabold transition ${
+                selectedDiscoveryTag === chip
+                  ? 'border-[var(--primary)] bg-[var(--primary)] text-white shadow-sm'
+                  : 'border-[var(--border)] bg-[var(--surface)] text-[var(--muted)] hover:border-[var(--primary)] hover:text-[var(--primary)]'
+              }`}
+            >
+              {selectedDiscoveryTag === chip && <BadgeCheck className="mr-1 inline h-3.5 w-3.5" />}
               {chip}
             </button>
           ))}
