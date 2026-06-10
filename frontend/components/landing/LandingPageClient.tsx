@@ -15,31 +15,18 @@ interface Props {
 
 export function LandingPageClient({ statItems, recentReviews }: Props) {
   const reduced = useReducedMotion();
-  const categoryLinks = ['Electronics', 'Home', 'Beauty', 'Fitness', 'Appliances', 'Travel gear'];
-  const fallbackReviews = [
+  const fallbackReview =
     {
       title: 'Clear photos, honest battery notes',
       body: 'The review matched what arrived, including the small downsides I wanted to know before buying.',
       rating: 5,
       user: { full_name: 'Maya R.' },
       product: { name: 'Wireless headphones' },
-    },
-    {
-      title: 'Useful before checkout',
-      body: 'The best comments were from verified buyers and helped me compare two similar models quickly.',
-      rating: 4,
-      user: { full_name: 'Jon A.' },
-      product: { name: 'Countertop blender' },
-    },
-    {
-      title: 'No hype, just the details',
-      body: 'I could see why people liked it and where it fell short after a few weeks of use.',
-      rating: 5,
-      user: { full_name: 'Sofia K.' },
-      product: { name: 'Running shoes' },
-    },
-  ];
-  const rawReviews = (recentReviews?.length ? recentReviews : fallbackReviews).slice(0, 3);
+    };
+  const review = recentReviews?.[0] || fallbackReview;
+  const author = review.user?.full_name || review.user?.username || review.author || 'Verified buyer';
+  const product = review.product?.name || (typeof review.product === 'string' ? review.product : 'Reviewed product');
+  const rating = Math.max(0, Math.min(5, Math.round(Number(review.rating) || 5)));
 
   return (
     <div className="trust-shell">
@@ -87,73 +74,48 @@ export function LandingPageClient({ statItems, recentReviews }: Props) {
             className="flex items-center"
           >
             <div className="review-intel-card relative w-full overflow-hidden rounded-[2rem] p-5 sm:p-7">
-              <div className="rounded-[1.35rem] border border-[var(--border)] bg-[var(--surface)] p-5 shadow-xl shadow-emerald-900/10">
-                <div className="border-b border-[var(--border)] pb-5">
-                  <p className="text-label-mono text-[var(--primary)]">Review search</p>
-                  <h2 className="mt-2 text-2xl font-black text-[var(--foreground)]">What are you looking for?</h2>
-                  <div className="mt-4 flex items-center gap-3 rounded-2xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-sm font-bold text-[var(--muted)]">
-                    <SearchCheck className="h-5 w-5 shrink-0 text-[var(--primary)]" />
-                    <span className="truncate">Search products, brands, or categories</span>
+              <div className="rounded-[1.35rem] border border-[var(--border)] bg-[var(--surface)] p-6 shadow-xl shadow-emerald-900/10">
+                <div className="flex items-start justify-between gap-4 border-b border-[var(--border)] pb-5">
+                  <div>
+                    <p className="text-label-mono text-[var(--primary)]">Latest verified review</p>
+                    <h2 className="mt-2 max-w-sm text-2xl font-black leading-tight text-[var(--foreground)]">
+                      {review.title || 'Recent buyer note'}
+                    </h2>
                   </div>
-                </div>
-
-                <div className="border-b border-[var(--border)] py-5">
-                  <p className="text-sm font-black text-[var(--foreground)]">Popular categories</p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {categoryLinks.map((category) => (
-                      <Link
-                        key={category}
-                        href={`/products?category=${encodeURIComponent(category)}`}
-                        className="rounded-full border border-[var(--border)] bg-[var(--background)] px-3 py-1.5 text-xs font-extrabold text-[var(--foreground)] transition hover:border-[var(--primary)] hover:text-[var(--primary)]"
-                      >
-                        {category}
-                      </Link>
-                    ))}
+                  <div className="shrink-0 rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-right">
+                    <p className="text-data text-xl font-black text-[var(--foreground)]">{rating}.0</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.08em] text-[var(--muted)]">Rating</p>
                   </div>
                 </div>
 
                 <div className="pt-5">
-                  <div className="flex items-center justify-between gap-3">
-                    <p className="text-sm font-black text-[var(--foreground)]">Recent reviews</p>
-                    <Link href="/products" className="text-xs font-black text-[var(--primary)] hover:underline">
-                      See all
-                    </Link>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex items-center">
+                      {Array.from({ length: 5 }).map((_, starIndex) => (
+                        <Star
+                          key={starIndex}
+                          className={`h-4 w-4 ${starIndex < rating ? 'fill-[var(--secondary)] text-[var(--secondary)]' : 'fill-[var(--border)] text-[var(--border)]'}`}
+                        />
+                      ))}
+                    </div>
+                    <p className="text-sm font-black text-[var(--foreground)]">{author}</p>
+                    <span className="h-1 w-1 rounded-full bg-[var(--border)]" />
+                    <p className="text-sm font-bold text-[var(--muted)]">{product}</p>
                   </div>
-                  <div className="mt-3 space-y-3">
-                    {rawReviews.map((item, index) => {
-                      const author = item.user?.full_name || item.user?.username || item.author || 'Verified buyer';
-                      const product = item.product?.name || (typeof item.product === 'string' ? item.product : 'Reviewed product');
-                      const rating = Math.max(0, Math.min(5, Math.round(Number(item.rating) || 5)));
-                      return (
-                        <motion.div
-                          key={`${item.title || product}-${index}`}
-                          whileHover={reduced ? {} : { y: -2 }}
-                          className="rounded-2xl border border-[var(--border)] bg-[var(--background)] p-4"
-                        >
-                          <div className="flex items-start gap-3">
-                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--primary-soft)] text-sm font-black text-[var(--primary)]">
-                              {String(author).charAt(0).toUpperCase()}
-                            </div>
-                            <div className="min-w-0 flex-1">
-                              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                                <p className="truncate text-sm font-black text-[var(--foreground)]">{author}</p>
-                                <div className="flex items-center">
-                                  {Array.from({ length: 5 }).map((_, starIndex) => (
-                                    <Star
-                                      key={starIndex}
-                                      className={`h-3.5 w-3.5 ${starIndex < rating ? 'fill-[var(--secondary)] text-[var(--secondary)]' : 'fill-[var(--border)] text-[var(--border)]'}`}
-                                    />
-                                  ))}
-                                </div>
-                              </div>
-                              <p className="mt-1 truncate text-xs font-bold text-[var(--muted)]">{product}</p>
-                              <p className="mt-2 text-sm font-black text-[var(--foreground)]">{item.title || 'Recent review'}</p>
-                              <p className="mt-1 line-clamp-2 text-xs leading-5 text-[var(--muted)]">{item.body || item.text || 'A verified buyer shared enough detail to make the product easier to judge.'}</p>
-                            </div>
-                          </div>
-                        </motion.div>
-                      );
-                    })}
+
+                  <p className="mt-5 text-base leading-8 text-[var(--muted)]">
+                    {review.body || review.text || 'A verified buyer shared enough detail to make the product easier to judge.'}
+                  </p>
+
+                  <div className="mt-6 grid gap-3 border-t border-[var(--border)] pt-5 sm:grid-cols-2">
+                    <div>
+                      <p className="text-label-mono text-[var(--primary)]">Evidence</p>
+                      <p className="mt-1 text-sm font-bold text-[var(--foreground)]">Purchase context checked</p>
+                    </div>
+                    <div>
+                      <p className="text-label-mono text-[var(--secondary)]">Moderation</p>
+                      <p className="mt-1 text-sm font-bold text-[var(--foreground)]">Duplicate signals screened</p>
+                    </div>
                   </div>
                 </div>
               </div>
