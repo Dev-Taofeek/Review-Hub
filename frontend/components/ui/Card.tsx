@@ -18,7 +18,7 @@ export function Card({ children, className, hover = false, padding = 'md' }: Car
   return (
     <div
       className={cn(
-        'rounded-lg trust-card',
+        'rounded-2xl trust-card',
         hover && 'trust-card-hover cursor-pointer',
         paddings[padding],
         className
@@ -39,7 +39,7 @@ export function CardHeader({ children, className }: { children: React.ReactNode;
 
 export function CardTitle({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <h3 className={cn('text-base font-black text-[var(--foreground)]', className)}>
+    <h3 className={cn('text-base font-bold text-[var(--foreground)]', className)}>
       {children}
     </h3>
   );

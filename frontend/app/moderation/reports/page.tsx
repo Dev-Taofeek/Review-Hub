@@ -61,8 +61,8 @@ export default function ModerationReportsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
-        <h2 className="text-lg font-bold text-[var(--foreground)]">
-          Reports <span className="text-[var(--muted)] font-normal">({total})</span>
+        <h2 className="text-lg font-bold text-slate-900 dark:text-white">
+          Reports <span className="text-slate-400 dark:text-slate-500 font-normal">({total})</span>
         </h2>
         <Select
           options={STATUS_OPTIONS}
@@ -85,24 +85,24 @@ export default function ModerationReportsPage() {
       ) : (
         <>
           {/* overflow-x-auto allows horizontal scroll on narrow screens */}
-          <div className="rounded-xl bg-[var(--surface)] border border-[var(--border)] overflow-x-auto ">
-            <table className="min-w-full divide-y divide-[var(--border)]">
-              <thead className="bg-[var(--surface-soft)]">
+          <div className="rounded-xl bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07] overflow-x-auto shadow-sm">
+            <table className="min-w-full divide-y divide-slate-100 dark:divide-white/[0.06]">
+              <thead className="bg-slate-50 dark:bg-white/[0.03]">
                 <tr>
                   {['Review', 'Reason', 'Reporter', 'Date', 'Status', 'Actions'].map((h) => (
-                    <th key={h} className="px-4 py-3 text-left text-xs font-bold text-[var(--muted)] uppercase tracking-wider whitespace-nowrap">{h}</th>
+                    <th key={h} className="px-4 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider whitespace-nowrap">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[var(--border)] bg-[var(--surface)]">
+              <tbody className="divide-y divide-slate-50 dark:divide-white/[0.04] bg-white dark:bg-[#0D1020]">
                 {reports.map((report) => (
-                  <tr key={report.id} className="hover:bg-[var(--surface-soft)] transition-colors">
+                  <tr key={report.id} className="hover:bg-slate-50 dark:hover:bg-white/[0.03] transition-colors">
                     <td className="px-4 py-3 max-w-xs">
-                      <p className="text-sm font-medium text-[var(--foreground)] truncate">
+                      <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">
                         {(report.review as { title?: string })?.title ?? 'Deleted review'}
                       </p>
                       {report.message && (
-                        <p className="text-xs text-[var(--muted)] truncate mt-0.5">"{report.message}"</p>
+                        <p className="text-xs text-slate-500 truncate mt-0.5">"{report.message}"</p>
                       )}
                     </td>
                     <td className="px-4 py-3">
@@ -111,10 +111,10 @@ export default function ModerationReportsPage() {
                         {getReasonLabel(report.reason)}
                       </Badge>
                     </td>
-                    <td className="px-4 py-3 text-xs text-[var(--muted)]">
+                    <td className="px-4 py-3 text-xs text-slate-500">
                       {(report.reporter as { username?: string })?.username ?? 'Unknown'}
                     </td>
-                    <td className="px-4 py-3 text-xs text-[var(--muted)]">
+                    <td className="px-4 py-3 text-xs text-slate-500">
                       {formatRelativeTime(report.created_at)}
                     </td>
                     <td className="px-4 py-3"><StatusBadge status={report.status} /></td>

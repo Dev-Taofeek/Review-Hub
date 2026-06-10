@@ -36,7 +36,7 @@ export function ThemeToggle({ className }: { className?: string }) {
 
       {/* Sliding thumb */}
       <span className={cn(
-        'absolute h-6 w-6 rounded-full  transition-all duration-300 flex items-center justify-center',
+        'absolute h-6 w-6 rounded-full shadow-sm transition-all duration-300 flex items-center justify-center',
         isDark
           ? 'translate-x-[1.5rem] bg-[var(--primary)] border border-emerald-300/30'
           : 'translate-x-0.5 bg-[var(--surface)] border border-[var(--border)] shadow-xs'

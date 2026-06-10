@@ -7,12 +7,12 @@ export default function RootLoading() {
         <Skeleton className="h-10 w-64 rounded-xl" />
         <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-36 rounded-lg" />
+            <Skeleton key={i} className="h-36 rounded-2xl" />
           ))}
         </div>
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-64 rounded-lg" />
+            <Skeleton key={i} className="h-64 rounded-2xl" />
           ))}
         </div>
       </div>

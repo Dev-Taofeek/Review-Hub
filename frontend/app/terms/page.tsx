@@ -137,19 +137,19 @@ export default function TermsPage() {
         <div className="absolute inset-x-0 top-0 h-1 bg-[var(--secondary)]" />
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 relative">
           <div className="flex items-center gap-2 mb-4">
-            <Link href="/" className="flex items-center gap-2 text-[var(--muted)] hover:text-white transition-colors text-sm">
+            <Link href="/" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
               <Star className="h-4 w-4" /> ReviewHub
             </Link>
-            <span className="text-[var(--muted)]">/</span>
-            <span className="text-[var(--muted)] text-sm">Terms of Service</span>
+            <span className="text-gray-600">/</span>
+            <span className="text-gray-300 text-sm">Terms of Service</span>
           </div>
           <div className="flex items-start gap-4">
-            <div className="h-12 w-12 rounded-lg bg-violet-600/20 border border-violet-500/30 flex items-center justify-center shrink-0">
+            <div className="h-12 w-12 rounded-2xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center shrink-0">
               <FileText className="h-6 w-6 text-violet-400" />
             </div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-white">Terms of Service</h1>
-              <p className="text-[var(--muted)] mt-1">Last updated: {LAST_UPDATED}</p>
+              <p className="text-gray-400 mt-1">Last updated: {LAST_UPDATED}</p>
             </div>
           </div>
         </div>
@@ -161,12 +161,12 @@ export default function TermsPage() {
 
           {/* Sticky TOC */}
           <aside className="lg:col-span-1 hidden lg:block">
-            <div className="sticky top-20 rounded-lg border border-[var(--border)] bg-[var(--surface)]  p-4">
-              <p className="text-xs font-semibold uppercase tracking-widest text-[var(--muted)] mb-3">Contents</p>
+            <div className="sticky top-20 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white dark:bg-[#0D1020] shadow-sm p-4">
+              <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Contents</p>
               <nav className="space-y-1">
                 {SECTIONS.map((s) => (
                   <a key={s.id} href={`#${s.id}`}
-                    className="block text-xs text-[var(--muted)] hover:text-brand-600 dark:hover:text-brand-400 py-1 border-l-2 border-transparent hover:border-brand-500 pl-2.5 transition-all leading-relaxed">
+                    className="block text-xs text-gray-600 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 py-1 border-l-2 border-transparent hover:border-brand-500 pl-2.5 transition-all leading-relaxed">
                     {s.title}
                   </a>
                 ))}
@@ -177,7 +177,7 @@ export default function TermsPage() {
           {/* Main content */}
           <main className="lg:col-span-3 space-y-10">
             {/* Summary box */}
-            <div className="rounded-lg border border-violet-200 dark:border-violet-800/50 bg-violet-50 dark:bg-violet-950/20 p-5">
+            <div className="rounded-2xl border border-violet-200 dark:border-violet-800/50 bg-violet-50 dark:bg-violet-950/20 p-5">
               <p className="text-sm font-semibold text-violet-800 dark:text-violet-300 mb-2">Please read carefully</p>
               <p className="text-sm text-violet-700 dark:text-violet-400 leading-relaxed">
                 By using ReviewHub, you agree to post honest reviews of products you have genuinely used, treat other community members with respect, and follow our content standards. Fake, incentivised, or abusive reviews will result in account termination.
@@ -186,20 +186,20 @@ export default function TermsPage() {
 
             {SECTIONS.map((section) => (
               <section key={section.id} id={section.id} className="scroll-mt-20">
-                <h2 className="text-lg font-bold text-[var(--foreground)] mb-3 pb-2 border-b border-[var(--border)]">
+                <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3 pb-2 border-b border-gray-200 dark:border-white/10">
                   {section.title}
                 </h2>
 
                 {'content' in section && section.content && (
-                  <p className="text-sm text-[var(--muted)] leading-relaxed mb-4">{section.content}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4">{section.content}</p>
                 )}
 
                 {'subsections' in section && section.subsections?.map((sub) => (
                   <div key={sub.title} className="mb-5">
-                    <h3 className="text-sm font-semibold text-[var(--foreground)] mb-2">{sub.title}</h3>
+                    <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">{sub.title}</h3>
                     <ul className="space-y-1.5">
                       {sub.content.map((item, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-[var(--muted)]">
+                        <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
                           <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-violet-500 shrink-0" />
                           {item}
                         </li>
@@ -211,7 +211,7 @@ export default function TermsPage() {
                 {'bullets' in section && section.bullets && (
                   <ul className="space-y-1.5">
                     {section.bullets.map((b, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-[var(--muted)]">
+                      <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
                         <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-violet-500 shrink-0" />
                         {b}
                       </li>
@@ -220,8 +220,8 @@ export default function TermsPage() {
                 )}
 
                 {'contact' in section && section.contact && (
-                  <div className="mt-3 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] p-4">
-                    <p className="text-sm text-[var(--muted)] font-mono whitespace-pre-line">{section.contact.address}</p>
+                  <div className="mt-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 p-4">
+                    <p className="text-sm text-gray-600 dark:text-gray-300 font-mono whitespace-pre-line">{section.contact.address}</p>
                   </div>
                 )}
               </section>
@@ -230,9 +230,9 @@ export default function TermsPage() {
         </div>
 
         {/* Footer nav */}
-        <div className="mt-12 pt-6 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-[var(--muted)]">&copy; {new Date().getFullYear()} ReviewHub, Inc. All rights reserved.</p>
-          <div className="flex gap-4 text-xs text-[var(--muted)]">
+        <div className="mt-12 pt-6 border-t border-gray-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-gray-400">&copy; {new Date().getFullYear()} ReviewHub, Inc. All rights reserved.</p>
+          <div className="flex gap-4 text-xs text-gray-400">
             <Link href="/terms"   className="text-brand-600 dark:text-brand-400 font-medium">Terms of Service</Link>
             <Link href="/privacy" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Privacy Policy</Link>
             <Link href="/"        className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Home</Link>

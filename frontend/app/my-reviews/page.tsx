@@ -45,12 +45,12 @@ export default function MyReviewsPage() {
           <motion.div variants={reduced ? {} : staggerItem} className="flex items-start justify-between gap-4 flex-wrap">
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <div className="h-10 w-10 rounded-xl bg-[var(--primary)] flex items-center justify-center  shadow-emerald-900/20">
+                <div className="h-10 w-10 rounded-xl bg-[var(--primary)] flex items-center justify-center shadow-lg shadow-emerald-900/20">
                   <BookOpen className="h-5 w-5 text-white" />
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--foreground)]">My Reviews</h1>
+                <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">My Reviews</h1>
               </div>
-              <p className="text-sm text-[var(--muted)] ml-[52px]">
+              <p className="text-sm text-slate-500 dark:text-slate-400 ml-[52px]">
                 {total > 0 ? `${total} review${total !== 1 ? 's' : ''} submitted` : 'No reviews yet'}
               </p>
             </div>
@@ -71,13 +71,13 @@ export default function MyReviewsPage() {
             variants={reduced ? {} : staggerItem}
             initial="hidden"
             animate="visible"
-            className="rounded-lg border border-[var(--border)] bg-[var(--surface)]  p-16 text-center"
+            className="rounded-2xl border border-slate-200/60 dark:border-white/[0.07] bg-white dark:bg-[#0c1526] shadow-sm p-16 text-center"
           >
-            <div className="inline-flex h-20 w-20 rounded-lg bg-violet-50 dark:bg-violet-950/30 items-center justify-center mx-auto mb-5">
+            <div className="inline-flex h-20 w-20 rounded-3xl bg-violet-50 dark:bg-violet-950/30 items-center justify-center mx-auto mb-5">
               <Star className="h-10 w-10 text-violet-400" />
             </div>
-            <h2 className="text-lg font-bold text-[var(--foreground)] mb-2">No reviews yet</h2>
-            <p className="text-sm text-[var(--muted)] mb-6 max-w-xs mx-auto">
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">No reviews yet</h2>
+            <p className="text-sm text-slate-400 dark:text-slate-500 mb-6 max-w-xs mx-auto">
               You haven't written any reviews yet. Browse products and share your experience.
             </p>
             <Button onClick={() => router.push('/products')}>Browse Products</Button>

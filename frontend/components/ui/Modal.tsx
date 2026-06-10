@@ -83,7 +83,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
       onClick={(e) => { if (e.target === overlayRef.current) onClose(); }}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-[#081711]/70" aria-hidden="true" />
+      <div className="absolute inset-0 bg-[#031A14]/62 backdrop-blur-sm animate-fade-in" aria-hidden="true" />
 
       {/* Dialog */}
       <div
@@ -93,7 +93,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
         aria-labelledby={title ? 'modal-title' : undefined}
         aria-describedby={description ? 'modal-description' : undefined}
         className={cn(
-          'relative z-10 w-full rounded-lg trust-card',
+          'relative z-10 w-full rounded-2xl trust-card shadow-modal animate-scale-in',
           'flex flex-col max-h-[90vh]',
           sizes[size],
           className
@@ -115,7 +115,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
             <button
               onClick={onClose}
               aria-label="Close dialog"
-              className="rounded-md p-1 text-[var(--muted)] transition-colors hover:bg-[var(--surface-soft)] hover:text-[var(--foreground)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
+              className="rounded-lg p-1 text-[var(--muted)] hover:bg-[var(--surface-soft)] hover:text-[var(--foreground)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
             >
               <X className="h-5 w-5" aria-hidden="true" />
             </button>
@@ -125,7 +125,7 @@ export function Modal({ open, onClose, title, description, children, size = 'md'
           <button
             onClick={onClose}
             aria-label="Close dialog"
-            className="absolute right-4 top-4 z-10 rounded-md p-1 text-[var(--muted)] transition-colors hover:bg-[var(--surface-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
+            className="absolute right-4 top-4 z-10 rounded-lg p-1 text-[var(--muted)] hover:bg-[var(--surface-soft)] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
           >
             <X className="h-5 w-5" aria-hidden="true" />
           </button>

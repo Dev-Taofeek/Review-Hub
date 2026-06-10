@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Github, Twitter } from 'lucide-react';
+import { Star, Github, Twitter } from 'lucide-react';
 
 const LINKS = {
   Product:  [
@@ -24,17 +24,17 @@ export function Footer() {
 
           {/* Brand */}
           <div className="col-span-2 lg:col-span-2">
-            <Link href="/" className="mb-4 inline-flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center border border-[var(--primary)] bg-[var(--primary)] text-sm font-black text-white">
-                RH
+            <Link href="/" className="inline-flex items-center gap-3 mb-4 group">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[var(--primary)] shadow-md shadow-emerald-900/20 transition-shadow">
+                <Star className="h-4.5 w-4.5 fill-white text-white" aria-hidden="true" />
               </div>
               <div>
                 <span className="block text-[15px] font-black tracking-tight text-[var(--foreground)]">ReviewHub</span>
-                <span className="text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--primary)]">Product evidence</span>
+                <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-[var(--primary)]">Verified Reviews</span>
               </div>
             </Link>
             <p className="max-w-[260px] text-sm leading-relaxed text-[var(--muted)]">
-              Product reviews organized around evidence, verification, and moderation transparency.
+              The most trusted platform for honest product reviews. Community-built, spam-free.
             </p>
             <div className="flex items-center gap-3 mt-5">
               {[
@@ -43,7 +43,7 @@ export function Footer() {
               ].map(({ icon: Icon, href, label }) => (
                 <a key={label} href={href} target="_blank" rel="noopener noreferrer"
                   aria-label={label}
-                  className="flex h-8 w-8 items-center justify-center rounded-md border border-[var(--border)] bg-[var(--surface-soft)] text-[var(--muted)] transition-colors hover:border-[var(--primary)] hover:text-[var(--primary)]">
+                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface-soft)] text-[var(--muted)] transition-all hover:border-[var(--primary)] hover:text-[var(--primary)]">
                   <Icon className="h-3.5 w-3.5" aria-hidden="true" />
                 </a>
               ))}

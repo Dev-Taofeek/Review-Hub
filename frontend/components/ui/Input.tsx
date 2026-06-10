@@ -3,16 +3,26 @@
 import { forwardRef } from 'react';
 import { cn } from '@/lib/utils';
 
+/* ── Shared field base ──────────────────────────────────── */
 const fieldBase = [
-  'w-full rounded-md border border-[var(--border)]',
-  'bg-[var(--surface)] px-3.5 py-2.5 text-sm text-[var(--foreground)]',
+  'w-full rounded-xl border',
+  'bg-[var(--surface)]',
+  'px-3.5 py-2.5 text-sm',
+  'text-[var(--foreground)]',
   'placeholder:text-[var(--text-3)]',
-  'transition-colors duration-150',
+  'shadow-sm',
+  'transition-all duration-150',
+  'focus:outline-none focus:ring-2 focus:ring-[var(--ring)] focus:border-[var(--primary)]',
   'hover:border-[var(--primary)]',
-  'focus:border-[var(--primary)] focus:outline-none focus:ring-2 focus:ring-[var(--ring)]',
-  'disabled:cursor-not-allowed disabled:bg-[var(--surface-soft)] disabled:opacity-60',
+  'disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[var(--surface-soft)]',
 ].join(' ');
 
+const fieldBorder = {
+  normal: 'border-[var(--border)]',
+  error:  'border-red-400 dark:border-red-500/70 focus:ring-red-400/50 focus:border-red-400',
+};
+
+/* ── Input ─────────────────────────────────────────────── */
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
@@ -29,7 +39,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {label && (
           <label htmlFor={inputId} className="text-sm font-bold text-[var(--foreground)]">
             {label}
-            {rest.required && <span className="ml-1 text-[var(--danger)]" aria-hidden="true">*</span>}
+            {rest.required && <span className="ml-1 text-red-500" aria-hidden="true">*</span>}
           </label>
         )}
         <div className="relative">
@@ -43,7 +53,13 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             aria-invalid={!!error}
             aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
-            className={cn(fieldBase, error && 'border-[var(--danger)] focus:border-[var(--danger)] focus:ring-[var(--danger-soft)]', icon && 'pl-10', iconRight && 'pr-10', className)}
+            className={cn(
+              fieldBase,
+              error ? fieldBorder.error : fieldBorder.normal,
+              icon      && 'pl-10',
+              iconRight && 'pr-10',
+              className
+            )}
             {...rest}
           />
           {iconRight && (
@@ -53,15 +69,21 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
         {error && (
-          <p id={`${inputId}-error`} role="alert" className="text-xs font-bold text-[var(--danger)]">{error}</p>
+          <p id={`${inputId}-error`} role="alert" className="flex items-center gap-1.5 text-xs font-medium text-red-500 dark:text-red-400">
+            <span className="h-3.5 w-3.5 rounded-full bg-red-500/15 flex items-center justify-center text-[9px] font-bold leading-none shrink-0">!</span>
+            {error}
+          </p>
         )}
-        {hint && !error && <p id={`${inputId}-hint`} className="text-xs text-[var(--muted)]">{hint}</p>}
+        {hint && !error && (
+          <p id={`${inputId}-hint`} className="text-xs text-[var(--muted)]">{hint}</p>
+        )}
       </div>
     );
   }
 );
 Input.displayName = 'Input';
 
+/* ── Textarea ──────────────────────────────────────────── */
 interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
   error?: string;
@@ -76,25 +98,35 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         {label && (
           <label htmlFor={inputId} className="text-sm font-bold text-[var(--foreground)]">
             {label}
-            {rest.required && <span className="ml-1 text-[var(--danger)]" aria-hidden="true">*</span>}
+            {rest.required && <span className="ml-1 text-red-500" aria-hidden="true">*</span>}
           </label>
         )}
         <textarea
           ref={ref}
           id={inputId}
           aria-invalid={!!error}
-          aria-describedby={error ? `${inputId}-error` : hint ? `${inputId}-hint` : undefined}
-          className={cn(fieldBase, 'min-h-[120px] resize-y', error && 'border-[var(--danger)] focus:border-[var(--danger)] focus:ring-[var(--danger-soft)]', className)}
+          className={cn(
+            fieldBase,
+            'resize-vertical min-h-[100px]',
+            error ? fieldBorder.error : fieldBorder.normal,
+            className
+          )}
           {...rest}
         />
-        {error && <p id={`${inputId}-error`} role="alert" className="text-xs font-bold text-[var(--danger)]">{error}</p>}
-        {hint && !error && <p id={`${inputId}-hint`} className="text-xs text-[var(--muted)]">{hint}</p>}
+        {error && (
+          <p role="alert" className="flex items-center gap-1.5 text-xs font-medium text-red-500 dark:text-red-400">
+            <span className="h-3.5 w-3.5 rounded-full bg-red-500/15 flex items-center justify-center text-[9px] font-bold leading-none shrink-0">!</span>
+            {error}
+          </p>
+        )}
+        {hint && !error && <p className="text-xs text-[var(--muted)]">{hint}</p>}
       </div>
     );
   }
 );
 Textarea.displayName = 'Textarea';
 
+/* ── Select ────────────────────────────────────────────── */
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   error?: string;
@@ -107,18 +139,26 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
     const inputId = id || label?.toLowerCase().replace(/\s+/g, '-');
     return (
       <div className="flex flex-col gap-1.5">
-        {label && <label htmlFor={inputId} className="text-sm font-bold text-[var(--foreground)]">{label}</label>}
+        {label && (
+          <label htmlFor={inputId} className="text-sm font-bold text-[var(--foreground)]">
+            {label}
+          </label>
+        )}
         <select
           ref={ref}
           id={inputId}
-          aria-invalid={!!error}
-          className={cn(fieldBase, 'cursor-pointer', error && 'border-[var(--danger)] focus:border-[var(--danger)] focus:ring-[var(--danger-soft)]', className)}
+          className={cn(
+            fieldBase,
+            'cursor-pointer appearance-none',
+            error ? fieldBorder.error : fieldBorder.normal,
+            className
+          )}
           {...rest}
         >
           {placeholder && <option value="">{placeholder}</option>}
-          {options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+          {options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
-        {error && <p role="alert" className="text-xs font-bold text-[var(--danger)]">{error}</p>}
+        {error && <p role="alert" className="text-xs font-medium text-red-500 dark:text-red-400">{error}</p>}
       </div>
     );
   }

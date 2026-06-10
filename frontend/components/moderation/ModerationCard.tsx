@@ -39,12 +39,12 @@ export function ModerationCard({ review, onAction }: ModerationCardProps) {
   const spamScore = review.spam_score ?? 0;
 
   return (
-    <article className="trust-card overflow-hidden rounded-lg">
+    <article className="trust-card overflow-hidden rounded-3xl">
       {/* Spam score bar */}
       {spamScore > 0 && (
         <div className="h-1 w-full bg-[var(--surface-soft)]">
           <div
-            className={`h-full transition-all ${spamScore >= 70 ? 'bg-[var(--danger)]' : spamScore >= 30 ? 'bg-[var(--secondary)]' : 'bg-[var(--primary)]'}`}
+            className={`h-full transition-all ${spamScore >= 70 ? 'bg-red-500' : spamScore >= 30 ? 'bg-amber-400' : 'bg-emerald-400'}`}
             style={{ width: `${spamScore}%` }}
           />
         </div>
@@ -90,7 +90,7 @@ export function ModerationCard({ review, onAction }: ModerationCardProps) {
         <div className="flex items-center gap-2 border-t border-[var(--border)] pt-3">
           <Button
             size="sm" variant="secondary"
-            icon={<CheckCircle className="h-4 w-4 text-[var(--primary)]" />}
+            icon={<CheckCircle className="h-4 w-4 text-emerald-600" />}
             loading={loading === 'approve'}
             disabled={!!loading || review.status === 'published'}
             onClick={() => handle('approve')}
@@ -100,7 +100,7 @@ export function ModerationCard({ review, onAction }: ModerationCardProps) {
           </Button>
           <Button
             size="sm" variant="secondary"
-            icon={<Flag className="h-4 w-4 text-[var(--secondary)]" />}
+            icon={<Flag className="h-4 w-4 text-amber-600" />}
             loading={loading === 'flag'}
             disabled={!!loading || review.status === 'flagged'}
             onClick={() => handle('flag')}
@@ -110,11 +110,11 @@ export function ModerationCard({ review, onAction }: ModerationCardProps) {
           </Button>
           <Button
             size="sm" variant="secondary"
-            icon={<XCircle className="h-4 w-4 text-[var(--danger)]" />}
+            icon={<XCircle className="h-4 w-4 text-red-500" />}
             loading={loading === 'reject'}
             disabled={!!loading || review.status === 'rejected'}
             onClick={() => handle('reject')}
-            className="flex-1 text-[var(--danger)]"
+            className="flex-1 text-red-600"
           >
             Reject
           </Button>

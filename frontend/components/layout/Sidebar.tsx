@@ -42,7 +42,7 @@ export function Sidebar({ items, title }: SidebarProps) {
               className={cn(
                 'group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
                 active
-                  ? 'bg-[var(--primary-soft)] text-[var(--primary)] '
+                  ? 'bg-[var(--primary-soft)] text-[var(--primary)] shadow-sm'
                   : 'text-[var(--muted)] hover:bg-[var(--surface-soft)] hover:text-[var(--foreground)]'
               )}
             >
@@ -55,7 +55,7 @@ export function Sidebar({ items, title }: SidebarProps) {
               <span className={cn(
                 'flex h-8 w-8 items-center justify-center rounded-lg shrink-0 transition-all duration-200 [&>svg]:h-4 [&>svg]:w-4',
                 active
-                  ? 'bg-[var(--surface)] text-[var(--primary)] '
+                  ? 'bg-[var(--surface)] text-[var(--primary)] shadow-sm'
                   : 'bg-[var(--surface-soft)] text-[var(--muted)] group-hover:text-[var(--foreground)]'
               )}>
                 {item.icon}

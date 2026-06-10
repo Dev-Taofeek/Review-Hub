@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Input, Select } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useCategories } from '@/hooks/useProducts';
@@ -21,30 +22,30 @@ interface ProductFiltersProps {
 }
 
 const SORT_OPTIONS = [
-  { value: 'newest', label: 'Newest first' },
-  { value: 'rating_desc', label: 'Highest rated' },
-  { value: 'most_reviewed', label: 'Most reviewed' },
-  { value: 'price_asc', label: 'Price: Low to High' },
-  { value: 'price_desc', label: 'Price: High to Low' },
+  { value: 'newest',       label: 'Newest first'    },
+  { value: 'rating_desc',  label: 'Highest rated'   },
+  { value: 'most_reviewed',label: 'Most reviewed'   },
+  { value: 'price_asc',    label: 'Price: Low → High'},
+  { value: 'price_desc',   label: 'Price: High → Low'},
 ];
 
 const RATING_OPTIONS = [
-  { value: '', label: 'Any rating' },
-  { value: '4.5', label: '4.5 and up' },
-  { value: '4', label: '4.0 and up' },
-  { value: '3', label: '3.0 and up' },
+  { value: '',    label: 'Any rating'  },
+  { value: '4.5', label: '4.5+ ⭐⭐⭐⭐½' },
+  { value: '4',   label: '4.0+ ⭐⭐⭐⭐'   },
+  { value: '3',   label: '3.0+ ⭐⭐⭐'     },
 ];
 
 export function ProductFilters({ initialFilters = {}, onFiltersChange }: ProductFiltersProps) {
   const { categories } = useCategories();
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [filters, setFilters] = useState<FiltersState>({
-    search: '',
-    category: '',
-    minPrice: '',
-    maxPrice: '',
+    search:    '',
+    category:  '',
+    minPrice:  '',
+    maxPrice:  '',
     minRating: '',
-    sortBy: 'newest',
+    sortBy:    'newest',
     ...initialFilters,
   });
 
@@ -64,31 +65,46 @@ export function ProductFilters({ initialFilters = {}, onFiltersChange }: Product
 
   return (
     <div className="flex flex-col gap-3">
-      <Input
-        placeholder="Search products"
-        value={filters.search}
-        onChange={(e) => update('search', e.target.value)}
-        icon={<Search className="h-4 w-4" />}
-      />
-      <Select
-        options={SORT_OPTIONS}
-        value={filters.sortBy}
-        onChange={(e) => update('sortBy', e.target.value)}
-        className="w-full"
-      />
-      <Button
-        variant={showAdvanced ? 'primary' : 'outline'}
-        size="md"
-        icon={<SlidersHorizontal className="h-4 w-4" />}
-        onClick={() => setShowAdvanced(!showAdvanced)}
-        className="w-full shrink-0"
-      >
-        Filters
-        {hasActive && <span className="ml-1 text-[10px] font-black">Active</span>}
-      </Button>
+      {/* Search + sort row */}
+      <div className="flex flex-col gap-2">
+        <div className="flex-1">
+          <Input
+            placeholder="Search products…"
+            value={filters.search}
+            onChange={(e) => update('search', e.target.value)}
+            icon={<Search className="h-4 w-4" />}
+          />
+        </div>
+        <Select
+          options={SORT_OPTIONS}
+          value={filters.sortBy}
+          onChange={(e) => update('sortBy', e.target.value)}
+          className="w-full"
+        />
+        <Button
+          variant={showAdvanced ? 'primary' : 'outline'}
+          size="md"
+          icon={<SlidersHorizontal className="h-4 w-4" />}
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className="w-full shrink-0"
+        >
+          Filters
+          {hasActive && (
+            <span className="ml-1 flex h-4 w-4 items-center justify-center rounded-full bg-white/20 text-[10px]">!</span>
+          )}
+        </Button>
+      </div>
 
-      {showAdvanced && (
-        <div className="border border-[var(--border)] bg-[var(--surface)] p-4">
+      {/* Advanced filters */}
+      <AnimatePresence initial={false}>
+        {showAdvanced && (
+        <motion.div
+          initial={{ opacity: 0, height: 0, y: -6 }}
+          animate={{ opacity: 1, height: 'auto', y: 0 }}
+          exit={{ opacity: 0, height: 0, y: -6 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 30 }}
+          className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 shadow-sm"
+        >
           <div className="grid grid-cols-1 gap-3">
             <Select
               label="Category"
@@ -97,13 +113,13 @@ export function ProductFilters({ initialFilters = {}, onFiltersChange }: Product
               onChange={(e) => update('category', e.target.value)}
             />
             <Select
-              label="Minimum rating"
+              label="Min Rating"
               options={RATING_OPTIONS}
               value={filters.minRating}
               onChange={(e) => update('minRating', e.target.value)}
             />
             <Input
-              label="Minimum price"
+              label="Min Price ($)"
               type="number"
               min="0"
               placeholder="0"
@@ -111,7 +127,7 @@ export function ProductFilters({ initialFilters = {}, onFiltersChange }: Product
               onChange={(e) => update('minPrice', e.target.value)}
             />
             <Input
-              label="Maximum price"
+              label="Max Price ($)"
               type="number"
               min="0"
               placeholder="Any"
@@ -126,8 +142,9 @@ export function ProductFilters({ initialFilters = {}, onFiltersChange }: Product
               </Button>
             </div>
           )}
-        </div>
-      )}
+        </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

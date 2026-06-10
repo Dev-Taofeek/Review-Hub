@@ -1,6 +1,7 @@
 'use client';
 
 import { forwardRef } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger' | 'outline';
@@ -16,16 +17,18 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variants: Record<Variant, string> = {
   primary: [
-    'bg-[var(--primary)] text-white font-extrabold',
-    'hover:bg-[color-mix(in_srgb,var(--primary)_88%,black)]',
+    'bg-[var(--primary)] text-white font-bold',
+    'shadow-lg shadow-emerald-900/20',
+    'hover:brightness-110',
     'active:brightness-95',
-    'border border-[var(--primary)]',
+    'disabled:shadow-none',
+    'border border-emerald-900/10',
   ].join(' '),
 
   secondary: [
-    'bg-[var(--surface-soft)] text-[var(--foreground)] font-extrabold',
-    'border border-[var(--border)]',
-    'hover:border-[var(--primary)]',
+    'bg-[var(--surface)] text-[var(--foreground)] font-bold',
+    'border border-[var(--border)] shadow-sm',
+    'hover:bg-[var(--surface-soft)] hover:shadow-md',
   ].join(' '),
 
   ghost: [
@@ -34,9 +37,11 @@ const variants: Record<Variant, string> = {
   ].join(' '),
 
   danger: [
-    'bg-[var(--danger)]',
-    'text-white font-extrabold',
-    'border border-[var(--danger)]',
+    'bg-red-600',
+    'text-white font-semibold',
+    'shadow-md shadow-red-900/25',
+    'hover:bg-red-500',
+    'border border-red-500/30',
   ].join(' '),
 
   outline: [
@@ -47,20 +52,25 @@ const variants: Record<Variant, string> = {
 };
 
 const sizes: Record<Size, string> = {
-  xs: 'h-7  px-3   text-xs  gap-1.5 rounded-md',
-  sm: 'h-9  px-3.5 text-sm  gap-2   rounded-md',
-  md: 'h-10 px-4   text-sm  gap-2   rounded-md',
-  lg: 'h-12 px-5   text-base gap-2.5 rounded-md',
+  xs: 'h-7  px-3   text-xs  gap-1.5 rounded-lg',
+  sm: 'h-9  px-3.5 text-sm  gap-2   rounded-xl',
+  md: 'h-10 px-4   text-sm  gap-2   rounded-xl',
+  lg: 'h-12 px-5   text-base gap-2.5 rounded-xl',
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ variant = 'primary', size = 'md', loading, icon, iconRight, className, children, disabled, ...rest }, ref) => {
+    const reduced = useReducedMotion();
+
     return (
-      <button
+      <motion.button
         ref={ref}
         disabled={disabled || loading}
+        whileHover={(!disabled && !loading && !reduced) ? { scale: 1.015 } : {}}
+        whileTap={(!disabled  && !loading && !reduced)  ? { scale: 0.975 } : {}}
+        transition={{ type: 'spring', stiffness: 420, damping: 26 }}
         className={cn(
-          'inline-flex items-center justify-center transition-colors duration-150',
+          'inline-flex items-center justify-center transition-all duration-150',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]',
           'disabled:pointer-events-none disabled:opacity-50',
           variants[variant],
@@ -74,7 +84,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ) : icon}
         {children}
         {!loading && iconRight}
-      </button>
+      </motion.button>
     );
   }
 );

@@ -6,7 +6,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import {
   Star, ThumbsUp, BookOpen, Clock, CheckCircle2, AlertTriangle, XCircle,
   TrendingUp, ArrowRight, Package, MessageSquare, BarChart2,
-  Plus, Activity, ChevronRight, Zap, Target,
+  Plus, Sparkles, Activity, ChevronRight, Zap, Target,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { authApi } from '@/lib/api';
@@ -71,7 +71,7 @@ function ScoreArc({ score, label, max = 100 }: { score: number; label: string; m
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <AnimatedCounter value={score} className="text-data text-2xl font-black text-[var(--foreground)]" />
+        <AnimatedCounter value={score} className="text-data text-2xl font-black text-slate-900 dark:text-white" />
         <span className="text-label-mono mt-0.5" style={{ color: 'var(--text-3)', fontSize: '9px' }}>{label}</span>
       </div>
     </div>
@@ -110,7 +110,7 @@ export default function DashboardPage() {
 
             <div className="flex items-center gap-5">
               <motion.div variants={reduced ? {} : staggerItem} className="relative">
-                <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-lg overflow-hidden ring-2 ring-offset-2 ring-offset-transparent"
+                <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl overflow-hidden ring-2 ring-offset-2 ring-offset-transparent"
                   style={{ boxShadow: '0 0 0 2px var(--primary-soft), 0 16px 40px rgba(4,120,87,0.12)' }}>
                   <Avatar src={user.avatar_url} name={user.full_name || user.username} size="xl" className="h-full w-full" />
                 </div>
@@ -132,7 +132,7 @@ export default function DashboardPage() {
                   {!loading && ov && ov.reviewsThisMonth > 0 && (
                     <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full"
                       style={{ background: 'rgba(0,229,160,0.1)', border: '1px solid rgba(0,229,160,0.2)', color: '#00E5A0' }}>
-                      <CheckCircle2 className="h-2.5 w-2.5" /> {ov.reviewsThisMonth} this month
+                      <Sparkles className="h-2.5 w-2.5" /> {ov.reviewsThisMonth} this month
                     </span>
                   )}
                 </div>
@@ -163,7 +163,7 @@ export default function DashboardPage() {
         {/* ── Intelligence grid ───────────────────────── */}
         {loading ? (
           <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[...Array(4)].map((_,i) => <Skeleton key={i} className="h-32 rounded-lg" />)}
+            {[...Array(4)].map((_,i) => <Skeleton key={i} className="h-32 rounded-2xl" />)}
           </div>
         ) : ov && (
           <motion.div variants={reduced ? {} : staggerContainer} initial="hidden" animate="visible"
@@ -178,7 +178,7 @@ export default function DashboardPage() {
               return (
                 <motion.div key={card.key} variants={reduced ? {} : staggerItem}
                   whileHover={reduced ? {} : { y: -5, scale: 1.015, transition: { type: 'spring', stiffness: 280, damping: 22 } }}
-                  className="trust-card relative overflow-hidden rounded-lg p-5">
+                  className="trust-card relative overflow-hidden rounded-3xl p-5">
                   {/* Accent glow background */}
                   <div className="absolute right-0 top-0 h-1 w-full pointer-events-none" style={{ background: card.accent }} />
 
@@ -207,7 +207,7 @@ export default function DashboardPage() {
 
             {/* Score arc panel */}
             <motion.div variants={reduced ? {} : staggerItem} initial="hidden" whileInView="visible" viewport={{ once:true }}
-              className="trust-card rounded-lg p-6">
+              className="trust-card rounded-3xl p-6">
               <div className="flex items-center gap-2 mb-5">
                 <Target className="h-4 w-4" style={{ color:'var(--signal)' }} />
                 <h2 className="font-bold text-[var(--foreground)]">Review Health</h2>
@@ -254,7 +254,7 @@ export default function DashboardPage() {
 
             {/* Recent reviews — timeline style */}
             <motion.div variants={reduced ? {} : staggerItem} initial="hidden" whileInView="visible" viewport={{ once:true }}
-              className="trust-card overflow-hidden rounded-lg">
+              className="trust-card overflow-hidden rounded-3xl">
               <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
                 <div className="flex items-center gap-2.5">
                   <div className="h-7 w-7 rounded-lg flex items-center justify-center"
@@ -280,7 +280,7 @@ export default function DashboardPage() {
                 </div>
               ) : !stats?.recentReviews.length ? (
                 <div className="px-6 py-16 text-center">
-                  <div className="h-16 w-16 rounded-lg flex items-center justify-center mx-auto mb-4"
+                  <div className="h-16 w-16 rounded-2xl flex items-center justify-center mx-auto mb-4"
                     style={{ background:'rgba(0,229,160,0.08)', border:'1px solid rgba(0,229,160,0.15)' }}>
                     <Star className="h-8 w-8" style={{ color:'var(--signal)' }} />
                   </div>
@@ -344,7 +344,7 @@ export default function DashboardPage() {
                 whileHover={reduced ? {} : { y:-3 }}
                 transition={{ type:'spring', stiffness:320, damping:24 }}>
                 <Link href={action.href}
-                  className="trust-card trust-card-hover group relative rounded-lg p-5 flex items-start gap-4 transition-all duration-200 block"
+                  className="trust-card trust-card-hover group relative rounded-3xl p-5 flex items-start gap-4 transition-all duration-200 block"
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = `${action.accent}30`; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = ''; }}
                 >

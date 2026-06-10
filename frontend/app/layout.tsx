@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Plus_Jakarta_Sans } from 'next/font/google';
+import { Manrope, Sora } from 'next/font/google';
 import { Toaster } from 'react-hot-toast';
 import { ConditionalShell } from '@/components/layout/ConditionalShell';
 import { ScrollToTop } from '@/components/ScrollToTop';
@@ -7,15 +7,15 @@ import { ScrollProgress } from '@/components/ui/ScrollProgress';
 import { ThemeProvider } from '@/lib/theme';
 import './globals.css';
 
-const plusJakarta = Plus_Jakarta_Sans({
+const sora = Sora({
   subsets:  ['latin'],
-  variable: '--font-heading',
+  variable: '--font-sora',
   display:  'swap',
 });
 
-const inter = Inter({
+const manrope = Manrope({
   subsets:  ['latin'],
-  variable: '--font-body',
+  variable: '--font-manrope',
   display:  'swap',
 });
 
@@ -68,22 +68,22 @@ export const viewport: Viewport = {
   width:        'device-width',
   initialScale: 1,
   themeColor:   [
-    { media: '(prefers-color-scheme: light)', color: '#FCF8F2' },
-    { media: '(prefers-color-scheme: dark)',  color: '#081711' },
+    { media: '(prefers-color-scheme: light)', color: '#FAF7F0' },
+    { media: '(prefers-color-scheme: dark)',  color: '#031A14' },
   ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`h-full scroll-smooth ${plusJakarta.variable} ${inter.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`h-full scroll-smooth ${sora.variable} ${manrope.variable}`} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
-      <body className={`${inter.className} flex min-h-full flex-col bg-trust text-[var(--foreground)]`}>
+      <body className={`${manrope.className} flex min-h-full flex-col bg-trust text-[var(--foreground)]`}>
         {/* Skip navigation for keyboard/screen-reader users */}
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded-xl focus:bg-brand-600 focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white focus: focus:outline-none"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[9999] focus:rounded-xl focus:bg-brand-600 focus:px-4 focus:py-2.5 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lg focus:outline-none"
         >
           Skip to main content
         </a>

@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
   Star, Eye, EyeOff, ArrowRight, Shield,
-  ThumbsUp, BarChart2, CheckCircle,
+  ThumbsUp, BarChart2, CheckCircle, Sparkles,
 } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
@@ -85,7 +85,7 @@ function LoginForm() {
             <Link href="/" className="flex items-center gap-3 group">
               <motion.div
                 whileHover={reduced ? {} : { scale: 1.08, rotate: -5 }}
-                className="h-10 w-10 rounded-xl bg-[var(--primary)] flex items-center justify-center  shadow-emerald-900/30"
+                className="h-10 w-10 rounded-xl bg-[var(--primary)] flex items-center justify-center shadow-lg shadow-emerald-900/30"
               >
                 <Star className="h-5 w-5 fill-white text-white" />
               </motion.div>
@@ -105,7 +105,7 @@ function LoginForm() {
           >
             <motion.div variants={reduced ? {} : staggerItem} className="mb-3">
               <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-300 bg-emerald-300/10 border border-emerald-300/20 px-3 py-1 rounded-full">
-                <CheckCircle className="h-3 w-3" />
+                <Sparkles className="h-3 w-3" />
                 Trusted community
               </span>
             </motion.div>
@@ -170,7 +170,7 @@ function LoginForm() {
         {/* Mobile logo */}
         <div className="lg:hidden mb-10">
           <Link href="/" className="inline-flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl bg-[var(--primary)] flex items-center justify-center ">
+            <div className="h-9 w-9 rounded-xl bg-[var(--primary)] flex items-center justify-center shadow-lg">
               <Star className="h-4.5 w-4.5 fill-white text-white" />
             </div>
             <span className="text-base font-black text-[var(--foreground)]">ReviewHub</span>
@@ -220,7 +220,7 @@ function LoginForm() {
                 iconRight={
                   <button type="button" onClick={() => setShowPw(!showPw)}
                     aria-label={showPw ? 'Hide password' : 'Show password'}
-                    className="text-[var(--muted)] hover:text-[var(--muted)] dark:hover:text-[var(--foreground)] transition-colors">
+                    className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
                     <AnimatePresence mode="wait" initial={false}>
                       {showPw
                         ? <motion.div key="hide" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }}><EyeOff className="h-4 w-4" /></motion.div>
