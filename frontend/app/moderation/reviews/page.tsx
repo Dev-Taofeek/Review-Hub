@@ -48,8 +48,8 @@ export default function ModerationReviewsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-          Review Queue <span className="text-slate-400 font-normal">({total})</span>
+        <h2 className="text-lg font-semibold text-[var(--foreground)]">
+          Review Queue <span className="text-[var(--muted)] font-normal">({total})</span>
         </h2>
         <Select
           options={STATUS_OPTIONS}
@@ -61,7 +61,7 @@ export default function ModerationReviewsPage() {
 
       {loading ? (
         <div className="grid gap-4 sm:grid-cols-2">
-          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-48 rounded-2xl" />)}
+          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-48 rounded-lg" />)}
         </div>
       ) : reviews.length === 0 ? (
         <EmptyState

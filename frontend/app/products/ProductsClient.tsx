@@ -2,8 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { BadgeCheck, Package, Plus, Search, ShieldCheck, SlidersHorizontal, Sparkles } from 'lucide-react';
+import { BadgeCheck, Package, Plus, Search, ShieldCheck, SlidersHorizontal } from 'lucide-react';
 import { ProductCard } from '@/components/products/ProductCard';
 import { ProductFilters } from '@/components/products/ProductFilters';
 import { ProductCardSkeleton } from '@/components/ui/Skeleton';
@@ -11,24 +10,22 @@ import { Pagination } from '@/components/ui/Pagination';
 import { Button } from '@/components/ui/Button';
 import { useProducts } from '@/hooks/useProducts';
 import { useAuth } from '@/hooks/useAuth';
-import { staggerContainer, staggerItem, fadeInUp, fadeIn } from '@/lib/animations';
 
 export function ProductsClient() {
   const [page, setPage] = useState(1);
   const [selectedDiscoveryTag, setSelectedDiscoveryTag] = useState('Verified picks');
   const { products, total, totalPages, loading, filters, setFilters } = useProducts({ page });
   const { isAuthenticated } = useAuth();
-  const reduced = useReducedMotion();
   const isFiltered = !!(filters.search || filters.category || filters.brand || filters.minPrice || filters.maxPrice || filters.minRating);
 
   const filterPanel = (
-    <div className="rounded-3xl review-intel-card p-4">
-      <div className="mb-4 flex items-center gap-2 text-sm font-black text-[var(--foreground)]">
+    <div className="border border-[var(--border)] bg-[var(--surface)] p-4">
+      <div className="mb-4 flex items-center gap-2 border-b border-[var(--border)] pb-3 text-sm font-black text-[var(--foreground)]">
         <SlidersHorizontal className="h-4 w-4 text-[var(--primary)]" />
         Discovery filters
       </div>
       <ProductFilters initialFilters={filters} onFiltersChange={(f) => { setFilters({ ...f }); setPage(1); }} />
-      <div className="mt-5 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
+      <div className="mt-5 border border-[var(--border)] bg-[var(--surface-soft)] p-4">
         <div className="flex items-center gap-2 text-xs font-black text-[var(--primary)]">
           <ShieldCheck className="h-4 w-4" /> Trust layer active
         </div>
@@ -40,11 +37,9 @@ export function ProductsClient() {
   return (
     <div className="trust-shell min-h-screen">
       <div className="mx-auto max-w-[1600px] px-4 py-8 xs:px-5 sm:px-8 lg:px-20">
-        <motion.div variants={reduced ? {} : fadeInUp} initial="hidden" animate="visible" className="mb-6 grid gap-5 lg:grid-cols-[1fr_auto]">
+        <div className="mb-6 grid gap-5 border-b border-[var(--border)] pb-7 lg:grid-cols-[1fr_auto]">
           <div>
-            <p className="mb-2 inline-flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1 text-label-mono text-[var(--primary)]">
-              <Sparkles className="h-3.5 w-3.5" /> Product discovery
-            </p>
+            <p className="mb-2 text-label-mono text-[var(--primary)]">Product discovery</p>
             <h1 className="max-w-3xl text-4xl font-black leading-tight text-[var(--foreground)] xs:text-5xl">Find products with reviews you can actually trust.</h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-[var(--muted)]" aria-live="polite">
               {loading ? 'Loading...' : total > 0 ? `${total} product${total !== 1 ? 's' : ''} found` : 'No products yet'}
@@ -55,7 +50,7 @@ export function ProductsClient() {
               <Button icon={<Plus className="h-4 w-4" aria-hidden="true" />} size="sm">Add Product</Button>
             </Link>
           )}
-        </motion.div>
+        </div>
 
         <div className="mb-5 flex gap-2 overflow-x-auto pb-1">
           {['Verified picks', 'High confidence', 'Most reviewed', 'New arrivals', 'Buyer favorites'].map((chip) => (
@@ -64,9 +59,9 @@ export function ProductsClient() {
               type="button"
               aria-pressed={selectedDiscoveryTag === chip}
               onClick={() => setSelectedDiscoveryTag(chip)}
-              className={`shrink-0 rounded-full border px-4 py-2 text-xs font-extrabold transition ${
+              className={`shrink-0 border px-4 py-2 text-xs font-extrabold transition ${
                 selectedDiscoveryTag === chip
-                  ? 'border-[var(--primary)] bg-[var(--primary)] text-white shadow-sm'
+                  ? 'border-[var(--primary)] bg-[var(--primary)] text-white '
                   : 'border-[var(--border)] bg-[var(--surface)] text-[var(--muted)] hover:border-[var(--primary)] hover:text-[var(--primary)]'
               }`}
             >
@@ -76,18 +71,16 @@ export function ProductsClient() {
           ))}
         </div>
 
-        <AnimatePresence mode="wait">
-          {loading ? (
+        {loading ? (
             <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
               <div className="hidden lg:block">{filterPanel}</div>
-              <motion.div key="loading" variants={reduced ? {} : staggerContainer} initial="hidden" animate="visible" exit={{ opacity: 0 }} className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
-                {Array.from({ length: 8 }).map((_, i) => <motion.div key={i} variants={reduced ? {} : staggerItem}><ProductCardSkeleton /></motion.div>)}
-              </motion.div>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+                {Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)}
+              </div>
             </div>
           ) : products.length === 0 ? (
-            <motion.div key="empty" variants={reduced ? {} : fadeInUp} initial="hidden" animate="visible" exit={{ opacity: 0 }}>
-              <div className="trust-card flex flex-col items-center justify-center rounded-3xl py-24 text-center">
-                <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-[var(--surface-soft)] shadow-inner">
+              <div className="trust-card flex flex-col items-center justify-center py-24 text-center">
+                <div className="mb-6 flex h-20 w-20 items-center justify-center border border-[var(--border)] bg-[var(--surface-soft)]">
                   {isFiltered ? <Search className="h-10 w-10 text-[var(--primary)]" /> : <Package className="h-10 w-10 text-[var(--primary)]" />}
                 </div>
                 <h2 className="mb-2 text-xl font-black text-[var(--foreground)]">{isFiltered ? 'No products match your filters' : 'No products yet'}</h2>
@@ -102,9 +95,8 @@ export function ProductsClient() {
                   <Link href="/register"><Button size="lg">Sign up to add products</Button></Link>
                 )}
               </div>
-            </motion.div>
           ) : (
-            <motion.div key={`grid-${filters.search}-${filters.category}-${page}`} variants={reduced ? {} : staggerContainer} initial="hidden" animate="visible" exit={{ opacity: 0, transition: { duration: 0.1 } }}>
+            <div>
               <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
                 <aside className="hidden lg:block"><div className="sticky top-20">{filterPanel}</div></aside>
                 <div>
@@ -115,13 +107,12 @@ export function ProductsClient() {
                 </div>
               </div>
               {totalPages > 1 && (
-                <motion.div variants={reduced ? {} : fadeIn} className="mt-10 flex justify-center">
+                <div className="mt-10 flex justify-center">
                   <Pagination page={page} totalPages={totalPages} onPageChange={(p) => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); }} />
-                </motion.div>
+                </div>
               )}
-            </motion.div>
+            </div>
           )}
-        </AnimatePresence>
       </div>
     </div>
   );

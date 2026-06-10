@@ -22,7 +22,7 @@ const ROLE_OPTIONS = [
 ];
 
 /* Shared card class */
-const CARD = 'bg-white dark:bg-[#0D1020] border border-slate-200/80 dark:border-white/[0.07] shadow-sm';
+const CARD = 'bg-[var(--surface)] border border-[var(--border)] ';
 
 export default function AdminUsersPage() {
   const { user: currentUser } = useAuth();
@@ -65,18 +65,18 @@ export default function AdminUsersPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
         <div>
-          <h2 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <h2 className="text-lg font-bold text-[var(--foreground)] flex items-center gap-2">
             <Users className="h-5 w-5 text-brand-600 dark:text-[#00E5A0]" />
             Users
-            <span className="text-sm font-normal text-slate-400">({total.toLocaleString()})</span>
+            <span className="text-sm font-normal text-[var(--muted)]">({total.toLocaleString()})</span>
           </h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Click any row to view full details and manage permissions</p>
+          <p className="text-sm text-[var(--muted)] mt-0.5">Click any row to view full details and manage permissions</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <select
             value={roleFilter}
             onChange={(e) => { setRoleFilter(e.target.value); setPage(1); }}
-            className="h-9 rounded-xl border border-slate-200 dark:border-white/[0.09] bg-white dark:bg-[#0D1020] text-sm text-slate-700 dark:text-slate-300 px-3 focus:outline-none focus:ring-2 focus:ring-brand-500"
+            className="h-9 rounded-xl border border-[var(--border)] bg-[var(--surface)] text-sm text-[var(--foreground)] px-3 focus:outline-none focus:ring-2 focus:ring-brand-500"
           >
             {ROLE_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
@@ -105,8 +105,8 @@ export default function AdminUsersPage() {
                 {s.icon}
               </div>
               <div className="min-w-0">
-                <p className="text-xl font-black text-slate-900 dark:text-white tabular-nums">{s.value}</p>
-                <p className="text-xs text-slate-400 dark:text-slate-500 leading-tight">{s.label}</p>
+                <p className="text-xl font-black text-[var(--foreground)] tabular-nums">{s.value}</p>
+                <p className="text-xs text-[var(--muted)] leading-tight">{s.label}</p>
               </div>
             </div>
           ))}
@@ -119,28 +119,28 @@ export default function AdminUsersPage() {
           {Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-[60px] rounded-xl" />)}
         </div>
       ) : users.length === 0 ? (
-        <div className={cn('py-16 text-center rounded-2xl', CARD)}>
-          <p className="text-slate-400 dark:text-slate-500">No users match your search</p>
+        <div className={cn('py-16 text-center rounded-lg', CARD)}>
+          <p className="text-[var(--muted)]">No users match your search</p>
         </div>
       ) : (
         /* overflow-x-auto allows horizontal scroll when table is too wide */
-        <div className={cn('rounded-2xl overflow-x-auto', CARD)}>
-          <table className="min-w-full divide-y divide-slate-100 dark:divide-white/[0.06]">
-            <thead className="bg-slate-50 dark:bg-white/[0.03]">
+        <div className={cn('rounded-lg overflow-x-auto', CARD)}>
+          <table className="min-w-full divide-y divide-[var(--border)]">
+            <thead className="bg-[var(--surface-soft)]">
               <tr>
                 {['User', 'Role', 'Status', 'Reviews', 'Joined', ''].map((h, i) => (
-                  <th key={i} className="px-4 py-3 text-left text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider whitespace-nowrap">
+                  <th key={i} className="px-4 py-3 text-left text-xs font-bold text-[var(--muted)] uppercase tracking-wider whitespace-nowrap">
                     {h}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-50 dark:divide-white/[0.04] bg-white dark:bg-[#0D1020]">
+            <tbody className="divide-y divide-[var(--border)] bg-[var(--surface)]">
               {users.map((user) => (
                 <tr
                   key={user.id}
                   onClick={() => setSelected(user)}
-                  className="hover:bg-slate-50 dark:hover:bg-white/[0.03] transition-colors cursor-pointer group"
+                  className="hover:bg-[var(--surface-soft)] transition-colors cursor-pointer group"
                 >
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
@@ -151,10 +151,10 @@ export default function AdminUsersPage() {
                         )}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-slate-900 dark:text-slate-100 group-hover:text-brand-600 dark:group-hover:text-[#00E5A0] transition-colors whitespace-nowrap">
+                        <p className="text-sm font-semibold text-[var(--foreground)] group-hover:text-brand-600 dark:group-hover:text-[#00E5A0] transition-colors whitespace-nowrap">
                           {user.full_name || user.username || 'Unnamed'}
                         </p>
-                        <p className="text-xs text-slate-400 dark:text-slate-500 truncate max-w-[160px]">{user.email}</p>
+                        <p className="text-xs text-[var(--muted)] truncate max-w-[160px]">{user.email}</p>
                       </div>
                     </div>
                   </td>
@@ -170,8 +170,8 @@ export default function AdminUsersPage() {
                       )}
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-sm font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap">{user.review_count ?? 0}</td>
-                  <td className="px-4 py-3 text-xs text-slate-400 dark:text-slate-500 whitespace-nowrap">{user.created_at ? formatDate(user.created_at) : '—'}</td>
+                  <td className="px-4 py-3 text-sm font-semibold text-[var(--foreground)] whitespace-nowrap">{user.review_count ?? 0}</td>
+                  <td className="px-4 py-3 text-xs text-[var(--muted)] whitespace-nowrap">{user.created_at ? formatDate(user.created_at) : '—'}</td>
                   <td className="px-4 py-3 text-xs text-brand-600 dark:text-[#00E5A0] opacity-0 group-hover:opacity-100 transition-opacity font-semibold whitespace-nowrap">
                     View →
                   </td>

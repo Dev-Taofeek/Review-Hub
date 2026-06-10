@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { Star, Eye, EyeOff, ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
+import { Star, Eye, EyeOff, ArrowRight, CheckCircle2 } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { useAuth } from '@/hooks/useAuth';
@@ -82,7 +82,7 @@ export default function RegisterPage() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group w-fit mb-auto">
             <motion.div whileHover={reduced ? {} : { scale: 1.08, rotate: -5 }}
-              className="h-10 w-10 rounded-xl bg-[var(--primary)] flex items-center justify-center shadow-lg shadow-emerald-900/30">
+              className="h-10 w-10 rounded-xl bg-[var(--primary)] flex items-center justify-center  shadow-emerald-900/30">
               <Star className="h-5 w-5 fill-white text-white" />
             </motion.div>
             <div>
@@ -95,7 +95,7 @@ export default function RegisterPage() {
           <motion.div variants={reduced ? {} : staggerContainer} initial="hidden" animate="visible" className="py-16">
             <motion.div variants={reduced ? {} : staggerItem} className="mb-3">
               <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-400 bg-brand-950/60 border border-brand-800/40 px-3 py-1 rounded-full">
-                <Sparkles className="h-3 w-3" />
+                <CheckCircle2 className="h-3 w-3" />
                 Free forever
               </span>
             </motion.div>
@@ -105,7 +105,7 @@ export default function RegisterPage() {
               <span className="text-emerald-300">honest experiences.</span>
             </motion.h1>
             <motion.p variants={reduced ? {} : staggerItem}
-              className="text-slate-400 text-base leading-relaxed mb-10 max-w-sm">
+              className="text-[var(--muted)] text-base leading-relaxed mb-10 max-w-sm">
               Join thousands of reviewers making online shopping better for everyone. It takes 60 seconds.
             </motion.p>
 
@@ -115,12 +115,12 @@ export default function RegisterPage() {
                 <motion.li key={step.label} variants={reduced ? {} : staggerItem} className="flex items-center gap-4">
                   <div className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 text-sm font-bold transition-all ${
                     i === 0
-                      ? 'bg-brand-600 text-white shadow-md shadow-brand-900/50'
-                      : 'bg-white/[0.06] border border-white/10 text-slate-500'
+                      ? 'bg-brand-600 text-white  shadow-brand-900/50'
+                      : 'bg-white/[0.06] border border-white/10 text-[var(--muted)]'
                   }`}>
                     {i === 0 ? <CheckCircle2 className="h-4 w-4" /> : i + 1}
                   </div>
-                  <span className={`text-sm font-medium ${i === 0 ? 'text-white' : 'text-slate-500'}`}>{step.label}</span>
+                  <span className={`text-sm font-medium ${i === 0 ? 'text-white' : 'text-[var(--muted)]'}`}>{step.label}</span>
                 </motion.li>
               ))}
             </motion.ol>
@@ -132,13 +132,13 @@ export default function RegisterPage() {
                   <div key={init} className={`h-7 w-7 rounded-full border-2 border-[#040f1f] flex items-center justify-center text-[9px] font-bold text-white ${['bg-brand-600', 'bg-violet-600', 'bg-amber-500'][i]}`}>{init}</div>
                 ))}
               </div>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[var(--muted)]">
                 <span className="text-white font-semibold">12,000+</span> reviewers already joined
               </p>
             </motion.div>
           </motion.div>
 
-          <p className="text-xs text-slate-600 mt-auto">&copy; {new Date().getFullYear()} ReviewHub. Built for trust.</p>
+          <p className="text-xs text-[var(--muted)] mt-auto">&copy; {new Date().getFullYear()} ReviewHub. Built for trust.</p>
         </div>
       </motion.div>
 
@@ -151,10 +151,10 @@ export default function RegisterPage() {
       >
         <div className="lg:hidden mb-10">
           <Link href="/" className="inline-flex items-center gap-2.5">
-            <div className="h-9 w-9 rounded-xl bg-[var(--primary)] flex items-center justify-center shadow-lg">
+            <div className="h-9 w-9 rounded-xl bg-[var(--primary)] flex items-center justify-center ">
               <Star className="h-4.5 w-4.5 fill-white text-white" />
             </div>
-            <span className="text-base font-black text-slate-900 dark:text-white">ReviewHub</span>
+            <span className="text-base font-black text-[var(--foreground)]">ReviewHub</span>
           </Link>
         </div>
 
@@ -165,8 +165,8 @@ export default function RegisterPage() {
           className="w-full max-w-sm mx-auto"
         >
           <motion.div variants={reduced ? {} : staggerItem} className="mb-8">
-            <h2 className="text-2xl xs:text-3xl font-black tracking-tight text-slate-900 dark:text-white">Create your account</h2>
-            <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+            <h2 className="text-2xl xs:text-3xl font-black tracking-tight text-[var(--foreground)]">Create your account</h2>
+            <p className="mt-2 text-sm text-[var(--muted)]">
               Already have an account?{' '}
               <Link href="/login" className="font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 transition-colors">
                 Sign in →
@@ -199,7 +199,7 @@ export default function RegisterPage() {
                 iconRight={
                   <button type="button" onClick={() => setShowPw(!showPw)}
                     aria-label={showPw ? 'Hide password' : 'Show password'}
-                    className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                    className="text-[var(--muted)] hover:text-[var(--muted)] dark:hover:text-[var(--foreground)] transition-colors">
                     <AnimatePresence mode="wait" initial={false}>
                       {showPw
                         ? <motion.div key="hide" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }}><EyeOff className="h-4 w-4" /></motion.div>
@@ -211,7 +211,7 @@ export default function RegisterPage() {
               />
               {/* Password strength bar */}
               {form.password.length > 0 && (
-                <div className="mt-2 h-1 rounded-full bg-slate-200 dark:bg-white/10 overflow-hidden">
+                <div className="mt-2 h-1 rounded-full bg-[var(--surface-soft)] overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: pwStrength === 'weak' ? '33%' : pwStrength === 'good' ? '66%' : '100%' }}
@@ -232,7 +232,7 @@ export default function RegisterPage() {
           </form>
 
           <motion.p variants={reduced ? {} : staggerItem}
-            className="mt-6 text-center text-xs text-slate-400 leading-relaxed">
+            className="mt-6 text-center text-xs text-[var(--muted)] leading-relaxed">
             By creating an account you agree to our{' '}
             <Link href="/terms" className="text-brand-600 dark:text-brand-400 hover:underline">Terms</Link>
             {' '}and{' '}

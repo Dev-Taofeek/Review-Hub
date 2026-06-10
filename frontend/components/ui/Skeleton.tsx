@@ -9,8 +9,7 @@ export function Skeleton({ className }: SkeletonProps) {
   return (
     <div
       className={cn(
-        'rounded-md bg-shimmer',
-        'bg-[length:200%_100%] animate-shimmer',
+        'rounded-sm bg-[var(--surface-soft)]',
         className
       )}
     />
@@ -19,8 +18,8 @@ export function Skeleton({ className }: SkeletonProps) {
 
 export function ProductCardSkeleton() {
   return (
-    <div className="rounded-2xl trust-card p-5">
-      <Skeleton className="aspect-square w-full rounded-xl mb-4" />
+    <div className="trust-card p-5">
+      <Skeleton className="mb-4 aspect-square w-full" />
       <Skeleton className="h-4 w-3/4 mb-2" />
       <Skeleton className="h-3 w-1/2 mb-3" />
       <Skeleton className="h-5 w-1/3 mb-2" />
@@ -31,7 +30,7 @@ export function ProductCardSkeleton() {
 
 export function ReviewCardSkeleton() {
   return (
-    <div className="rounded-2xl trust-card p-5">
+    <div className="trust-card p-5">
       <div className="flex items-start gap-3 mb-4">
         <Skeleton className="h-10 w-10 rounded-full shrink-0" />
         <div className="flex-1">

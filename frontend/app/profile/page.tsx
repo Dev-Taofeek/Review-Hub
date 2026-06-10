@@ -27,7 +27,7 @@ const ROLE_META: Record<string, { label: string; color: string; glow: string; de
 /* Reusable card */
 const Card = ({ children, className }: { children: React.ReactNode; className?: string }) => (
   <div className={cn(
-    'trust-card rounded-3xl',
+    'trust-card rounded-lg',
     className
   )}>
     {children}
@@ -99,7 +99,7 @@ export default function ProfilePage() {
             <div className="flex flex-col sm:flex-row gap-5 sm:gap-6 sm:items-end">
               {/* Avatar */}
               <div className="relative self-start shrink-0">
-                <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-2xl overflow-hidden border-4 border-[var(--surface)] shadow-lg"
+                <div className="h-20 w-20 sm:h-24 sm:w-24 rounded-lg overflow-hidden border-4 border-[var(--surface)] "
                   style={{ boxShadow: role.glow }}>
                   <Avatar src={user.avatar_url} name={user.full_name || user.username} size="xl" className="w-full h-full rounded-none" />
                 </div>
@@ -107,7 +107,7 @@ export default function ProfilePage() {
                   onClick={() => fileInputRef.current?.click()}
                   disabled={avatarLoading}
                   aria-label="Upload avatar"
-                  className="absolute -bottom-1.5 -right-1.5 h-8 w-8 rounded-xl flex items-center justify-center text-black shadow-md transition-all disabled:opacity-60 hover:scale-110"
+                  className="absolute -bottom-1.5 -right-1.5 h-8 w-8 rounded-xl flex items-center justify-center text-black  transition-all disabled:opacity-60 hover:scale-110"
                   style={{ background: 'var(--signal)' }}
                 >
                   {avatarLoading
@@ -121,7 +121,7 @@ export default function ProfilePage() {
               {/* Name + meta */}
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight truncate">
+                  <h1 className="text-xl sm:text-2xl font-black text-[var(--foreground)] tracking-tight truncate">
                     {user.full_name || user.username || 'Unnamed'}
                   </h1>
                   <RoleBadge role={user.role} />
@@ -132,12 +132,12 @@ export default function ProfilePage() {
                   )}
                 </div>
                 {user.username && (
-                  <p className="text-sm text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                  <p className="text-sm text-[var(--muted)] flex items-center gap-1">
                     <AtSign className="h-3.5 w-3.5" aria-hidden="true" /> {user.username}
                   </p>
                 )}
                 {user.bio && (
-                  <p className="text-sm text-slate-600 dark:text-slate-300 mt-2 leading-relaxed max-w-lg">{user.bio}</p>
+                  <p className="text-sm text-[var(--muted)] mt-2 leading-relaxed max-w-lg">{user.bio}</p>
                 )}
               </div>
 
@@ -171,7 +171,7 @@ export default function ProfilePage() {
             {/* Activity stats */}
             <motion.div variants={reduced ? {} : staggerItem}>
               <Card className="p-5">
-                <p className="text-label-mono text-slate-400 dark:text-white/30 mb-4">Activity</p>
+                <p className="text-label-mono text-[var(--muted)] mb-4">Activity</p>
                 <div className="space-y-3">
                   {[
                     { icon: <BookOpen className="h-4 w-4" />, label: 'Reviews written', value: user.review_count ?? 0, accent: '#00E5A0', bg: 'bg-brand-50 dark:bg-[rgba(0,229,160,0.08)] text-brand-700 dark:text-[#00E5A0]' },
@@ -183,8 +183,8 @@ export default function ProfilePage() {
                         {s.icon}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs text-slate-400 dark:text-slate-500">{s.label}</p>
-                        <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{String(s.value)}</p>
+                        <p className="text-xs text-[var(--muted)]">{s.label}</p>
+                        <p className="text-sm font-semibold text-[var(--foreground)] truncate">{String(s.value)}</p>
                       </div>
                     </div>
                   ))}
@@ -194,7 +194,7 @@ export default function ProfilePage() {
 
             {/* Role badge */}
             <motion.div variants={reduced ? {} : staggerItem}>
-              <div className="trust-card rounded-3xl p-5 relative overflow-hidden" style={{ boxShadow: role.glow }}>
+              <div className="trust-card rounded-lg p-5 relative overflow-hidden" style={{ boxShadow: role.glow }}>
                 <div className="absolute inset-x-0 top-0 h-1" style={{ background: role.color }} />
                 <div className="relative">
                   <ShieldCheck className="h-6 w-6 mb-2" style={{ color: role.color }} />
@@ -206,19 +206,19 @@ export default function ProfilePage() {
 
             {/* Quick links */}
             <motion.div variants={reduced ? {} : staggerItem}>
-              <Card className="divide-y divide-slate-100 dark:divide-white/[0.05] overflow-hidden">
+              <Card className="divide-y divide-[var(--border)] overflow-hidden">
                 {[
                   { href: '/my-reviews', icon: <BookOpen className="h-4 w-4" />, label: 'My Reviews' },
                   { href: '/dashboard',  icon: <ThumbsUp className="h-4 w-4" />, label: 'Dashboard' },
                   { href: '/products',   icon: <Star className="h-4 w-4" />,     label: 'Browse Products' },
                 ].map((item) => (
                   <Link key={item.href} href={item.href}
-                    className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-white/[0.04] transition-colors group">
-                    <div className="h-7 w-7 rounded-lg bg-slate-100 dark:bg-white/[0.07] flex items-center justify-center [&>svg]:h-3.5 [&>svg]:w-3.5 text-slate-500 dark:text-slate-400 group-hover:bg-brand-50 dark:group-hover:bg-[rgba(0,229,160,0.08)] group-hover:text-brand-600 dark:group-hover:text-[#00E5A0] transition-all">
+                    className="flex items-center gap-3 px-4 py-3 hover:bg-[var(--surface-soft)] dark:hover:bg-white/[0.04] transition-colors group">
+                    <div className="h-7 w-7 rounded-lg bg-[var(--surface-soft)] dark:bg-white/[0.07] flex items-center justify-center [&>svg]:h-3.5 [&>svg]:w-3.5 text-[var(--muted)] group-hover:bg-brand-50 dark:group-hover:bg-[rgba(0,229,160,0.08)] group-hover:text-brand-600 dark:group-hover:text-[#00E5A0] transition-all">
                       {item.icon}
                     </div>
-                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300 group-hover:text-brand-700 dark:group-hover:text-[#00E5A0] flex-1 transition-colors">{item.label}</span>
-                    <ArrowRight className="h-3.5 w-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                    <span className="text-sm font-medium text-[var(--foreground)] group-hover:text-brand-700 dark:group-hover:text-[#00E5A0] flex-1 transition-colors">{item.label}</span>
+                    <ArrowRight className="h-3.5 w-3.5 text-[var(--muted)] group-hover:translate-x-0.5 transition-transform" />
                   </Link>
                 ))}
               </Card>
@@ -231,7 +231,7 @@ export default function ProfilePage() {
             {/* Account details / Edit form */}
             <motion.div variants={reduced ? {} : staggerItem}>
               <Card className="p-5 sm:p-6">
-                <p className="text-label-mono text-slate-400 dark:text-white/30 mb-5">Account Details</p>
+                <p className="text-label-mono text-[var(--muted)] mb-5">Account Details</p>
 
                 {editing ? (
                   <div className="space-y-4">
@@ -247,13 +247,13 @@ export default function ProfilePage() {
                       value={form.bio}
                       onChange={(e) => setForm(f => ({ ...f, bio: e.target.value }))}
                       hint={`${form.bio.length} / 300 characters`} />
-                    <div className="flex justify-end gap-3 pt-3 border-t border-slate-100 dark:border-white/[0.06]">
+                    <div className="flex justify-end gap-3 pt-3 border-t border-[var(--border)] dark:border-white/[0.06]">
                       <Button variant="ghost" onClick={cancelEdit}>Cancel</Button>
                       <Button loading={loading} icon={<Save className="h-4 w-4" />} onClick={handleSave}>Save Changes</Button>
                     </div>
                   </div>
                 ) : (
-                  <div className="divide-y divide-slate-100 dark:divide-white/[0.05]">
+                  <div className="divide-y divide-[var(--border)]">
                     {[
                       { icon: <Mail className="h-4 w-4" />,     label: 'Email',    value: user.email || '—' },
                       { icon: <AtSign className="h-4 w-4" />,   label: 'Username', value: user.username ? `@${user.username}` : '—' },
@@ -261,12 +261,12 @@ export default function ProfilePage() {
                       { icon: <BookOpen className="h-4 w-4" />, label: 'Bio',      value: user.bio || 'No bio yet — click Edit Profile to add one' },
                     ].map((row) => (
                       <div key={row.label} className="flex items-start gap-3 py-3.5 first:pt-0 last:pb-0">
-                        <div className="h-7 w-7 rounded-lg bg-slate-100 dark:bg-white/[0.07] flex items-center justify-center [&>svg]:h-3.5 [&>svg]:w-3.5 text-slate-500 dark:text-slate-400 shrink-0 mt-0.5">
+                        <div className="h-7 w-7 rounded-lg bg-[var(--surface-soft)] dark:bg-white/[0.07] flex items-center justify-center [&>svg]:h-3.5 [&>svg]:w-3.5 text-[var(--muted)] shrink-0 mt-0.5">
                           {row.icon}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-xs text-slate-400 dark:text-slate-500 mb-0.5">{row.label}</p>
-                          <p className="text-sm text-slate-800 dark:text-slate-200 break-all leading-relaxed">{row.value}</p>
+                          <p className="text-xs text-[var(--muted)] mb-0.5">{row.label}</p>
+                          <p className="text-sm text-[var(--foreground)] break-all leading-relaxed">{row.value}</p>
                         </div>
                       </div>
                     ))}
@@ -278,14 +278,14 @@ export default function ProfilePage() {
             {/* Security */}
             <motion.div variants={reduced ? {} : staggerItem}>
               <Card className="p-5 sm:p-6">
-                <p className="text-label-mono text-slate-400 dark:text-white/30 mb-4">Security</p>
-                <div className="flex items-center gap-3 p-3.5 rounded-xl bg-slate-50 dark:bg-white/[0.04] border border-slate-200/60 dark:border-white/[0.07]">
-                  <div className="h-9 w-9 rounded-xl bg-slate-100 dark:bg-white/[0.08] flex items-center justify-center shrink-0">
-                    <Lock className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                <p className="text-label-mono text-[var(--muted)] mb-4">Security</p>
+                <div className="flex items-center gap-3 p-3.5 rounded-xl bg-[var(--surface-soft)] dark:bg-white/[0.04] border border-[var(--border)]">
+                  <div className="h-9 w-9 rounded-xl bg-[var(--surface-soft)] dark:bg-white/[0.08] flex items-center justify-center shrink-0">
+                    <Lock className="h-4 w-4 text-[var(--muted)]" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm font-semibold text-slate-900 dark:text-white">Password</p>
-                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Managed via your email provider — reset through the sign-in page</p>
+                    <p className="text-sm font-semibold text-[var(--foreground)]">Password</p>
+                    <p className="text-xs text-[var(--muted)] mt-0.5">Managed via your email provider — reset through the sign-in page</p>
                   </div>
                 </div>
               </Card>

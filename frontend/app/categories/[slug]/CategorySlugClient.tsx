@@ -70,7 +70,7 @@ export function CategorySlugClient({ slug }: Props) {
             </div>
           ) : category ? (
             <div className="flex items-center gap-5">
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border border-[var(--border)] bg-[var(--primary-soft)] text-3xl text-[var(--primary)] sm:h-20 sm:w-20 sm:text-4xl">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--primary-soft)] text-3xl text-[var(--primary)] sm:h-20 sm:w-20 sm:text-4xl">
                 {category.icon || 'Box'}
               </div>
               <div>
@@ -102,7 +102,7 @@ export function CategorySlugClient({ slug }: Props) {
             {loading ? 'Loading products...' : `${total} product${total !== 1 ? 's' : ''} in ${category?.name ?? 'this category'}`}
           </p>
           <div className="flex flex-wrap items-center gap-3">
-            <div className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 shadow-sm">
+            <div className="flex items-center gap-2 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 ">
               <SlidersHorizontal className="h-3.5 w-3.5 shrink-0 text-[var(--muted)]" />
               <label htmlFor="category-sort" className="sr-only">Sort products</label>
               <select id="category-sort" value={sortBy} onChange={(e) => handleSort(e.target.value)} className="cursor-pointer border-none bg-transparent text-sm font-bold text-[var(--foreground)] outline-none">
@@ -122,8 +122,8 @@ export function CategorySlugClient({ slug }: Props) {
             {Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)}
           </div>
         ) : products.length === 0 ? (
-          <div className="trust-card rounded-3xl py-20 text-center">
-            <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-[var(--primary-soft)]">
+          <div className="trust-card rounded-lg py-20 text-center">
+            <div className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-lg bg-[var(--primary-soft)]">
               <Package className="h-10 w-10 text-[var(--primary)]" />
             </div>
             <p className="mb-2 text-lg font-black text-[var(--foreground)]">No products in this category yet</p>

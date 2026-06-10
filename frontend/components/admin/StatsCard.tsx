@@ -15,7 +15,7 @@ const schemes: Record<NonNullable<StatsCardProps['color']>, { accent: string; so
   blue: { accent: 'var(--accent)', soft: 'var(--accent-soft)' },
   emerald: { accent: 'var(--primary)', soft: 'var(--primary-soft)' },
   amber: { accent: 'var(--secondary)', soft: 'var(--secondary-soft)' },
-  red: { accent: 'var(--danger)', soft: 'rgba(220,38,38,0.10)' },
+  red: { accent: 'var(--danger)', soft: 'var(--danger-soft)' },
   purple: { accent: 'var(--primary)', soft: 'var(--primary-soft)' },
   teal: { accent: 'var(--accent)', soft: 'var(--accent-soft)' },
 };
@@ -26,17 +26,17 @@ export function StatsCard({
   const { accent, soft } = schemes[color];
 
   return (
-    <div className={cn('trust-card trust-card-hover group relative overflow-hidden rounded-3xl p-5', className)}>
+    <div className={cn('trust-card trust-card-hover relative overflow-hidden rounded-lg p-5', className)}>
       <div className="absolute inset-x-0 top-0 h-1" style={{ background: accent }} />
       <div className="relative">
         <div className="mb-4 flex items-start justify-between">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl [&>svg]:h-5 [&>svg]:w-5" style={{ background: soft, color: accent }}>
+          <div className="flex h-10 w-10 items-center justify-center rounded-md [&>svg]:h-5 [&>svg]:w-5" style={{ background: soft, color: accent }}>
             {icon}
           </div>
           {change && (
             <span
               className={cn(
-                'rounded-full px-2.5 py-1 text-[11px] font-black',
+                'rounded-md px-2.5 py-1 text-[11px] font-black',
                 changePositive ? 'bg-[var(--primary-soft)] text-[var(--primary)]' : 'bg-[var(--secondary-soft)] text-amber-700 dark:text-amber-300'
               )}
             >

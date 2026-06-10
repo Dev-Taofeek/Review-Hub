@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ChevronLeft, Package, Info, ImagePlus, X, Upload,
-  Loader2, Camera, Sparkles, CheckCircle2,
+  Loader2, Camera, CheckCircle2,
 } from 'lucide-react';
 import { Input, Textarea, Select } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
@@ -125,7 +125,7 @@ export default function NewProductPage() {
         {/* Back */}
         <nav className="mb-8">
           <Link href="/products"
-            className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-brand-600 dark:text-slate-400 dark:hover:text-brand-400 transition-colors group">
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--muted)] hover:text-brand-600 dark:text-[var(--muted)] dark:hover:text-brand-400 transition-colors group">
             <ChevronLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
             Back to Products
           </Link>
@@ -139,12 +139,12 @@ export default function NewProductPage() {
             {/* Header */}
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <div className="h-12 w-12 rounded-2xl bg-[var(--primary)] flex items-center justify-center shadow-lg shadow-emerald-900/20">
+                <div className="h-12 w-12 rounded-lg bg-[var(--primary)] flex items-center justify-center  shadow-emerald-900/20">
                   <Package className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">Add a Product</h1>
-                  <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Share a product with the ReviewHub community</p>
+                  <h1 className="text-2xl sm:text-3xl font-bold text-[var(--foreground)] tracking-tight">Add a Product</h1>
+                  <p className="text-sm text-[var(--muted)] mt-0.5">Share a product with the ReviewHub community</p>
                 </div>
               </div>
             </div>
@@ -222,18 +222,18 @@ export default function NewProductPage() {
               />
 
               {/* Actions */}
-              <div className="flex items-center justify-between pt-4 border-t border-slate-200 dark:border-white/[0.07]">
+              <div className="flex items-center justify-between pt-4 border-t border-[var(--border)]">
                 <Link href="/products">
                   <Button variant="ghost" type="button"
-                    className="text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200">
+                    className="text-[var(--muted)] hover:text-[var(--foreground)] dark:text-[var(--muted)] dark:hover:text-[var(--foreground)]">
                     Cancel
                   </Button>
                 </Link>
                 <Button
                   type="submit"
                   loading={submitting}
-                  icon={uploadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
-                  className="shadow-lg shadow-emerald-900/20 px-6"
+                  icon={uploadingImage ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
+                  className=" shadow-emerald-900/20 px-6"
                 >
                   {submitting
                     ? uploadingImage ? 'Uploading image…' : 'Creating product…'
@@ -245,25 +245,25 @@ export default function NewProductPage() {
 
           {/* ── Right: Image Upload ─────────────────────────── */}
           <div className="order-1 lg:order-2 lg:sticky lg:top-[80px]">
-            <div className="rounded-2xl border border-slate-200/60 dark:border-white/[0.07] bg-white dark:bg-[#0c1526] shadow-sm overflow-hidden">
+            <div className="rounded-lg border border-[var(--border)] bg-[var(--surface)]  overflow-hidden">
 
               {/* Card header */}
-              <div className="px-5 py-4 border-b border-slate-100 dark:border-white/[0.05] flex items-center gap-2.5">
-                <div className="h-8 w-8 rounded-lg bg-[var(--accent)] flex items-center justify-center shadow-sm">
+              <div className="px-5 py-4 border-b border-[var(--border)] flex items-center gap-2.5">
+                <div className="h-8 w-8 rounded-lg bg-[var(--accent)] flex items-center justify-center ">
                   <Camera className="h-4 w-4 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">Product Image</p>
-                  <p className="text-xs text-slate-400">Makes your listing stand out</p>
+                  <p className="text-sm font-bold text-[var(--foreground)]">Product Image</p>
+                  <p className="text-xs text-[var(--muted)]">Makes your listing stand out</p>
                 </div>
-                <span className="ml-auto text-xs font-medium text-slate-400 bg-slate-100 dark:bg-white/[0.06] px-2 py-0.5 rounded-full">Optional</span>
+                <span className="ml-auto text-xs font-medium text-[var(--muted)] bg-[var(--surface-soft)] px-2 py-0.5 rounded-full">Optional</span>
               </div>
 
               <div className="p-5">
                 {imagePreview ? (
                   /* Image preview */
                   <div className="relative">
-                    <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-white/[0.07] bg-slate-100 dark:bg-white/[0.04]"
+                    <div className="relative rounded-xl overflow-hidden border border-[var(--border)] bg-[var(--surface-soft)] dark:bg-white/[0.04]"
                       style={{ aspectRatio: '4/3' }}>
                       <img
                         src={imagePreview}
@@ -277,7 +277,7 @@ export default function NewProductPage() {
                       <button
                         type="button"
                         onClick={removeImage}
-                        className="absolute top-3 right-3 h-8 w-8 rounded-full bg-black/60 hover:bg-red-600 text-white flex items-center justify-center transition-colors backdrop-blur-sm shadow-lg"
+                        className="absolute top-3 right-3 h-8 w-8 rounded-full bg-black/60 hover:bg-red-600 text-white flex items-center justify-center transition-colors backdrop-blur-sm "
                       >
                         <X className="h-4 w-4" />
                       </button>
@@ -298,7 +298,7 @@ export default function NewProductPage() {
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-dashed border-slate-300 dark:border-white/[0.12] text-sm font-medium text-slate-500 dark:text-slate-400 hover:border-brand-400 dark:hover:border-brand-600 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                      className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-dashed border-[var(--border)] text-sm font-medium text-[var(--muted)] hover:border-brand-400 dark:hover:border-brand-600 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
                     >
                       <Upload className="h-4 w-4" />
                       Change image
@@ -318,44 +318,44 @@ export default function NewProductPage() {
                         'py-12 px-6',
                         dragOver
                           ? 'border-brand-400 bg-brand-50 dark:border-brand-600 dark:bg-brand-950/20 scale-[1.01]'
-                          : 'border-slate-200 dark:border-white/[0.1] hover:border-brand-400 dark:hover:border-brand-600 hover:bg-slate-50 dark:hover:bg-white/[0.02]'
+                          : 'border-[var(--border)] hover:border-brand-400 dark:hover:border-brand-600 hover:bg-[var(--surface-soft)] dark:hover:bg-white/[0.02]'
                       )}
                     >
                       {/* Icon */}
                       <div className={cn(
-                        'h-16 w-16 rounded-2xl flex items-center justify-center transition-all duration-200',
+                        'h-16 w-16 rounded-lg flex items-center justify-center transition-all duration-200',
                         dragOver
                           ? 'bg-brand-100 dark:bg-brand-950/60 scale-110'
-                          : 'bg-slate-100 dark:bg-white/[0.06] group-hover:bg-brand-100 dark:group-hover:bg-brand-950/40 group-hover:scale-105'
+                          : 'bg-[var(--surface-soft)] group-hover:bg-brand-100 dark:group-hover:bg-brand-950/40 group-hover:scale-105'
                       )}>
                         <ImagePlus className={cn(
                           'h-8 w-8 transition-colors duration-200',
                           dragOver
                             ? 'text-brand-500'
-                            : 'text-slate-400 group-hover:text-brand-500'
+                            : 'text-[var(--muted)] group-hover:text-brand-500'
                         )} />
                       </div>
 
                       <div className="text-center">
                         <p className={cn(
                           'text-sm font-bold transition-colors duration-200',
-                          dragOver ? 'text-brand-600 dark:text-brand-400' : 'text-slate-700 dark:text-slate-300'
+                          dragOver ? 'text-brand-600 dark:text-brand-400' : 'text-[var(--foreground)]'
                         )}>
                           {dragOver ? 'Drop your image here' : 'Upload a product photo'}
                         </p>
-                        <p className="text-xs text-slate-400 dark:text-slate-500 mt-1.5">
+                        <p className="text-xs text-[var(--muted)] mt-1.5">
                           Drag & drop or click to browse
                         </p>
-                        <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+                        <p className="text-xs text-[var(--muted)] mt-0.5">
                           JPEG · PNG · WebP · Max 5 MB
                         </p>
                       </div>
 
                       <div className={cn(
-                        'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm',
+                        'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 ',
                         dragOver
                           ? 'bg-brand-500 text-white'
-                          : 'bg-white dark:bg-white/[0.08] border border-slate-200 dark:border-white/[0.1] text-slate-700 dark:text-slate-300 group-hover:bg-brand-50 dark:group-hover:bg-brand-950/30 group-hover:border-brand-300 dark:group-hover:border-brand-700 group-hover:text-brand-700 dark:group-hover:text-brand-300'
+                          : 'bg-white dark:bg-white/[0.08] border border-[var(--border)] text-[var(--foreground)] group-hover:bg-brand-50 dark:group-hover:bg-brand-950/30 group-hover:border-brand-300 dark:group-hover:border-brand-700 group-hover:text-brand-700 dark:group-hover:text-brand-300'
                       )}>
                         <Upload className="h-4 w-4" />
                         Choose file
@@ -375,7 +375,7 @@ export default function NewProductPage() {
 
               {/* Tips */}
               <div className="px-5 pb-5 space-y-2">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">Photo tips</p>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[var(--muted)]">Photo tips</p>
                 {[
                   'Use a clear, well-lit photo of the product',
                   'White or neutral backgrounds work best',
@@ -383,17 +383,17 @@ export default function NewProductPage() {
                 ].map((tip) => (
                   <div key={tip} className="flex items-start gap-2">
                     <CheckCircle2 className="h-3.5 w-3.5 text-brand-500 shrink-0 mt-0.5" />
-                    <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{tip}</p>
+                    <p className="text-xs text-[var(--muted)] leading-relaxed">{tip}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Community note */}
-            <div className="mt-4 rounded-xl border border-slate-200/60 dark:border-white/[0.07] bg-white dark:bg-[#0c1526] p-4 flex gap-3 shadow-sm">
-              <Sparkles className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                <span className="font-bold text-slate-700 dark:text-slate-300">Help the community.</span>{' '}
+            <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 flex gap-3 ">
+              <CheckCircle2 className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
+              <p className="text-xs text-[var(--muted)] leading-relaxed">
+                <span className="font-bold text-[var(--foreground)]">Help the community.</span>{' '}
                 Adding detailed descriptions and clear photos helps other shoppers make better decisions.
               </p>
             </div>

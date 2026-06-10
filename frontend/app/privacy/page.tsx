@@ -137,19 +137,19 @@ export default function PrivacyPage() {
         <div className="absolute inset-x-0 top-0 h-1 bg-[var(--secondary)]" />
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16 relative">
           <div className="flex items-center gap-2 mb-4">
-            <Link href="/" className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors text-sm">
+            <Link href="/" className="flex items-center gap-2 text-[var(--muted)] hover:text-white transition-colors text-sm">
               <Star className="h-4 w-4" /> ReviewHub
             </Link>
-            <span className="text-gray-600">/</span>
-            <span className="text-gray-300 text-sm">Privacy Policy</span>
+            <span className="text-[var(--muted)]">/</span>
+            <span className="text-[var(--muted)] text-sm">Privacy Policy</span>
           </div>
           <div className="flex items-start gap-4">
-            <div className="h-12 w-12 rounded-2xl bg-brand-600/20 border border-brand-500/30 flex items-center justify-center shrink-0">
+            <div className="h-12 w-12 rounded-lg bg-brand-600/20 border border-brand-500/30 flex items-center justify-center shrink-0">
               <Shield className="h-6 w-6 text-brand-400" />
             </div>
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-white">Privacy Policy</h1>
-              <p className="text-gray-400 mt-1">Last updated: {LAST_UPDATED}</p>
+              <p className="text-[var(--muted)] mt-1">Last updated: {LAST_UPDATED}</p>
             </div>
           </div>
         </div>
@@ -161,12 +161,12 @@ export default function PrivacyPage() {
 
           {/* Sticky table of contents */}
           <aside className="lg:col-span-1 hidden lg:block">
-            <div className="sticky top-20 rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white dark:bg-[#0D1020] shadow-sm p-4">
-              <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Contents</p>
+            <div className="sticky top-20 rounded-lg border border-[var(--border)] bg-[var(--surface)]  p-4">
+              <p className="text-xs font-semibold uppercase tracking-widest text-[var(--muted)] mb-3">Contents</p>
               <nav className="space-y-1">
                 {SECTIONS.map((s) => (
                   <a key={s.id} href={`#${s.id}`}
-                    className="block text-xs text-gray-600 dark:text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 py-1 border-l-2 border-transparent hover:border-brand-500 pl-2.5 transition-all leading-relaxed">
+                    className="block text-xs text-[var(--muted)] hover:text-brand-600 dark:hover:text-brand-400 py-1 border-l-2 border-transparent hover:border-brand-500 pl-2.5 transition-all leading-relaxed">
                     {s.title}
                   </a>
                 ))}
@@ -177,7 +177,7 @@ export default function PrivacyPage() {
           {/* Main content */}
           <main className="lg:col-span-3 space-y-10">
             {/* Summary box */}
-            <div className="rounded-2xl border border-brand-200 dark:border-brand-800/50 bg-brand-50 dark:bg-brand-950/20 p-5">
+            <div className="rounded-lg border border-brand-200 dark:border-brand-800/50 bg-brand-50 dark:bg-brand-950/20 p-5">
               <p className="text-sm font-semibold text-brand-800 dark:text-brand-300 mb-2">The short version</p>
               <p className="text-sm text-brand-700 dark:text-brand-400 leading-relaxed">
                 We collect only the information needed to run ReviewHub. We never sell your data. Your reviews and public profile are visible to others. You control your data and can delete your account at any time.
@@ -186,22 +186,22 @@ export default function PrivacyPage() {
 
             {SECTIONS.map((section) => (
               <section key={section.id} id={section.id} className="scroll-mt-20">
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3 pb-2 border-b border-gray-200 dark:border-white/10">
+                <h2 className="text-lg font-bold text-[var(--foreground)] mb-3 pb-2 border-b border-[var(--border)]">
                   {section.title}
                 </h2>
 
                 {section.content && (
-                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+                  <p className="text-sm text-[var(--muted)] leading-relaxed mb-4">
                     {section.content}
                   </p>
                 )}
 
                 {'subsections' in section && section.subsections?.map((sub) => (
                   <div key={sub.title} className="mb-5">
-                    <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">{sub.title}</h3>
+                    <h3 className="text-sm font-semibold text-[var(--foreground)] mb-2">{sub.title}</h3>
                     <ul className="space-y-1.5">
                       {sub.content.map((item, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
+                        <li key={i} className="flex items-start gap-2 text-sm text-[var(--muted)]">
                           <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-brand-500 shrink-0" />
                           {item}
                         </li>
@@ -213,7 +213,7 @@ export default function PrivacyPage() {
                 {'bullets' in section && section.bullets && (
                   <ul className="space-y-1.5 mb-4">
                     {section.bullets.map((b, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
+                      <li key={i} className="flex items-start gap-2 text-sm text-[var(--muted)]">
                         <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-brand-500 shrink-0" />
                         {b}
                       </li>
@@ -222,12 +222,12 @@ export default function PrivacyPage() {
                 )}
 
                 {'afterContent' in section && section.afterContent && (
-                  <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mt-3">{section.afterContent}</p>
+                  <p className="text-sm text-[var(--muted)] leading-relaxed mt-3">{section.afterContent}</p>
                 )}
 
                 {'contact' in section && section.contact && (
-                  <div className="mt-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 p-4">
-                    <p className="text-sm text-gray-600 dark:text-gray-300 font-mono">{section.contact.address}</p>
+                  <div className="mt-3 rounded-xl bg-[var(--surface-soft)] border border-[var(--border)] p-4">
+                    <p className="text-sm text-[var(--muted)] font-mono">{section.contact.address}</p>
                   </div>
                 )}
               </section>
@@ -236,9 +236,9 @@ export default function PrivacyPage() {
         </div>
 
         {/* Footer nav */}
-        <div className="mt-12 pt-6 border-t border-gray-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-400">&copy; {new Date().getFullYear()} ReviewHub, Inc. All rights reserved.</p>
-          <div className="flex gap-4 text-xs text-gray-400">
+        <div className="mt-12 pt-6 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-[var(--muted)]">&copy; {new Date().getFullYear()} ReviewHub, Inc. All rights reserved.</p>
+          <div className="flex gap-4 text-xs text-[var(--muted)]">
             <Link href="/terms"   className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Terms of Service</Link>
             <Link href="/privacy" className="text-brand-600 dark:text-brand-400 font-medium">Privacy Policy</Link>
             <Link href="/"        className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">Home</Link>

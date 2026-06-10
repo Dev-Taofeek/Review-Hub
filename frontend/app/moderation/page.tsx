@@ -28,11 +28,11 @@ export default function ModerationOverviewPage() {
 
   return (
     <div className="space-y-5">
-      <div className="forest-panel relative overflow-hidden rounded-3xl p-5 sm:p-7">
+      <div className="forest-panel relative overflow-hidden rounded-lg p-5 sm:p-7">
         <div className="absolute inset-0 signal-grid opacity-20" />
         <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-300/20 bg-emerald-300/10">
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg border border-emerald-300/20 bg-emerald-300/10">
               <Shield className="h-6 w-6 text-emerald-300" />
             </div>
             <div>
@@ -50,8 +50,8 @@ export default function ModerationOverviewPage() {
       </div>
 
       {!loading && urgent > 0 && (
-        <div className="flex items-start gap-3 rounded-3xl border border-amber-300/40 bg-[var(--secondary-soft)] p-4">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-[var(--surface)] text-[var(--secondary)]">
+        <div className="flex items-start gap-3 rounded-lg border border-amber-300/40 bg-[var(--secondary-soft)] p-4">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--surface)] text-[var(--secondary)]">
             <AlertTriangle className="h-4 w-4" />
           </div>
           <div className="flex-1">
@@ -72,7 +72,7 @@ export default function ModerationOverviewPage() {
 
       {loading ? (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-32 rounded-3xl" />)}
+          {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-32 rounded-lg" />)}
         </div>
       ) : stats && (
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -80,9 +80,9 @@ export default function ModerationOverviewPage() {
             const value = stats[card.key];
             const pct = stats.total > 0 && card.key !== 'total' && card.key !== 'pendingReports' ? Math.round((value / stats.total) * 100) : null;
             return (
-              <div key={card.key} className="trust-card rounded-3xl p-4 sm:p-5">
+              <div key={card.key} className="trust-card rounded-lg p-4 sm:p-5">
                 <div className="mb-4 flex items-center justify-between">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-2xl" style={{ background: `${card.accent}18`, color: card.accent }}>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg" style={{ background: `${card.accent}18`, color: card.accent }}>
                     {card.icon}
                   </div>
                   {pct !== null && <span className="text-data text-xs font-black text-[var(--muted)]">{pct}%</span>}
@@ -101,8 +101,8 @@ export default function ModerationOverviewPage() {
           { href: '/moderation/reviews', icon: <Clock className="h-5 w-5" />, title: 'Priority Review Queue', desc: 'Approve, reject, or escalate reviews by risk signal', count: stats?.pending ?? 0, accent: 'var(--secondary)' },
           { href: '/moderation/reports', icon: <Activity className="h-5 w-5" />, title: 'Report Audit Trail', desc: 'Review community reports and reason chips', count: stats?.pendingReports ?? 0, accent: 'var(--accent)' },
         ].map((action) => (
-          <Link key={action.title} href={action.href} className="trust-card trust-card-hover group flex items-center gap-4 rounded-3xl p-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl" style={{ background: `${action.accent}18`, color: action.accent }}>{action.icon}</div>
+          <Link key={action.title} href={action.href} className="trust-card trust-card-hover group flex items-center gap-4 rounded-lg p-4">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg" style={{ background: `${action.accent}18`, color: action.accent }}>{action.icon}</div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2">
                 <p className="text-sm font-black text-[var(--foreground)]">{action.title}</p>

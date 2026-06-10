@@ -2,283 +2,196 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { ThumbsUp, Flag, Pencil, Trash2, CheckCircle2, ChevronDown, Star, Shield, Sparkles } from 'lucide-react';
+import { CheckCircle2, ChevronDown, Flag, Pencil, Star, ThumbsUp, Trash2 } from 'lucide-react';
+import toast from 'react-hot-toast';
 import { Avatar } from '@/components/ui/Avatar';
 import { StatusBadge } from '@/components/ui/Badge';
 import { VerifiedBadge } from '@/components/ui/VerifiedBadge';
-import { Button } from '@/components/ui/Button';
 import { ConfirmModal } from '@/components/ui/Modal';
 import { formatRelativeTime, cn } from '@/lib/utils';
 import { reviewsApi } from '@/lib/api';
-import { staggerItem } from '@/lib/animations';
-import toast from 'react-hot-toast';
 import type { Review, User } from '@/types';
-
-/* Rating color system — precise, intentional */
-const RATING_SYSTEM: Record<number, { label: string; accent: string; bg: string; border: string }> = {
-  5: { label: 'Exceptional', accent: '#10B981', bg: 'rgba(16,185,129,0.10)',  border: 'rgba(16,185,129,0.22)'  },
-  4: { label: 'Excellent',   accent: '#34D399', bg: 'rgba(52,211,153,0.08)', border: 'rgba(52,211,153,0.18)' },
-  3: { label: 'Good',         accent: '#FBBF24', bg: 'rgba(251,191,36,0.08)', border: 'rgba(251,191,36,0.18)' },
-  2: { label: 'Mixed',        accent: '#F97316', bg: 'rgba(249,115,22,0.08)', border: 'rgba(249,115,22,0.18)' },
-  1: { label: 'Poor',          accent: '#FF6B6B', bg: 'rgba(255,107,107,0.08)', border: 'rgba(255,107,107,0.18)' },
-};
 
 interface ReviewCardProps {
   review: Review;
   currentUser?: User | null;
-  onEdit?:   (review: Review) => void;
+  onEdit?: (review: Review) => void;
   onDelete?: (id: string) => void;
   onReport?: (review: Review) => void;
   showStatus?: boolean;
 }
 
+const ratingText: Record<number, string> = {
+  5: 'Excellent',
+  4: 'Very good',
+  3: 'Mixed',
+  2: 'Weak',
+  1: 'Poor',
+};
+
 export function ReviewCard({ review, currentUser, onEdit, onDelete, onReport, showStatus = false }: ReviewCardProps) {
-  const [helpful,       setHelpful]       = useState(review.helpful_count);
-  const [voted,         setVoted]         = useState<boolean | null>(review.user_vote ?? null);
-  const [expanded,      setExpanded]      = useState(false);
-  const [deleteOpen,    setDeleteOpen]    = useState(false);
+  const [helpful, setHelpful] = useState(review.helpful_count);
+  const [voted, setVoted] = useState<boolean | null>(review.user_vote ?? null);
+  const [expanded, setExpanded] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-  const [voteLoading,   setVoteLoading]   = useState(false);
-  const reduced = useReducedMotion();
+  const [voteLoading, setVoteLoading] = useState(false);
 
-  const isOwner    = currentUser?.id === review.user_id;
-  const isMod      = currentUser?.role === 'moderator' || currentUser?.role === 'admin';
+  const isOwner = currentUser?.id === review.user_id;
   const isVerified = (review.user as any)?.is_verified;
-  const LIMIT      = 300;
-  const longBody   = (review.body?.length ?? 0) > LIMIT;
-  const rs         = RATING_SYSTEM[review.rating] ?? RATING_SYSTEM[3];
-
-  /* Signal weight: reviews with more helpful votes get stronger visual treatment */
-  const signalWeight = helpful >= 10 ? 'high' : helpful >= 3 ? 'medium' : 'low';
+  const longBody = (review.body?.length ?? 0) > 320;
 
   const handleVote = async () => {
-    if (!currentUser)                   { toast.error('Sign in to vote'); return; }
+    if (!currentUser) { toast.error('Sign in to vote'); return; }
     if (currentUser.can_vote === false) { toast.error('Voting privileges restricted'); return; }
-    if (isOwner)                        { toast.error('Cannot vote on your own review'); return; }
+    if (isOwner) { toast.error('Cannot vote on your own review'); return; }
     setVoteLoading(true);
     try {
       const res = await reviewsApi.vote(review.id, true);
-      if (res.data?.action === 'removed') { setHelpful(h => Math.max(0,h-1)); setVoted(null); }
-      else if (res.data?.action === 'added') { setHelpful(h => h+1); setVoted(true); }
-    } catch { toast.error('Failed to vote'); }
-    finally  { setVoteLoading(false); }
+      if (res.data?.action === 'removed') { setHelpful((h) => Math.max(0, h - 1)); setVoted(null); }
+      else if (res.data?.action === 'added') { setHelpful((h) => h + 1); setVoted(true); }
+    } catch {
+      toast.error('Failed to vote');
+    } finally {
+      setVoteLoading(false);
+    }
   };
 
   const handleDelete = async () => {
     setDeleteLoading(true);
-    try   { await reviewsApi.delete(review.id); toast.success('Review deleted'); onDelete?.(review.id); }
-    catch { toast.error('Failed to delete'); }
-    finally { setDeleteLoading(false); setDeleteOpen(false); }
+    try {
+      await reviewsApi.delete(review.id);
+      toast.success('Review deleted');
+      onDelete?.(review.id);
+    } catch {
+      toast.error('Failed to delete');
+    } finally {
+      setDeleteLoading(false);
+      setDeleteOpen(false);
+    }
   };
 
   return (
-    <motion.article
-      variants={staggerItem}
-      whileHover={reduced ? {} : { y: -3, transition: { duration: 0.18, ease: 'easeOut' } }}
-      className={cn(
-        'relative rounded-3xl overflow-hidden transition-all duration-300 trust-card trust-card-hover',
-        /* High-signal: verified reviews get special treatment */
-        signalWeight === 'high' && 'dark:border-[rgba(0,229,160,0.12)]',
-      )}
-    >
-      {/* Rating accent line — visual signal strength indicator */}
-      <div className="absolute left-0 right-0 top-0 h-[2px]" style={{ background: rs.accent, opacity: 0.8 }} />
-
-      {/* High-signal badge — reviews with many helpful votes get a crown */}
-      {signalWeight === 'high' && (
-        <div className="absolute top-4 right-4 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold"
-          style={{ background: 'rgba(0,229,160,0.1)', border: '1px solid rgba(0,229,160,0.2)', color: '#00E5A0' }}>
-          <Shield className="h-2.5 w-2.5" aria-hidden="true" />
-          Top Signal
-        </div>
-      )}
-
-      <div className="p-5">
-        {/* ── Header ──────────────────────────────────── */}
-        <div className="flex items-start justify-between gap-3 mb-4">
-          <div className="flex items-center gap-3 min-w-0">
+    <article className="border border-[var(--border)] bg-[var(--surface)]">
+      <div className="grid gap-5 p-5 sm:grid-cols-[180px_1fr]">
+        <aside className="border-b border-[var(--border)] pb-4 sm:border-b-0 sm:border-r sm:pb-0 sm:pr-5">
+          <div className="flex items-center gap-3 sm:block">
             <Avatar src={review.user?.avatar_url} name={review.user?.full_name || review.user?.username} size="md" />
-            <div className="min-w-0">
-              <div className="flex items-center gap-1.5 flex-wrap">
-                  <span className="text-sm font-black text-[var(--foreground)] truncate">
+            <div className="min-w-0 sm:mt-3">
+              <div className="flex flex-wrap items-center gap-1.5">
+                <p className="truncate text-sm font-black text-[var(--foreground)]">
                   {review.user?.username || review.user?.full_name || 'Anonymous'}
-                </span>
+                </p>
                 {isVerified && <VerifiedBadge size="sm" />}
-                {review.is_verified_purchase && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full"
-                    style={{ background: 'var(--primary-soft)', border: '1px solid rgba(16,185,129,0.22)', color: 'var(--primary)' }}>
-                    <CheckCircle2 className="h-2.5 w-2.5" aria-hidden="true" />
-                    Verified
-                  </span>
-                )}
               </div>
-              <p className="text-[11px] mt-0.5" style={{ color: 'var(--text-3)' }}>{formatRelativeTime(review.created_at)}</p>
+              <p className="mt-1 text-xs font-bold text-[var(--muted)]">{formatRelativeTime(review.created_at)}</p>
             </div>
           </div>
 
-          {/* Rating badge */}
-          <div className="flex items-center gap-2 shrink-0 px-3 py-1.5 rounded-xl"
-            style={{ background: rs.bg, border: `1px solid ${rs.border}` }}>
-            <div className="flex gap-0.5">
-              {[1,2,3,4,5].map((s) => (
-                <Star key={s} className={cn('h-3 w-3', s <= review.rating ? 'fill-current text-current' : 'fill-[var(--border)] text-transparent')}
-                  style={s <= review.rating ? { color: rs.accent } : {}} />
+          <div className="mt-4">
+            <div className="flex items-center gap-1">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star
+                  key={star}
+                  className={cn(
+                    'h-4 w-4',
+                    star <= review.rating
+                      ? 'fill-[var(--secondary)] text-[var(--secondary)]'
+                      : 'fill-[var(--border)] text-[var(--border)]'
+                  )}
+                />
               ))}
             </div>
-            <span className="text-data text-xs font-black" style={{ color: rs.accent }}>{review.rating}.0</span>
+            <p className="mt-2 text-sm font-black text-[var(--foreground)]">{ratingText[review.rating] || 'Rated'}</p>
+            {review.is_verified_purchase && (
+              <p className="mt-3 inline-flex items-center gap-1 text-xs font-extrabold text-[var(--primary)]">
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                Verified purchase
+              </p>
+            )}
+            {showStatus && <div className="mt-3"><StatusBadge status={review.status} /></div>}
           </div>
-        </div>
+        </aside>
 
-        {/* ── Title ───────────────────────────────────── */}
-        <div className="mb-2 flex flex-wrap items-center gap-2">
-          <h4 className="text-[15px] font-black text-[var(--foreground)] leading-snug">
-            {review.title}
-          </h4>
-          <span className="inline-flex items-center gap-1 rounded-full border border-[var(--border)] bg-[var(--surface-soft)] px-2 py-0.5 text-[10px] font-black text-[var(--accent)]">
-            <Sparkles className="h-3 w-3" /> Quality {Math.min(98, 68 + review.rating * 6 + Math.min(helpful, 10))}
-          </span>
-        </div>
-
-        {/* ── Body ────────────────────────────────────── */}
         <div>
-          <AnimatePresence initial={false}>
-            <motion.p
-              key={expanded ? 'x' : 'c'}
-              initial={reduced ? {} : { opacity: 0 }}
-              animate={reduced ? {} : { opacity: 1 }}
-              transition={{ duration: 0.2 }}
-              className={cn('text-sm leading-relaxed text-[var(--muted)]', !expanded && longBody && 'line-clamp-3')}
-            >
-              {review.body}
-            </motion.p>
-          </AnimatePresence>
+          <h4 className="text-lg font-black leading-snug text-[var(--foreground)]">{review.title}</h4>
+          <p className={cn('mt-3 text-sm leading-7 text-[var(--muted)]', !expanded && longBody && 'line-clamp-3')}>
+            {review.body}
+          </p>
           {longBody && (
-            <button onClick={() => setExpanded(!expanded)} aria-expanded={expanded}
-              className="mt-1.5 flex items-center gap-1 text-xs font-bold transition-colors"
-              style={{ color: 'var(--signal)' }}>
-              <motion.span animate={reduced ? {} : { rotate: expanded ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                <ChevronDown className="h-3.5 w-3.5" />
-              </motion.span>
-              {expanded ? 'Show less' : 'Read more'}
+            <button onClick={() => setExpanded(!expanded)} aria-expanded={expanded} className="mt-2 flex items-center gap-1 text-xs font-black text-[var(--primary)]">
+              <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', expanded && 'rotate-180')} />
+              {expanded ? 'Show less' : 'Read full review'}
             </button>
           )}
-        </div>
 
-        {/* ── Pros / Cons — pill tags ──────────────────── */}
-        {((review.pros?.length ?? 0) > 0 || (review.cons?.length ?? 0) > 0) && (
-          <div className="mt-4 flex flex-wrap gap-4">
-            {(review.pros?.length ?? 0) > 0 && (
-              <div className="flex-1 min-w-[140px]">
-                <p className="text-label-mono mb-2" style={{ color: '#00E5A0' }}>Pros</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {review.pros!.map((p, i) => (
-                    <span key={i} className="text-xs font-medium px-2.5 py-0.5 rounded-full"
-                      style={{ background: 'var(--primary-soft)', border: '1px solid rgba(16,185,129,0.20)', color: 'var(--primary)' }}>
-                      {p}
-                    </span>
-                  ))}
+          {((review.pros?.length ?? 0) > 0 || (review.cons?.length ?? 0) > 0) && (
+            <div className="mt-5 grid gap-4 border-y border-[var(--border)] py-4 sm:grid-cols-2">
+              {(review.pros?.length ?? 0) > 0 && (
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.08em] text-[var(--primary)]">What worked</p>
+                  <ul className="mt-2 space-y-1 text-sm text-[var(--muted)]">
+                    {review.pros!.map((pro, index) => <li key={index}>+ {pro}</li>)}
+                  </ul>
                 </div>
-              </div>
-            )}
-            {(review.cons?.length ?? 0) > 0 && (
-              <div className="flex-1 min-w-[140px]">
-                <p className="text-label-mono mb-2" style={{ color: '#FF6B6B' }}>Cons</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {review.cons!.map((c, i) => (
-                    <span key={i} className="text-xs font-medium px-2.5 py-0.5 rounded-full"
-                      style={{ background: 'rgba(255,107,107,0.08)', border: '1px solid rgba(255,107,107,0.18)', color: '#FF6B6B' }}>
-                      {c}
-                    </span>
-                  ))}
+              )}
+              {(review.cons?.length ?? 0) > 0 && (
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.08em] text-[var(--danger)]">What did not</p>
+                  <ul className="mt-2 space-y-1 text-sm text-[var(--muted)]">
+                    {review.cons!.map((con, index) => <li key={index}>- {con}</li>)}
+                  </ul>
                 </div>
-              </div>
-            )}
-          </div>
-        )}
+              )}
+            </div>
+          )}
 
-        {/* ── Images ──────────────────────────────────── */}
-        {(review.images?.length ?? 0) > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {review.images!.map((img) => (
-              <div key={img.id} className="relative h-20 w-20 overflow-hidden rounded-xl"
-                style={{ border: '1px solid var(--wire)' }}>
-                <Image src={img.url} alt="Review image" fill sizes="80px" className="object-cover" />
-              </div>
-            ))}
-          </div>
-        )}
+          {(review.images?.length ?? 0) > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2">
+              {review.images!.map((img) => (
+                <div key={img.id} className="relative h-20 w-20 overflow-hidden border border-[var(--border)]">
+                  <Image src={img.url} alt="Review evidence" fill sizes="80px" className="object-cover" />
+                </div>
+              ))}
+            </div>
+          )}
 
-        {showStatus && <div className="mt-3"><StatusBadge status={review.status} /></div>}
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)] pt-4">
+            <button
+              onClick={handleVote}
+              disabled={voteLoading}
+              aria-pressed={voted === true}
+              className={cn(
+                'flex items-center gap-2 border px-3 py-2 text-xs font-extrabold transition-colors',
+                voted
+                  ? 'border-[var(--primary)] bg-[var(--primary-soft)] text-[var(--primary)]'
+                  : 'border-[var(--border)] text-[var(--muted)] hover:border-[var(--primary)]'
+              )}
+            >
+              <ThumbsUp className={cn('h-3.5 w-3.5', voted && 'fill-current')} />
+              Helpful {helpful > 0 && <span className="tabular-nums">{helpful}</span>}
+            </button>
 
-        {/* ── Footer ──────────────────────────────────── */}
-        <div className="mt-4 pt-3 flex items-center justify-between gap-2"
-          style={{ borderTop: '1px solid var(--line)' }}>
-
-          {/* Helpful vote — animated */}
-          <motion.button
-            onClick={handleVote}
-            disabled={voteLoading}
-            whileTap={reduced ? {} : { scale: 0.92 }}
-            transition={{ type: 'spring', stiffness: 500, damping: 28 }}
-            aria-pressed={voted === true}
-            className="flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-xl transition-all duration-200"
-            style={voted ? {
-              background: 'rgba(0,229,160,0.1)',
-              border: '1px solid rgba(0,229,160,0.22)',
-              color: '#00E5A0',
-            } : {
-              background: 'transparent',
-              border: '1px solid transparent',
-              color: 'var(--text-3)',
-            }}
-          >
-            <ThumbsUp className={cn('h-3.5 w-3.5', voted && 'fill-current')} aria-hidden="true" />
-            Helpful
-            {helpful > 0 && (
-              <span className="text-data px-1.5 py-0.5 rounded-md text-[10px] font-black"
-                style={voted
-                  ? { background: 'rgba(0,229,160,0.15)', color: '#00E5A0' }
-                  : { background: 'var(--raised)', color: 'var(--text-2)' }
-                }>
-                {helpful}
-              </span>
-            )}
-          </motion.button>
-
-          {/* Actions */}
-          <div className="flex items-center gap-1">
-            {isOwner && (
-              <>
-                <button onClick={() => onEdit?.(review)} className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-2 rounded-xl transition-colors"
-                  style={{ color: 'var(--text-2)' }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'var(--raised)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                  <Pencil className="h-3 w-3" aria-hidden="true" /> Edit
+            <div className="flex items-center gap-2">
+              {isOwner && (
+                <>
+                  <button onClick={() => onEdit?.(review)} className="flex items-center gap-1.5 px-2 py-2 text-xs font-extrabold text-[var(--muted)] hover:text-[var(--foreground)]">
+                    <Pencil className="h-3.5 w-3.5" />
+                    Edit
+                  </button>
+                  <button onClick={() => setDeleteOpen(true)} className="flex items-center gap-1.5 px-2 py-2 text-xs font-extrabold text-[var(--danger)]">
+                    <Trash2 className="h-3.5 w-3.5" />
+                    Delete
+                  </button>
+                </>
+              )}
+              {!isOwner && onReport && (
+                <button onClick={() => onReport(review)} className="flex items-center gap-1.5 px-2 py-2 text-xs font-extrabold text-[var(--muted)] hover:text-[var(--danger)]">
+                  <Flag className="h-3.5 w-3.5" />
+                  Report
                 </button>
-                <button onClick={() => setDeleteOpen(true)} className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-2 rounded-xl transition-colors"
-                  style={{ color: '#FF6B6B' }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,107,107,0.08)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}>
-                  <Trash2 className="h-3 w-3" aria-hidden="true" /> Delete
-                </button>
-              </>
-            )}
-            {isMod && !isOwner && (
-              <button onClick={() => setDeleteOpen(true)} className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-2 rounded-xl"
-                style={{ color: '#FF6B6B' }}>
-                <Trash2 className="h-3 w-3" aria-hidden="true" /> Remove
-              </button>
-            )}
-            {!isOwner && currentUser && (
-              <button onClick={() => onReport?.(review)} aria-label="Report this review"
-                className="flex items-center gap-1.5 text-[11px] font-semibold px-2.5 py-2 rounded-xl transition-colors"
-                style={{ color: 'var(--text-3)' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#FF6B6B'; (e.currentTarget as HTMLElement).style.background = 'rgba(255,107,107,0.08)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'; (e.currentTarget as HTMLElement).style.background = 'transparent'; }}>
-                <Flag className="h-3.5 w-3.5" aria-hidden="true" /> Report
-              </button>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -287,12 +200,12 @@ export function ReviewCard({ review, currentUser, onEdit, onDelete, onReport, sh
         open={deleteOpen}
         onClose={() => setDeleteOpen(false)}
         onConfirm={handleDelete}
-        loading={deleteLoading}
-        title="Delete Review"
-        description="This action cannot be undone. Your review will be permanently removed."
+        title="Delete review?"
+        description="This review will be permanently removed."
         confirmLabel="Delete"
         confirmVariant="danger"
+        loading={deleteLoading}
       />
-    </motion.article>
+    </article>
   );
 }

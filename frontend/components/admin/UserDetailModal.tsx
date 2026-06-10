@@ -160,15 +160,15 @@ export function UserDetailModal({ user, currentUserId, onUpdate, onClose }: User
       <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm animate-fade-in" onClick={onClose} />
 
       {/* Slide-over panel */}
-      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white dark:bg-[#0d1526] shadow-modal animate-slide-down flex flex-col overflow-hidden border-l border-gray-200 dark:border-white/10">
+      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-[var(--surface)] shadow-modal animate-slide-down flex flex-col overflow-hidden border-l border-[var(--border)]">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-white/10">
-          <h2 className="font-semibold text-gray-900 dark:text-white">User Details</h2>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)]">
+          <h2 className="font-semibold text-[var(--foreground)]">User Details</h2>
           <button
             onClick={onClose}
             aria-label="Close user details"
-            className="h-8 w-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+            className="h-8 w-8 rounded-lg flex items-center justify-center text-[var(--muted)] hover:text-[var(--muted)] hover:bg-[var(--surface-soft)] dark:hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
           >
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
@@ -178,7 +178,7 @@ export function UserDetailModal({ user, currentUserId, onUpdate, onClose }: User
         <div className="flex-1 overflow-y-auto">
 
           {/* Identity */}
-          <div className="px-6 py-5 border-b border-gray-100 dark:border-white/10">
+          <div className="px-6 py-5 border-b border-[var(--border)]">
             <div className="flex items-start gap-4">
               <div className="relative shrink-0">
                 <Avatar src={user.avatar_url} name={user.full_name || user.username} size="lg" />
@@ -190,12 +190,12 @@ export function UserDetailModal({ user, currentUserId, onUpdate, onClose }: User
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex flex-wrap items-center gap-2 mb-1">
-                  <h3 className="text-base font-bold text-gray-900 dark:text-white truncate">
+                  <h3 className="text-base font-bold text-[var(--foreground)] truncate">
                     {user.full_name || user.username || 'Unnamed User'}
                   </h3>
                   {user.is_verified && <VerifiedBadge size="sm" />}
                 </div>
-                <p className="text-sm text-gray-500 mb-2">@{user.username || 'no username'}</p>
+                <p className="text-sm text-[var(--muted)] mb-2">@{user.username || 'no username'}</p>
                 <div className="flex flex-wrap gap-1.5">
                   <RoleBadge role={user.role} />
                   {user.is_banned
@@ -220,8 +220,8 @@ export function UserDetailModal({ user, currentUserId, onUpdate, onClose }: User
           </div>
 
           {/* Info rows */}
-          <div className="px-6 py-4 space-y-3 border-b border-gray-100 dark:border-white/10">
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-400">Account Information</h4>
+          <div className="px-6 py-4 space-y-3 border-b border-[var(--border)]">
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-[var(--muted)]">Account Information</h4>
             {[
               { icon: <Mail className="h-4 w-4" />,     label: 'Email',        value: user.email || '—' },
               { icon: <AtSign className="h-4 w-4" />,   label: 'Username',     value: user.username ? `@${user.username}` : '—' },
@@ -230,20 +230,20 @@ export function UserDetailModal({ user, currentUserId, onUpdate, onClose }: User
               { icon: <Calendar className="h-4 w-4" />, label: 'Joined',       value: user.created_at ? formatDate(user.created_at) : '—' },
             ].map((row) => (
               <div key={row.label} className="flex items-center gap-3">
-                <div className="h-7 w-7 rounded-lg bg-gray-100 dark:bg-white/8 flex items-center justify-center text-gray-500 shrink-0">
+                <div className="h-7 w-7 rounded-lg bg-[var(--surface-soft)] flex items-center justify-center text-[var(--muted)] shrink-0">
                   {row.icon}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs text-gray-400">{row.label}</p>
-                  <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">{row.value}</p>
+                  <p className="text-xs text-[var(--muted)]">{row.label}</p>
+                  <p className="text-sm font-medium text-[var(--foreground)] truncate">{row.value}</p>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Permissions summary */}
-          <div className="px-6 py-4 space-y-2 border-b border-gray-100 dark:border-white/10">
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Permissions</h4>
+          <div className="px-6 py-4 space-y-2 border-b border-[var(--border)]">
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-[var(--muted)] mb-3">Permissions</h4>
             {[
               { icon: <Star className="h-4 w-4" />,         label: 'Write reviews',   allowed: !user.is_banned },
               { icon: <CheckCircle2 className="h-4 w-4" />, label: 'Vote on reviews', allowed: user.can_vote !== false && !user.is_banned },
@@ -251,13 +251,13 @@ export function UserDetailModal({ user, currentUserId, onUpdate, onClose }: User
               { icon: <BadgeCheck className="h-4 w-4" />,   label: 'Verified reviewer (pinned reviews)', allowed: !!user.is_verified },
             ].map((perm) => (
               <div key={perm.label} className="flex items-center gap-3 py-1">
-                <div className={cn('h-6 w-6 rounded-full flex items-center justify-center shrink-0 [&>svg]:h-3 [&>svg]:w-3', perm.allowed ? 'bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600' : 'bg-gray-100 dark:bg-white/8 text-gray-400')}>
+                <div className={cn('h-6 w-6 rounded-full flex items-center justify-center shrink-0 [&>svg]:h-3 [&>svg]:w-3', perm.allowed ? 'bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600' : 'bg-[var(--surface-soft)] text-[var(--muted)]')}>
                   {perm.icon}
                 </div>
-                <span className={cn('text-sm', perm.allowed ? 'text-gray-800 dark:text-gray-200' : 'text-gray-400 line-through')}>{perm.label}</span>
+                <span className={cn('text-sm', perm.allowed ? 'text-[var(--foreground)]' : 'text-[var(--muted)] line-through')}>{perm.label}</span>
                 {perm.allowed
                   ? <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 ml-auto shrink-0" />
-                  : <AlertTriangle className="h-3.5 w-3.5 text-gray-300 dark:text-gray-600 ml-auto shrink-0" />
+                  : <AlertTriangle className="h-3.5 w-3.5 text-[var(--muted)] dark:text-[var(--muted)] ml-auto shrink-0" />
                 }
               </div>
             ))}
@@ -266,7 +266,7 @@ export function UserDetailModal({ user, currentUserId, onUpdate, onClose }: User
           {/* Admin actions */}
           {!isSelf && !isAdmin && (
             <div className="px-6 py-5 space-y-2">
-              <h4 className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">Admin Actions</h4>
+              <h4 className="text-xs font-semibold uppercase tracking-widest text-[var(--muted)] mb-3">Admin Actions</h4>
               {actions.map((action) => (
                 <div key={action.label}>
                   <Button
@@ -281,7 +281,7 @@ export function UserDetailModal({ user, currentUserId, onUpdate, onClose }: User
                     {loading === action.label ? action.loadingLabel : action.label}
                   </Button>
                   {action.disabled && action.disabledReason && (
-                    <p className="text-xs text-gray-400 mt-0.5 pl-1">{action.disabledReason}</p>
+                    <p className="text-xs text-[var(--muted)] mt-0.5 pl-1">{action.disabledReason}</p>
                   )}
                 </div>
               ))}
@@ -290,7 +290,7 @@ export function UserDetailModal({ user, currentUserId, onUpdate, onClose }: User
 
           {(isSelf || isAdmin) && (
             <div className="px-6 py-5">
-              <p className="text-sm text-gray-400 text-center">
+              <p className="text-sm text-[var(--muted)] text-center">
                 {isSelf ? 'You cannot modify your own account from here.' : 'Admin accounts cannot be modified.'}
               </p>
             </div>
@@ -302,9 +302,9 @@ export function UserDetailModal({ user, currentUserId, onUpdate, onClose }: User
       {confirmAction && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/30" onClick={() => setConfirmAction(null)} />
-          <div className="relative z-10 w-full max-w-sm rounded-2xl bg-white dark:bg-[#0d1526] border border-gray-200 dark:border-white/10 shadow-modal p-6 animate-scale-in">
-            <h3 className="text-base font-bold text-gray-900 dark:text-white mb-2">Confirm Action</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-5">{confirmAction.confirmMessage}</p>
+          <div className="relative z-10 w-full max-w-sm rounded-lg bg-[var(--surface)] border border-[var(--border)] shadow-modal p-6 animate-scale-in">
+            <h3 className="text-base font-bold text-[var(--foreground)] mb-2">Confirm Action</h3>
+            <p className="text-sm text-[var(--muted)] leading-relaxed mb-5">{confirmAction.confirmMessage}</p>
             <div className="flex gap-3 justify-end">
               <Button variant="ghost" size="sm" onClick={() => setConfirmAction(null)}>Cancel</Button>
               <Button

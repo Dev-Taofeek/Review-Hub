@@ -36,7 +36,7 @@ export default function AdminProductsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
-        <h2 className="text-lg font-semibold text-slate-900 dark:text-white">Products</h2>
+        <h2 className="text-lg font-semibold text-[var(--foreground)]">Products</h2>
         <Button icon={<Plus className="h-4 w-4" />} size="sm" onClick={() => { setEditProduct(null); setFormOpen(true); }}>
           Add Product
         </Button>
@@ -45,7 +45,7 @@ export default function AdminProductsPage() {
       {loading ? (
         <div className="animate-pulse space-y-2">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="h-14 rounded-xl bg-slate-100 dark:bg-white/5" />
+            <div key={i} className="h-14 rounded-xl bg-[var(--surface-soft)]" />
           ))}
         </div>
       ) : products.length === 0 ? (
@@ -57,30 +57,30 @@ export default function AdminProductsPage() {
         />
       ) : (
         <>
-          <div className="overflow-x-auto rounded-2xl border border-slate-200/80 dark:border-white/[0.07] bg-white dark:bg-[#0D1020] shadow-sm">
-            <table className="min-w-full divide-y divide-slate-100 dark:divide-white/[0.06]">
-              <thead className="bg-slate-50 dark:bg-white/5">
+          <div className="overflow-x-auto rounded-lg border border-[var(--border)] bg-[var(--surface)] ">
+            <table className="min-w-full divide-y divide-[var(--border)]">
+              <thead className="bg-[var(--surface-soft)] dark:bg-white/5">
                 <tr>
                   {['Product', 'Category', 'Price', 'Rating', 'Reviews', 'Status', 'Actions'].map((h) => (
-                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">{h}</th>
+                    <th key={h} className="px-4 py-3 text-left text-xs font-semibold text-[var(--muted)] uppercase tracking-wider">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50 dark:divide-white/[0.04] bg-white dark:bg-[#0D1020]">
+              <tbody className="divide-y divide-[var(--border)] bg-[var(--surface)]">
                 {products.map((p) => (
-                  <tr key={p.id} className="hover:bg-slate-50/50 transition-colors">
+                  <tr key={p.id} className="hover:bg-[var(--surface-soft)] transition-colors">
                     <td className="px-4 py-3">
                       <div>
-                        <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate max-w-[200px]">{p.name}</p>
-                        <p className="text-xs text-slate-400">{p.brand}</p>
+                        <p className="text-sm font-medium text-[var(--foreground)] truncate max-w-[200px]">{p.name}</p>
+                        <p className="text-xs text-[var(--muted)]">{p.brand}</p>
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      {p.category ? <Badge variant="info">{p.category.name}</Badge> : <span className="text-slate-400 text-xs">—</span>}
+                      {p.category ? <Badge variant="info">{p.category.name}</Badge> : <span className="text-[var(--muted)] text-xs">—</span>}
                     </td>
-                    <td className="px-4 py-3 text-sm font-medium text-slate-900 dark:text-slate-100">{formatPrice(p.price)}</td>
+                    <td className="px-4 py-3 text-sm font-medium text-[var(--foreground)]">{formatPrice(p.price)}</td>
                     <td className="px-4 py-3 text-sm text-amber-500">{p.average_rating.toFixed(1)}★</td>
-                    <td className="px-4 py-3 text-sm text-slate-600">{p.total_reviews}</td>
+                    <td className="px-4 py-3 text-sm text-[var(--muted)]">{p.total_reviews}</td>
                     <td className="px-4 py-3">
                       {p.is_active ? <Badge variant="success">Active</Badge> : <Badge variant="danger">Inactive</Badge>}
                     </td>

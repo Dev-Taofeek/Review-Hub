@@ -6,46 +6,48 @@
 
 @layer base {
   :root {
-    --background: #FAF7F0;
-    --foreground: #13251F;
-    --surface: #FFFDF7;
-    --surface-soft: #F3EBDD;
-    --surface-raised: #FFFFFF;
-    --primary: #047857;
-    --primary-soft: #D1FAE5;
-    --secondary: #F59E0B;
-    --secondary-soft: #FEF3C7;
-    --accent: #0891B2;
-    --accent-soft: #D9F4F8;
-    --border: #E7DCC8;
-    --muted: #756B5A;
-    --danger: #DC2626;
-    --ring: rgba(4, 120, 87, 0.26);
+    --background: #FCF8F2;
+    --foreground: #1B2A24;
+    --surface: #FFFDF8;
+    --surface-soft: #F6EFE4;
+    --surface-raised: #F6EFE4;
+    --primary: #0F766E;
+    --primary-soft: rgba(15, 118, 110, 0.12);
+    --secondary: #D97706;
+    --secondary-soft: rgba(217, 119, 6, 0.12);
+    --accent: #0EA5A4;
+    --accent-soft: rgba(14, 165, 164, 0.12);
+    --border: #E8DFD1;
+    --muted: #6B6255;
+    --danger: #B42318;
+    --danger-soft: rgba(180, 35, 24, 0.10);
+    --ring: rgba(15, 118, 110, 0.24);
     --void: var(--background);
     --text-1: var(--foreground);
     --text-2: var(--muted);
-    --text-3: #9A8F7E;
+    --text-3: #8A8072;
     --signal: var(--primary);
-    --wire: rgba(4, 120, 87, 0.12);
-    --line: rgba(117, 107, 90, 0.14);
+    --wire: rgba(15, 118, 110, 0.12);
+    --line: rgba(107, 98, 85, 0.16);
     --raised: var(--surface-soft);
   }
 
   .dark {
-    --background: #031A14;
-    --foreground: #F7F2E8;
-    --surface: #06251D;
-    --surface-soft: #083528;
-    --surface-raised: #0A3D2E;
-    --primary: #10B981;
+    --background: #081711;
+    --foreground: #F8F3E8;
+    --surface: #0D2119;
+    --surface-soft: #123126;
+    --surface-raised: #123126;
+    --primary: #34D399;
     --primary-soft: rgba(16, 185, 129, 0.14);
     --secondary: #FBBF24;
     --secondary-soft: rgba(251, 191, 36, 0.14);
     --accent: #22D3EE;
     --accent-soft: rgba(34, 211, 238, 0.13);
-    --border: rgba(247, 242, 232, 0.12);
-    --muted: #C8BFAE;
+    --border: rgba(255, 255, 255, 0.08);
+    --muted: #CFC3AF;
     --danger: #F87171;
+    --danger-soft: rgba(248, 113, 113, 0.12);
     --ring: rgba(16, 185, 129, 0.32);
     --void: var(--background);
     --text-1: var(--foreground);
@@ -68,7 +70,7 @@
     @apply font-sans;
     background: var(--background);
     color: var(--foreground);
-    transition: background-color 0.25s ease, color 0.25s ease;
+    transition: background-color 0.16s ease, color 0.16s ease;
   }
 
   .dark body {
@@ -87,7 +89,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
+    font-family: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
     letter-spacing: 0;
   }
 
@@ -102,32 +104,6 @@
 }
 
 @layer utilities {
-  [class*="text-slate-"],
-  [class*="text-gray-"] {
-    color: var(--muted) !important;
-  }
-
-  [class*="text-slate-9"],
-  [class*="text-gray-9"],
-  [class*="text-slate-8"],
-  [class*="text-gray-8"],
-  [class*="text-slate-7"],
-  [class*="text-gray-7"] {
-    color: var(--foreground) !important;
-  }
-
-  [class*="bg-slate-"],
-  [class*="bg-gray-"] {
-    background-color: var(--surface-soft) !important;
-  }
-
-  [class*="border-slate-"],
-  [class*="border-gray-"],
-  [class*="divide-slate-"] > :not([hidden]) ~ :not([hidden]),
-  [class*="divide-gray-"] > :not([hidden]) ~ :not([hidden]) {
-    border-color: var(--border) !important;
-  }
-
   .trust-shell {
     background: var(--background);
   }
@@ -135,27 +111,26 @@
   .trust-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.45) inset, 0 16px 42px rgba(19, 37, 31, 0.08);
+    box-shadow: none;
   }
 
   .dark .trust-card {
-    box-shadow: 0 1px 0 rgba(247, 242, 232, 0.04) inset, 0 18px 46px rgba(0, 0, 0, 0.28);
+    box-shadow: none;
   }
 
   .trust-card-hover {
-    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    transition: border-color 160ms ease, background-color 160ms ease;
   }
 
   .trust-card-hover:hover {
-    transform: translateY(-3px);
     border-color: color-mix(in srgb, var(--primary) 42%, var(--border));
-    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.45) inset, 0 22px 54px rgba(4, 120, 87, 0.14);
+    background: var(--surface);
   }
 
   .review-intel-card {
     background: var(--surface);
     border: 1px solid var(--border);
-    box-shadow: 0 24px 70px rgba(4, 120, 87, 0.14);
+    box-shadow: none;
   }
 
   .forest-panel {
@@ -165,7 +140,7 @@
   }
 
   .signal-grid {
-    background: color-mix(in srgb, var(--primary) 6%, transparent);
+    background: transparent;
   }
 
   .text-signal { color: var(--primary); }
@@ -175,15 +150,15 @@
   .border-trust { border-color: var(--border); }
 
   .text-label-mono {
-    font-family: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
     font-size: 0.68rem;
     font-weight: 800;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
   .text-data {
-    font-family: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-body), ui-sans-serif, system-ui, sans-serif;
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum";
   }
@@ -193,8 +168,7 @@
     height: 7px;
     border-radius: 999px;
     background: var(--primary);
-    animation: pulseSoft 2.2s cubic-bezier(0.4,0,0.6,1) infinite;
-    box-shadow: 0 0 12px color-mix(in srgb, var(--primary) 65%, transparent);
+    box-shadow: none;
   }
 
   .line-clamp-1 { overflow:hidden; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:1; }
@@ -209,11 +183,6 @@
   .dark .bg-shimmer {
     background: color-mix(in srgb, var(--foreground) 7%, var(--surface-soft));
   }
-}
-
-@keyframes pulseSoft {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.55; transform: scale(0.82); }
 }
 
 @media (max-width: 359px) {
